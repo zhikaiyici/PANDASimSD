@@ -94,7 +94,7 @@ int main(int argc, char** argv)
 
 	// Physics list
 	G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP;
-	// G4VModularPhysicsList* physicsList = new QBBC;
+	//G4VModularPhysicsList* physicsList = new QBBC;
 	//G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
 	//G4VModularPhysicsList* physicsList = new QGSP_BERT_HP;
 	physicsList->SetVerboseLevel(0);
@@ -155,12 +155,14 @@ int main(int argc, char** argv)
 	}
 	else
 	{
+		G4int NumberOfEvents = UserDataInput::GetNumberOfEvents();
 		if (argc > 1)
 		{
 			// batch mode
 			G4String command = "/control/execute ";
 			G4String fileName = argv[1];
 			UImanager->ApplyCommand(command + fileName);
+			//runManager->BeamOn(NumberOfEvents);
 		}
 		else
 		{
@@ -170,8 +172,7 @@ int main(int argc, char** argv)
 
 			// initialize G4 kernel
 			runManager->Initialize();
-			G4int NumberOfEvents = UserDataInput::GetNumberOfEvents();
-
+			
 			//auto neutrinoPosition = UserDataInput::GetPositionOfNeutrino();
 			//if (neutrinoPosition[1] < 5)
 			//{

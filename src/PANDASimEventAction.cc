@@ -49,9 +49,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PANDASimEventAction::PANDASimEventAction(/*PANDASimRunAction* runAction*/ )
+PANDASimEventAction::PANDASimEventAction(/*PANDASimRunAction* runAction*/)
 	: G4UserEventAction(),
-	//fRunAction(runAction),
+	/*fRunAction(runAction), */
 	fEdep(0.),
 	fScinHCID(-1), fGdHCID(-1), fPhocathHCID(-1),
 	//nAbsorbedOpPhoton(2), nDetectedOpPhoton(2),
@@ -243,7 +243,8 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 		fPANDASimRun->PushBackModuleCalPhDecayMu(nCalPhDecayMuVec);
 
 	G4int eventID = event->GetEventID();
-	G4int eventNumber = UserDataInput::GetNumberOfEvents();
+	//G4int eventNumber = UserDataInput::GetNumberOfEvents();
+	G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentRun()->GetNumberOfEventToBeProcessed();
 	if (eventID == 0 || ((eventID + 1) % (eventNumber / 10) == 0))
 	{
 		G4int per =(G4int) ((1. * eventID + 1) / (eventNumber * 0.01));

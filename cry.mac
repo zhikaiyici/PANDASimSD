@@ -13,7 +13,7 @@
 /CRY/input date 7-1-2012
 /CRY/input latitude 40.0
 /CRY/input altitude 0
-/CRY/input subboxLength 2
+/CRY/input subboxLength 10
 /CRY/update
 
-/run/beamOn 100
+/run/beamOn 1000

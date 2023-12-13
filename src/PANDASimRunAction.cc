@@ -57,49 +57,7 @@ using namespace std;
 PANDASimRunAction::PANDASimRunAction()
 	: G4UserRunAction()
 {
-	G4int nofEvents = UserDataInput::GetNumberOfEvents();
 	arraySize = UserDataInput::GetSizeOfArray();
-	G4double neutrinoPercentage = UserDataInput::GetNeutrinoPercentage() * 100.;
-	G4double numofevent = nofEvents;
-	G4double gdFilmThickness = UserDataInput::GetGdFilmThickness() / cm;
-	ostringstream ostrsGdFilmThickness, ossArraySize, ossEventNumber, ossNeutrinoPercentage;
-	ossEventNumber << setprecision(1) << numofevent;
-	ossArraySize << arraySize;
-	ossNeutrinoPercentage << neutrinoPercentage;
-	ostrsGdFilmThickness << gdFilmThickness;
-
-	G4String strArraySize = ossArraySize.str();
-	G4String strEventNumber = ossEventNumber.str();
-	G4String strNeutrinoPercentage = ossNeutrinoPercentage.str();
-	G4String strGdFilmThickness = ostrsGdFilmThickness.str();
-
-	array<G4int, 2> neutrinoPosition = UserDataInput::GetPositionOfNeutrino();
-	G4String strNeutrinoPosition;
-	if (neutrinoPosition[0] < arraySize * arraySize)
-	{
-		G4String tmp;
-		if (neutrinoPosition[1] < 5)
-			tmp = to_string(neutrinoPosition[1]);
-		else
-			tmp = "Random";
-		
-		strNeutrinoPosition = to_string(neutrinoPosition[0]) + "_" + tmp;
-	}
-	else
-		strNeutrinoPosition = "Random";
-
-	G4String sourceType = UserDataInput::GetSoureType();
-	G4String sourcePosition = UserDataInput::GetSourePosition();
-
-	runCondition = "(" + strArraySize + "x" + strArraySize + "_" + strEventNumber + "_";
-	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY")
-		runCondition += sourceType + "_" + sourcePosition + ")";
-	else if (sourceType == "COSMICNEUTRON")
-		runCondition += sourceType + ")";
-	else if (sourceType == "CRY")
-		runCondition += sourceType + ")";
-	else
-		runCondition += sourceType + "_" + strNeutrinoPercentage + "%_" + strNeutrinoPosition + ")";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -130,6 +88,51 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 			   << " The size of detector is " << arraySize << " x " << arraySize
 			   << G4endl
 			   << G4endl;
+
+		//G4int nofEvents = UserDataInput::GetNumberOfEvents();
+		//G4int nofEvents = G4RunManager::GetRunManager()->GetCurrentRun()->GetNumberOfEventToBeProcessed();
+		arraySize = UserDataInput::GetSizeOfArray();
+		G4double neutrinoPercentage = UserDataInput::GetNeutrinoPercentage() * 100.;
+		G4double numofevent = nofEvents;
+		G4double gdFilmThickness = UserDataInput::GetGdFilmThickness() / cm;
+		ostringstream ostrsGdFilmThickness, ossArraySize, ossEventNumber, ossNeutrinoPercentage;
+		ossEventNumber << setprecision(1) << numofevent;
+		ossArraySize << arraySize;
+		ossNeutrinoPercentage << neutrinoPercentage;
+		ostrsGdFilmThickness << gdFilmThickness;
+
+		G4String strArraySize = ossArraySize.str();
+		G4String strEventNumber = ossEventNumber.str();
+		G4String strNeutrinoPercentage = ossNeutrinoPercentage.str();
+		G4String strGdFilmThickness = ostrsGdFilmThickness.str();
+
+		array<G4int, 2> neutrinoPosition = UserDataInput::GetPositionOfNeutrino();
+		G4String strNeutrinoPosition;
+		if (neutrinoPosition[0] < arraySize * arraySize)
+		{
+			G4String tmp;
+			if (neutrinoPosition[1] < 5)
+				tmp = to_string(neutrinoPosition[1]);
+			else
+				tmp = "Random";
+
+			strNeutrinoPosition = to_string(neutrinoPosition[0]) + "_" + tmp;
+		}
+		else
+			strNeutrinoPosition = "Random";
+
+		G4String sourceType = UserDataInput::GetSoureType();
+		G4String sourcePosition = UserDataInput::GetSourePosition();
+
+		runCondition = "(" + strArraySize + "x" + strArraySize + "_" + strEventNumber + "_";
+		if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY")
+			runCondition += sourceType + "_" + sourcePosition + ")";
+		else if (sourceType == "COSMICNEUTRON")
+			runCondition += sourceType + ")";
+		else if (sourceType == "CRY")
+			runCondition += sourceType + ")";
+		else
+			runCondition += sourceType + "_" + strNeutrinoPercentage + "%_" + strNeutrinoPosition + ")";
 	}
 }
 
