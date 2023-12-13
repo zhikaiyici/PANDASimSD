@@ -13,7 +13,7 @@ Status_Of_UI: ON
 ##########################################设置线程数####################################
 Number_Of_Threads: 8
 
-#####################要模拟多少次实例（Status_Of_UI: OFF下有效）##########################
+################要模拟多少次实例（Status_Of_UI: OFF、非脚本运行下有效）####################
 Number_Of_Events:  1e6
 
 
@@ -46,5 +46,5 @@ Neutron_Spectrum_File_Name:  IBDNeutron.spec
 Percentage_Of_Neutrino:  1
 
 ##############中微子事件位置（0~size*size，0~5）##################
-###第一个值为size*size在阵列内随机分布，第二个值为5在单根内随机分布###
+###第一个值为size*size在阵列内随机分布，第二个值为5在单根内随机分布##
 Position_Of_Neutrino: 16  5

@@ -93,10 +93,10 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 		//G4int nofEvents = G4RunManager::GetRunManager()->GetCurrentRun()->GetNumberOfEventToBeProcessed();
 		arraySize = UserDataInput::GetSizeOfArray();
 		G4double neutrinoPercentage = UserDataInput::GetNeutrinoPercentage() * 100.;
-		G4double numofevent = nofEvents;
+		//G4double doubNumOfEvents = nofEvents;
 		G4double gdFilmThickness = UserDataInput::GetGdFilmThickness() / cm;
 		ostringstream ostrsGdFilmThickness, ossArraySize, ossEventNumber, ossNeutrinoPercentage;
-		ossEventNumber << setprecision(1) << numofevent;
+		ossEventNumber << setprecision(1) << doubNumOfEvents;
 		ossArraySize << arraySize;
 		ossNeutrinoPercentage << neutrinoPercentage;
 		ostrsGdFilmThickness << gdFilmThickness;
