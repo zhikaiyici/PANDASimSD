@@ -67,6 +67,8 @@ PANDASimEventAction::PANDASimEventAction(/*PANDASimRunAction* runAction*/ )
 	ResizeVector(capTimeGd, arraySize);
 	ResizeVector(decayTimeMu, arraySize);
 
+	ResizeVector(muTrackLength, arraySize);
+
 	//ResizeVector(nAbPhVec, arraySize);
 	//ResizeVector(nDtPhVec, arraySize);
 
@@ -94,6 +96,8 @@ void PANDASimEventAction::BeginOfEventAction(const G4Event* /*event*/)
 	InitializeVector(capTimeH);
 	InitializeVector(capTimeGd);
 	InitializeVector(decayTimeMu);
+
+	InitializeVector(muTrackLength);
 
 	//InitializeVector(nAbPhVec);
 	//InitializeVector(nDtPhVec);
@@ -153,6 +157,9 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 
 		G4double tMu = scinHit->GetDecayTimeMu();
 		decayTimeMu[moduleRepliaNumber][moduleRowReplicaNumber] = tMu;
+
+		G4double muTrack = scinHit->GetMuTrack();
+		muTrackLength[moduleRepliaNumber][moduleRowReplicaNumber] = muTrack;
 	}
 
 	PANDASimGdFilmHitsCollection* gdHC = static_cast<PANDASimGdFilmHitsCollection*>(GetHitsCollection(fGdHCID, event));
@@ -209,6 +216,9 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 		fPANDASimRun->PushBackModuleCapTimeH(capTimeH);
 	if (decayTimeMu != double_empty2DVec)
 		fPANDASimRun->PushBackModuleDecayTimeMu(decayTimeMu);
+
+	if (muTrackLength != double_empty2DVec)
+		fPANDASimRun->PushBackModuleMuTrackLength(muTrackLength);
 
 	/*vector <vector<G4int> > int_empty2DVec(arraySize, vector<G4int>(2));
 	vector<vector<vector<G4int> > > int_empty3DVec(arraySize, int_empty2DVec);

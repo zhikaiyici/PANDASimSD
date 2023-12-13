@@ -270,9 +270,9 @@ G4VPhysicalVolume* PANDASimDetectorConstruction::DefineDetector()
 	G4double containerY = arraySize * moduleY;
 	G4double containerX = moduleX;
 
-	G4double worldX = 1.1 * containerX + 1. * mm;
-	G4double worldY = 1.1 * containerY + 1. * mm;
-	G4double worldZ = 1.1 * containerZ + 1. * mm;
+	G4double worldX = 10.1 * containerX + 10. * m;
+	G4double worldY = 10.1 * containerY + 10. * m;
+	G4double worldZ = 1.1 * containerZ;
 
 	// Get materials
 	G4Material* plasticScintillator = G4Material::GetMaterial("PlasticScintillator");

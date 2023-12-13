@@ -138,6 +138,8 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
             hit->TimeMu(muDecayTime);
             fEventAction->SetDecayFlagMu(true);
         }
+        G4double trackLength = step->GetStepLength();
+        hit->AddMuTrack(trackLength);
     }
 
     // energy deposit

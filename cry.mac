@@ -1,0 +1,19 @@
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+/run/initialize
+
+/CRY/input returnNeutrons 0
+/CRY/input returnProtons 0
+/CRY/input returnGammas 0
+/CRY/input returnPions 0
+/CRY/input returnKaons 0
+/CRY/input returnElectrons 0
+/CRY/input returnMuons 1
+/CRY/input date 7-1-2012
+/CRY/input latitude 40.0
+/CRY/input altitude 0
+/CRY/input subboxLength 2
+/CRY/update
+
+/run/beamOn 100

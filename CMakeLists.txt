@@ -24,7 +24,26 @@ endif()
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+IF(UNIX)
+#Setup CRY-----------------------------------
+find_library( CRY NAMES CRY PATHS $ENV{CRYHOME}/lib NO_DEFAULT_PATH )
 
+set(CRY_INCLUDE_DIRS $ENV{CRYHOME}/src)
+#set(CRY_INCLUDE_DIRS /home/lab/programs/cry/cry_v1.7/src)
+MESSAGE ("Cry setup: " ${CRY_INCLUDE_DIRS} )
+#set(CRY_LIBRARY_DIR ${CRYHOME}/lib)
+set(CRY_LIBRARIES $ENV{CRYHOME}/lib/libCRY.a)
+#set(CRY_LIBRARIES /home/lab/programs/cry/cry_v1.7//lib/libCRY.a)
+#-----------------------------------------------
+
+#set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+
+# Locate sources and headers for this project
+# NB: headers are included so they will show up in IDEs
+#
+
+include_directories(${CRY_INCLUDE_DIRS})
+ENDIF ()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -38,6 +57,10 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 add_executable(PANDASim PANDASim.cc ${sources} ${headers})
 target_link_libraries(PANDASim ${Geant4_LIBRARIES})
 
+IF (UNIX)
+target_link_libraries(PANDASim ${CRY_LIBRARIES})
+ENDIF ()
+
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build PANDASim. This is so that we can run the executable directly because it
@@ -47,6 +70,7 @@ set(PANDASim_SCRIPTS
   init_vis.mac
   vis.mac
   run.mac
+  cry.mac
   InputSet.txt
   _readme.txt
   )

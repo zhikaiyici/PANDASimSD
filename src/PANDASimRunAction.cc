@@ -92,9 +92,11 @@ PANDASimRunAction::PANDASimRunAction()
 	G4String sourcePosition = UserDataInput::GetSourePosition();
 
 	runCondition = "(" + strArraySize + "x" + strArraySize + "_" + strEventNumber + "_";
-	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON")
+	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY")
 		runCondition += sourceType + "_" + sourcePosition + ")";
 	else if (sourceType == "COSMICNEUTRON")
+		runCondition += sourceType + ")";
+	else if (sourceType == "CRY")
 		runCondition += sourceType + ")";
 	else
 		runCondition += sourceType + "_" + strNeutrinoPercentage + "%_" + strNeutrinoPosition + ")";
@@ -231,6 +233,10 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		list<vector<vector<G4double> > > moduleDecayTimeMu = fPANDASimRun->GetModuleDecayTimeMu();
 		G4String moduleDecayTimeMuFileName = "output/moduleDecayTimeMu" + runCondition + ".txt";
 		WriteDataToFile(moduleDecayTimeMuFileName, moduleDecayTimeMu);
+
+		list<vector<vector<G4double> > > moduleMuTrackLength = fPANDASimRun->GetModuleMuTrackLength();
+		G4String moduleMuTrackLengthFileName = "output/moduleMuTrackLength" + runCondition + ".txt";
+		WriteDataToFile(moduleMuTrackLengthFileName, moduleMuTrackLength);
 
 		if (UserDataInput::GetOpticalPhysicsStatus() == true)
 		{

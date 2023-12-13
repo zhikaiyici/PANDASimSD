@@ -45,6 +45,7 @@
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_BERT_HP.hh"
 #include "G4OpticalPhysics.hh"
+#include "QBBC.hh"
 //#include "Shielding.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4VisExecutive.hh"
@@ -92,7 +93,7 @@ int main(int argc, char** argv)
 
 	// Physics list
 	G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP;
-	
+	// G4VModularPhysicsList* physicsList = new QBBC;
 	//G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
 	//G4VModularPhysicsList* physicsList = new QGSP_BERT_HP;
 	physicsList->SetVerboseLevel(0);
@@ -128,8 +129,8 @@ int main(int argc, char** argv)
 		G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 
 		UImanager->ApplyCommand("/run/verbose 2");
-		UImanager->ApplyCommand("/event/verbose 2");
-		UImanager->ApplyCommand("/tracking/verbose 2");
+		UImanager->ApplyCommand("/event/verbose 0");
+		UImanager->ApplyCommand("/tracking/verbose 0");
 		UImanager->ApplyCommand("/control/execute init_vis.mac");
 		ui->SessionStart();
 

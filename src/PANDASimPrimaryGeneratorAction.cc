@@ -52,40 +52,40 @@
 
 using namespace std;
 
-PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction()
+PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction(const char *inputfile)
 	: G4VUserPrimaryGeneratorAction(),
-	fParticle(nullptr)/*, fPositron(nullptr), fNeutron(nullptr),
-	fMuonN(nullptr), fMuonP(nullptr), fProton(nullptr), fGamma(nullptr),
-	fParticleGun(nullptr), fParticleGunP(nullptr),
-	arraySize(0), neutrinoPosition(0),
-	scinitillatorXHalfLength(0.), scinitillatorYHalfLength(0.), scinitillatorZHalfLength(0.),
-	containerXHalfLength(0.), containerYHalfLength(0.), containerZHalfLength(0.),
-	distanceBetweenModules(0.) , sourceType("NEUTRINO"), sourcePosition("CENTER"), referencePoints(0)*/
+	  fParticle(nullptr) /*, fPositron(nullptr), fNeutron(nullptr),
+	   fMuonN(nullptr), fMuonP(nullptr), fProton(nullptr), fGamma(nullptr),
+	   fParticleGun(nullptr), fParticleGunP(nullptr),
+	   arraySize(0), neutrinoPosition(0),
+	   scinitillatorXHalfLength(0.), scinitillatorYHalfLength(0.), scinitillatorZHalfLength(0.),
+	   containerXHalfLength(0.), containerYHalfLength(0.), containerZHalfLength(0.),
+	   distanceBetweenModules(0.) , sourceType("NEUTRINO"), sourcePosition("CENTER"), referencePoints(0)*/
 {
 	G4int n_particle = 1;
 	fParticleGun = new G4ParticleGun(n_particle);
-	//fParticleGun = new G4GeneralParticleSource();
-	//fParticleGunP = new G4ParticleGun(n_particle);
+	// fParticleGun = new G4GeneralParticleSource();
+	// fParticleGunP = new G4ParticleGun(n_particle);
 
-	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+	particleTable = G4ParticleTable::GetParticleTable();
 	G4String particleName;
 	fPositron = particleTable->FindParticle(particleName = "e+");
 	fNeutron = particleTable->FindParticle(particleName = "neutron");
-	//fNeutron = G4Neutron::Definition();
+	// fNeutron = G4Neutron::Definition();
 	fMuonN = particleTable->FindParticle(particleName = "mu-");
 	fMuonP = particleTable->FindParticle(particleName = "mu+");
 	fGamma = particleTable->FindParticle(particleName = "gamma");
 	fProton = particleTable->FindParticle(particleName = "proton");
 
-	G4LogicalVolumeStore* logicVolStroe = G4LogicalVolumeStore::GetInstance();
-	G4LogicalVolume* logicPlasticScintillator = logicVolStroe->GetVolume("PlasticScintillatorLV");
-	G4Box* scinitillatorBox = dynamic_cast<G4Box*>(logicPlasticScintillator->GetSolid());
+	G4LogicalVolumeStore *logicVolStroe = G4LogicalVolumeStore::GetInstance();
+	G4LogicalVolume *logicPlasticScintillator = logicVolStroe->GetVolume("PlasticScintillatorLV");
+	G4Box *scinitillatorBox = dynamic_cast<G4Box *>(logicPlasticScintillator->GetSolid());
 	scinitillatorXHalfLength = scinitillatorBox->GetXHalfLength();
 	scinitillatorYHalfLength = scinitillatorBox->GetYHalfLength();
 	scinitillatorZHalfLength = scinitillatorBox->GetZHalfLength();
 
 	auto containerLV = logicVolStroe->GetVolume("ContainerLV");
-	G4Box* containerBox = dynamic_cast<G4Box*>(containerLV->GetSolid());
+	G4Box *containerBox = dynamic_cast<G4Box *>(containerLV->GetSolid());
 	containerXHalfLength = containerBox->GetXHalfLength();
 	containerYHalfLength = containerBox->GetYHalfLength();
 	containerZHalfLength = containerBox->GetZHalfLength();
@@ -103,6 +103,54 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction()
 
 	CalculateReferencePoints refP;
 	referencePoints = refP.GetRefrencePoints();
+
+#ifdef __linux__
+	// char* CRYHome = getenv("CRYHOME");
+	// std::stringstream CRYData;
+	// CRYData << CRYHome << "/data";
+	// CRYDataPath = CRYData.str();
+
+	char* CRYData = getenv("CRYDATAPATH");
+	CRYDataPath = CRYData;
+
+	// Read the cry input file
+	std::ifstream inputFile;
+	inputFile.open(inputfile, std::ios::in);
+	char buffer[1000];
+
+	if (inputFile.fail())
+	{
+		if (*inputfile != 0) //....only complain if a filename was given
+			G4cout << "PrimaryGeneratorAction: Failed to open CRY input file= " << inputfile << G4endl;
+		InputState = -1;
+	}
+	else
+	{
+		std::string setupString("");
+		while (!inputFile.getline(buffer, 1000).eof())
+		{
+			setupString.append(buffer);
+			setupString.append(" ");
+		}
+
+		CRYSetup *setup = new CRYSetup(setupString, CRYDataPath);
+
+		gen = new CRYGenerator(setup);
+
+		// set random number generator
+		RNGWrapper<CLHEP::HepRandomEngine>::set(CLHEP::HepRandom::getTheEngine(), &CLHEP::HepRandomEngine::flat);
+		setup->setRandomFunction(RNGWrapper<CLHEP::HepRandomEngine>::rng);
+		InputState = 0;
+	}
+	// create a vector to store the CRY particle properties
+	vect = new std::vector<CRYParticle *>;
+
+	// Create the table containing all particle names
+	// particleTable = G4ParticleTable::GetParticleTable();
+
+	// Create the messenger file
+	gunMessenger = new PrimaryGeneratorMessenger(this);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,20 +158,76 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction()
 PANDASimPrimaryGeneratorAction::~PANDASimPrimaryGeneratorAction()
 {
 	delete fParticleGun;
-	//delete fParticleGunP;
+	// delete fParticleGunP;
 }
+
+#ifdef __linux__
+//----------------------------------------------------------------------------//
+void PANDASimPrimaryGeneratorAction::InputCRY()
+{
+	InputState = 1;
+}
+
+//----------------------------------------------------------------------------//
+void PANDASimPrimaryGeneratorAction::UpdateCRY(std::string *MessInput)
+{
+	CRYSetup *setup = new CRYSetup(*MessInput, CRYDataPath);
+	// CRYSetup *setup = new CRYSetup(*MessInput, "/home/lab/programs/cry/cry_v1.7/data");
+
+	gen = new CRYGenerator(setup);
+
+	// set random number generator
+	RNGWrapper<CLHEP::HepRandomEngine>::set(CLHEP::HepRandom::getTheEngine(), &CLHEP::HepRandomEngine::flat);
+	setup->setRandomFunction(RNGWrapper<CLHEP::HepRandomEngine>::rng);
+	InputState = 0;
+}
+
+//----------------------------------------------------------------------------//
+void PANDASimPrimaryGeneratorAction::CRYFromFile(G4String newValue)
+{
+	// Read the cry input file
+	std::ifstream inputFile;
+	inputFile.open(newValue, std::ios::in);
+	char buffer[1000];
+
+	if (inputFile.fail())
+	{
+		G4cout << "Failed to open input file " << newValue << G4endl;
+		G4cout << "Make sure to define the cry library on the command line" << G4endl;
+		InputState = -1;
+	}
+	else
+	{
+		std::string setupString("");
+		while (!inputFile.getline(buffer, 1000).eof())
+		{
+			setupString.append(buffer);
+			setupString.append(" ");
+		}
+
+		CRYSetup *setup = new CRYSetup(setupString, CRYDataPath);
+
+		gen = new CRYGenerator(setup);
+
+		// set random number generator
+		RNGWrapper<CLHEP::HepRandomEngine>::set(CLHEP::HepRandom::getTheEngine(), &CLHEP::HepRandomEngine::flat);
+		setup->setRandomFunction(RNGWrapper<CLHEP::HepRandomEngine>::rng);
+		InputState = 0;
+	}
+}
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
 {
-	//this function is called at the begining of ecah event
+	// this function is called at the begining of ecah event
 	//
 
 	G4ThreeVector positionVector, directionVector = G4ThreeVector();
 	G4double primaryParticleEnergy = 0. * MeV;
 
-	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON")
+	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY")
 	{
 		if (sourceType == "Am-Be/n")
 		{
@@ -171,7 +275,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 		if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino())
 		{
-			G4IonTable* ionTable = G4IonTable::GetIonTable();
+			G4IonTable *ionTable = G4IonTable::GetIonTable();
 			if (sourceType == "Co60")
 			{
 				fParticle = ionTable->GetIon(27, 60);
@@ -213,6 +317,50 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		fParticleGun->SetParticlePosition(positionVector);
 		fParticleGun->GeneratePrimaryVertex(anEvent);
 	}
+#ifdef __linux__
+	else if (sourceType == "CRY")
+	{
+		if (InputState != 0)
+		{
+			G4String *str = new G4String("CRY library was not successfully initialized");
+			// G4Exception(*str);
+			G4Exception("PrimaryGeneratorAction", "1", RunMustBeAborted, *str);
+		}
+		G4String particleName;
+		vect->clear();
+		gen->genEvent(vect);
+
+		//....debug output
+		G4cout << "\nEvent=" << anEvent->GetEventID() << " "
+			   << "CRY generated nparticles=" << vect->size()
+			   << G4endl;
+
+		for (unsigned j = 0; j < vect->size(); j++)
+		{
+			particleName = CRYUtils::partName((*vect)[j]->id());
+
+			//....debug output
+			G4cout << "  " << particleName << " "
+				   << "charge=" << (*vect)[j]->charge() << " "
+				   << setprecision(4)
+				   << "energy (MeV)=" << (*vect)[j]->ke() * MeV << " "
+				   << "pos (m)"
+				   << G4ThreeVector((*vect)[j]->x(), (*vect)[j]->y(), (*vect)[j]->z())
+				   << " "
+				   << "direction cosines "
+				   << G4ThreeVector((*vect)[j]->u(), (*vect)[j]->v(), (*vect)[j]->w())
+				   << " " << G4endl;
+
+			fParticleGun->SetParticleDefinition(particleTable->FindParticle((*vect)[j]->PDGid()));
+			fParticleGun->SetParticleEnergy((*vect)[j]->ke() * MeV);
+			fParticleGun->SetParticlePosition(G4ThreeVector((*vect)[j]->x() * m, (*vect)[j]->y() * m, (*vect)[j]->z() * m + 1.01 * containerZHalfLength));
+			fParticleGun->SetParticleMomentumDirection(G4ThreeVector((*vect)[j]->u(), (*vect)[j]->v(), (*vect)[j]->w()));
+			fParticleGun->SetParticleTime((*vect)[j]->t());
+			fParticleGun->GeneratePrimaryVertex(anEvent);
+			delete (*vect)[j];
+		}
+	}
+#endif
 	else if (sourceType == "COSMICNEUTRON")
 	{
 		fParticleGun->SetParticleDefinition(fNeutron);
@@ -225,7 +373,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	}
 	else
 	{
-		//neutrinoPosition = UserDataInput::GetPositionOfNeutrino();
+		// neutrinoPosition = UserDataInput::GetPositionOfNeutrino();
 		G4double random = G4UniformRand();
 		if (random < neutrinoPercentage)
 		{
@@ -256,7 +404,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			{
 				fParticle = fMuonP;
 			}
-			primaryParticleEnergy = (0. * G4UniformRand() + 100.) * GeV;// 4. * GeV;
+			primaryParticleEnergy = (0. * G4UniformRand() + 100.) * GeV; // 4. * GeV;
 			fParticleGun->SetParticleDefinition(fParticle);
 			fParticleGun->SetParticleEnergy(primaryParticleEnergy);
 			SamplingForMuon(positionVector, directionVector);
@@ -266,7 +414,6 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		}
 	}
 }
-
 
 G4double PANDASimPrimaryGeneratorAction::EnergySampling(vector<G4double> energy, vector<G4double> cdfSpectrum)
 {
@@ -286,7 +433,7 @@ G4double PANDASimPrimaryGeneratorAction::EnergySampling(vector<G4double> energy,
 			G4ExceptionDescription msg;
 			msg << "Cannot sample primaryParticleEnergy. 1e6 times samplings have been tried." << G4endl;
 			msg << "Break the while loop now.";
-			G4Exception("PANDASimPrimaryGeneratorAction::EnergySampling()", 
+			G4Exception("PANDASimPrimaryGeneratorAction::EnergySampling()",
 				"while (random < cdfSpectrum[0] || random > *(cdfSpectrum.end() - 1))", JustWarning, msg);
 			break;
 		}
@@ -305,11 +452,11 @@ G4double PANDASimPrimaryGeneratorAction::EnergySampling(vector<G4double> energy,
 	return primaryParticleEnergy;*/
 }
 
-void PANDASimPrimaryGeneratorAction::SamplingForIBD(G4ThreeVector& positionVector, G4ThreeVector& directionVector)
+void PANDASimPrimaryGeneratorAction::SamplingForIBD(G4ThreeVector &positionVector, G4ThreeVector &directionVector)
 {
 	G4double sourcePositionX = 0.;
 	G4double sourcePositionY = 0.;
-	G4double sourcePositionZ = 0.;// 2. * scinitillatorZHalfLength * G4UniformRand() - scinitillatorZHalfLength;
+	G4double sourcePositionZ = 0.; // 2. * scinitillatorZHalfLength * G4UniformRand() - scinitillatorZHalfLength;
 
 	G4double theta = pi * G4UniformRand();
 	G4double phi = twopi * G4UniformRand();
@@ -334,9 +481,9 @@ void PANDASimPrimaryGeneratorAction::SamplingForIBD(G4ThreeVector& positionVecto
 	G4double minY = referencePoints[randi][1] - scinitillatorYHalfLength;
 	G4double maxY = referencePoints[randi][1] + scinitillatorYHalfLength;
 
-	//G4cout << minX << ", " << maxZ << "; " << maxX << ", " << maxZ << G4endl;
-	//G4cout << minX << ", " << minZ << "; " << maxX << ", " << minZ << G4endl;
-	//getchar();
+	// G4cout << minX << ", " << maxZ << "; " << maxX << ", " << maxZ << G4endl;
+	// G4cout << minX << ", " << minZ << "; " << maxX << ", " << minZ << G4endl;
+	// getchar();
 
 	sourcePositionY = minY + (maxY - minY) * G4UniformRand();
 	sourcePositionZ = minZ + (maxZ - minZ) * G4UniformRand();
@@ -348,11 +495,11 @@ void PANDASimPrimaryGeneratorAction::SamplingForIBD(G4ThreeVector& positionVecto
 	positionVector = G4ThreeVector(sourcePositionX, sourcePositionY, sourcePositionZ);
 }
 
-void PANDASimPrimaryGeneratorAction::SamplingForMuon(G4ThreeVector& positionVector, G4ThreeVector& directionVector)
+void PANDASimPrimaryGeneratorAction::SamplingForMuon(G4ThreeVector &positionVector, G4ThreeVector &directionVector)
 {
 	G4double sourcePositionX = 0.;
 	G4double sourcePositionY = 0.;
-	G4double sourcePositionZ = 0.;// 2. * scinitillatorZHalfLength * G4UniformRand() - scinitillatorZHalfLength;
+	G4double sourcePositionZ = 0.; // 2. * scinitillatorZHalfLength * G4UniformRand() - scinitillatorZHalfLength;
 
 	G4double theta = pi * G4UniformRand();
 	G4double phi = twopi * G4UniformRand();

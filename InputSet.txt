@@ -11,7 +11,7 @@ Optical_Physics: OFF
 Status_Of_UI: ON
 
 ##########################################设置线程数####################################
-Number_Of_Threads: 1
+Number_Of_Threads: 8
 
 #####################要模拟多少次实例（Status_Of_UI: OFF下有效）##########################
 Number_Of_Events:  1e6
@@ -34,8 +34,8 @@ XYZ:
 Distance_Between_Modules:  2
 
 ########################################源相关参数#######################################
-##源类型（Cs137/Co60/Na22/Am-Be, CENTER/EDGE; NEUTRINO; COSMICNEUTRON）##
-Type_Of_Source:  Cs137 CENTER
+##源类型（Cs137/Co60/Na22/Am-Be, CENTER/EDGE; NEUTRINO; COSMICNEUTRON; CRY[Linux only]）#
+Type_Of_Source:  CRY CENTER
 
 ###########################能谱文件名称##########################
 Positron_Spectrum_File_Name:  IBDPositron.spec

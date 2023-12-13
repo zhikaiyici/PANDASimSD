@@ -96,6 +96,9 @@ void PANDASimRun::Merge(const G4Run* run)
 	auto localModuleDecayTimeMu = localRun->moduleDecayTimeMu;
 	moduleDecayTimeMu.merge(localModuleDecayTimeMu);
 
+	auto localModuleMuTrackLength = localRun->moduleMuTrackLength;
+	moduleMuTrackLength.merge(localModuleMuTrackLength);
+
 	list<vector<vector<vector<G4int> > > > localModuleAbPh = localRun->moduleAbPh;
 	moduleAbPh.merge(localModuleAbPh);
 

@@ -39,6 +39,15 @@
 #include "UserDataInput.hh"
 #include "G4GeneralParticleSource.hh"
 
+#ifdef __linux__
+#include "RNGWrapper.hh"
+#include "PrimaryGeneratorMessenger.hh"
+
+#include "CRYSetup.h"
+#include "CRYGenerator.h"
+#include "CRYParticle.h"
+#include "CRYUtils.h"
+#endif
 
 using namespace std;
 
@@ -54,7 +63,7 @@ class G4Box;
 class PANDASimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-	PANDASimPrimaryGeneratorAction();
+	PANDASimPrimaryGeneratorAction(const char *inputfile);
 	virtual ~PANDASimPrimaryGeneratorAction();
 
 	// method from the base class
@@ -63,10 +72,15 @@ public:
 	// method to access particle gun
 	// const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
+	void InputCRY();
+    void UpdateCRY(std::string* MessInput);
+    void CRYFromFile(G4String newValue);
+
 private:
 	G4ParticleGun* fParticleGun; // pointer a to G4 gun class
 	//G4GeneralParticleSource* fParticleGun; // pointer a to G4 gun class
 	//G4ParticleGun* fParticleGunP; // pointer a to G4 gun class
+	G4ParticleTable* particleTable;
 	G4ParticleDefinition* fParticle;
 	G4ParticleDefinition* fPositron;
 	G4ParticleDefinition* fNeutron;
@@ -97,6 +111,15 @@ private:
 	void SamplingForMuon(G4ThreeVector& positionVector, G4ThreeVector& directionVector); //位置和方向抽样函数
 	void SamplingForIBD(G4ThreeVector& positionVector, G4ThreeVector& directionVector); //位置和方向抽样函数
 	G4double EnergySampling(vector<G4double> energy, vector<G4double> cdfSpectrum); //能量抽样函数
+
+#ifdef __linux__
+	G4String CRYDataPath;
+	std::vector<CRYParticle *> *vect; // vector of generated particles
+	// G4ParticleTable* particleTable;
+	CRYGenerator *gen;
+	G4int InputState;
+	PrimaryGeneratorMessenger *gunMessenger;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
