@@ -110,7 +110,7 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     //const G4String processName_ = preStepPoint->GetProcessDefinedStep()->GetProcessName();
     //G4cout << "processName: " << processName << G4endl;
     
-    // ÅÐ¶ÏÊÇ·ñÎªÖÐ×Ó
+    // åˆ¤æ–­æ˜¯å¦ä¸ºä¸­å­
     if (strPrtclName == "neutron")
     {
         //G4cout << "GetCurrentStepNumber: " << theTrack->GetCurrentStepNumber() << G4endl;
@@ -139,6 +139,7 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
             fEventAction->SetDecayFlagMu(true);
         }
         G4double trackLength = step->GetStepLength();
+        //G4cout << "trackLength:" << trackLength / mm << G4endl;
         hit->AddMuTrack(trackLength);
     }
 
