@@ -39,6 +39,7 @@ PANDASimRun::PANDASimRun()
 	allAbPh(0), allDtPh(0),
 	moduleEnergyDeposit(0), moduleEnergyDepositDelayH(0), moduleEnergyDepositDelayGd(0), moduleEnergyDepositDecayMu(0),
 	moduleCapTimeH(0), moduleCapTimeGd(0), moduleDecayTimeMu(0),
+	moduleMuTrackLength(0), moduleMuEdep(0),
 	moduleAbPh(0), moduleDtPh(0),
 	moduleCalPh(0), moduleCalPhDelayH(0), moduleCalPhDelayGd(0), moduleCalPhDecayMu(0)
 {} 
@@ -98,6 +99,9 @@ void PANDASimRun::Merge(const G4Run* run)
 
 	auto localModuleMuTrackLength = localRun->moduleMuTrackLength;
 	moduleMuTrackLength.merge(localModuleMuTrackLength);
+
+	auto localModuleMuEdep = localRun->moduleMuEdep;
+	moduleMuEdep.merge(localModuleMuEdep);
 
 	list<vector<vector<vector<G4int> > > > localModuleAbPh = localRun->moduleAbPh;
 	moduleAbPh.merge(localModuleAbPh);

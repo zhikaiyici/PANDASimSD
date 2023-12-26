@@ -32,6 +32,7 @@
 #include "PANDASimPrimaryGeneratorAction.hh"
 #include "PANDASimRunAction.hh"
 #include "PANDASimEventAction.hh"
+#include "PANDASimStackingAction.hh"
 //#include "PANDASimSteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,6 +65,8 @@ void PANDASimActionInitialization::Build() const
 
 	PANDASimEventAction* eventAction = new PANDASimEventAction(/*runAction*/);
 	SetUserAction(eventAction);
+
+	SetUserAction(new PANDASimStackingAction(eventAction));
 
 	//SetUserAction(new PANDASimSteppingAction(eventAction, runAction));
 }

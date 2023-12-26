@@ -241,6 +241,10 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		G4String moduleMuTrackLengthFileName = "output/moduleMuTrackLength" + runCondition + ".txt";
 		WriteDataToFile(moduleMuTrackLengthFileName, moduleMuTrackLength);
 
+		list<vector<vector<G4double> > > moduleMuEdep = fPANDASimRun->GetModuleMuEdep();
+		G4String moduleMuEdepFileName = "output/moduleMuEdep" + runCondition + ".txt";
+		WriteDataToFile(moduleMuEdepFileName, moduleMuEdep);
+
 		if (UserDataInput::GetOpticalPhysicsStatus() == true)
 		{
 			auto moduleAbPh = fPANDASimRun->GetModuleAbPh();

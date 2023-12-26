@@ -35,7 +35,7 @@ G4ThreadLocal G4Allocator<PANDASimScinitillatorHit>* PANDASimScinHitAllocator = 
 
 PANDASimScinitillatorHit::PANDASimScinitillatorHit()
  : G4VHit(),
-	fEdep(0.),fEdepH(0.),fEdepGd(0.), fEdepMu(0.), capTimeH(0.), decayTimeMu(0.), muTrack(0.)
+	fEdep(0.),fEdepH(0.),fEdepGd(0.), fEdepMu(0.), capTimeH(0.), decayTimeMu(0.), muTrack(0.), muEdep(0.)
 {
 	//ResizeVector(energyDeposit, UserDataInput::GetSizeOfArray());
 }
@@ -58,6 +58,7 @@ PANDASimScinitillatorHit::PANDASimScinitillatorHit(const PANDASimScinitillatorHi
 	decayTimeMu = right.decayTimeMu;
 
 	muTrack = right.muTrack;
+	muEdep = right.muEdep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,6 +74,7 @@ const PANDASimScinitillatorHit& PANDASimScinitillatorHit::operator=(const PANDAS
 	decayTimeMu = right.decayTimeMu;
 
 	muTrack = right.muTrack;
+	muEdep = right.muEdep;
 
 	return *this;
 }

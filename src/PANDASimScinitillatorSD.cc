@@ -35,6 +35,7 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4StackManager.hh"
 
 #include "G4OpticalPhoton.hh"
 
@@ -45,8 +46,8 @@ PANDASimScinitillatorSD::PANDASimScinitillatorSD(
                             const G4String& hitsCollectionName,
                             G4int nofHits)
  : G4VSensitiveDetector(name),
-   fHitsCollection(nullptr), fEventAction(nullptr),
-    fHitsNum(nofHits)
+   fHitsCollection(nullptr), fEventAction(nullptr), fStackManager(nullptr),
+   fHitsNum(nofHits)
 {
   collectionName.insert(hitsCollectionName);
 }
@@ -104,6 +105,9 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     if (!fEventAction)
         fEventAction = static_cast<PANDASimEventAction*>(G4EventManager::GetEventManager()->GetUserEventAction());
 
+    if (!fStackManager)
+        fStackManager = G4EventManager::GetEventManager()->GetStackManager();
+
     auto stepPoint = step->GetPostStepPoint();
     //auto stepPoint = step->GetPreStepPoint();
     const G4String processName = stepPoint->GetProcessDefinedStep()->GetProcessName();
@@ -123,24 +127,36 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 
         if (processName == "nCapture")
         {
-            const G4double capTimeH = stepPoint->GetGlobalTime() / us;
-            //const G4double capTimeH = postStepPoint->GetLocalTime() / us;
+            const G4double capTimeH1 = stepPoint->GetGlobalTime() / us;
+            const G4double capTimeH = stepPoint->GetLocalTime() / us;
             hit->TimeH(capTimeH);
             fEventAction->SetDelayFlagH(true);
+            //G4int nWaiting = fStackManager->GetNWaitingTrack();
+            //G4int nUrgent = fStackManager->GetNUrgentTrack();
+            G4cout << "global capTimeH1: " << capTimeH1 << G4endl;
+            G4cout << "local capTimeH: " << capTimeH1 << G4endl;
         }
     }
     else if (strPrtclName == "mu+" || strPrtclName == "mu-")
     {
         if (processName == "Decay")
         {
-            const G4double muDecayTime = stepPoint->GetGlobalTime() / us;
-            //const G4double muDecayTime = postStepPoint->GetLocalTime() / us;
+            //const G4double muDecayTime = stepPoint->GetglobalTime() / us;
+            const G4double muDecayTime = stepPoint->GetLocalTime() / us;
             hit->TimeMu(muDecayTime);
             fEventAction->SetDecayFlagMu(true);
         }
         G4double trackLength = step->GetStepLength();
         //G4cout << "trackLength:" << trackLength / mm << G4endl;
         hit->AddMuTrack(trackLength);
+        G4double muEdep = step->GetTotalEnergyDeposit();
+        hit->AddMuEdep(muEdep);
+    }
+
+    if (strPrtclName == "He8" || strPrtclName == "Li9")
+    {
+        G4cout << "muon he8 / li9" << G4endl;
+        getchar();
     }
 
     // energy deposit
@@ -149,10 +165,15 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     if (edep == 0.) return false;
 
     // Add values
+    G4bool delayedFlag = fEventAction->GetDelayedFlag();
     G4bool delayFlagH = fEventAction->GetDelayFlagH();
     G4bool delayFlagGd = fEventAction->GetDelayFlagGd();
     G4bool decayFlagMu = fEventAction->GetDecayFlagMu();
-    if (delayFlagH)
+    //G4int nWaiting = fStackManager->GetNWaitingTrack();
+    //G4int nUrgent = fStackManager->GetNUrgentTrack();
+    //G4cout << "nWaiting: " << nWaiting << G4endl;
+    //G4cout << "nUrgent: " << nUrgent << G4endl;
+    if (delayFlagH && delayedFlag)
     {
         //auto ke = theTrack->GetKineticEnergy();
         //if (ke > 2.5 * MeV)
@@ -166,9 +187,9 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
         //}
         hit->AddH(edep);
     }
-    else if (delayFlagGd)
+    else if (delayFlagGd && delayedFlag)
         hit->AddGd(edep);
-    else if (decayFlagMu)
+    else if (decayFlagMu && delayedFlag)
         hit->AddMu(edep);
     else
         hit->Add(edep);

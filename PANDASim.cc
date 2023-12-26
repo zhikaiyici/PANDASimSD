@@ -139,8 +139,8 @@ int main(int argc, char** argv)
 		G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 
 		UImanager->ApplyCommand("/run/verbose 2");
-		UImanager->ApplyCommand("/event/verbose 0");
-		UImanager->ApplyCommand("/tracking/verbose 0");
+		UImanager->ApplyCommand("/event/verbose 2");
+		UImanager->ApplyCommand("/tracking/verbose 2");
 		UImanager->ApplyCommand("/control/execute init_vis.mac");
 		ui->SessionStart();
 

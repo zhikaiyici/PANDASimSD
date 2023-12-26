@@ -55,7 +55,7 @@ PANDASimEventAction::PANDASimEventAction(/*PANDASimRunAction* runAction*/)
 	fEdep(0.),
 	fScinHCID(-1), fGdHCID(-1), fPhocathHCID(-1),
 	//nAbsorbedOpPhoton(2), nDetectedOpPhoton(2),
-	delayFlagH(false), delayFlagGd(false), decayFlagMu(false)
+	delayedFlag(false), delayFlagH(false), delayFlagGd(false), decayFlagMu(false)
 {
 	arraySize = UserDataInput::GetSizeOfArray();
 	ResizeVector(energyDeposit, arraySize);
@@ -68,6 +68,7 @@ PANDASimEventAction::PANDASimEventAction(/*PANDASimRunAction* runAction*/)
 	ResizeVector(decayTimeMu, arraySize);
 
 	ResizeVector(muTrackLength, arraySize);
+	ResizeVector(muEdep, arraySize);
 
 	//ResizeVector(nAbPhVec, arraySize);
 	//ResizeVector(nDtPhVec, arraySize);
@@ -98,6 +99,7 @@ void PANDASimEventAction::BeginOfEventAction(const G4Event* /*event*/)
 	InitializeVector(decayTimeMu);
 
 	InitializeVector(muTrackLength);
+	InitializeVector(muEdep);
 
 	//InitializeVector(nAbPhVec);
 	//InitializeVector(nDtPhVec);
@@ -109,6 +111,11 @@ void PANDASimEventAction::BeginOfEventAction(const G4Event* /*event*/)
 
 	fEdep = 0.;
 
+	//fScinHCID = -1;
+	//fGdHCID = -1; 
+	//fPhocathHCID = -1,
+
+	delayedFlag = false;
 	delayFlagH = false;
 	delayFlagGd = false;
 	decayFlagMu = false;
@@ -160,6 +167,9 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 
 		G4double muTrack = scinHit->GetMuTrack();
 		muTrackLength[moduleRepliaNumber][moduleRowReplicaNumber] = muTrack;
+
+		G4double muE = scinHit->GetMuEdep();
+		muEdep[moduleRepliaNumber][moduleRowReplicaNumber] = muE;
 	}
 
 	PANDASimGdFilmHitsCollection* gdHC = static_cast<PANDASimGdFilmHitsCollection*>(GetHitsCollection(fGdHCID, event));
@@ -220,6 +230,9 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 	if (muTrackLength != double_empty2DVec)
 		fPANDASimRun->PushBackModuleMuTrackLength(muTrackLength);
 
+	if (muEdep != double_empty2DVec)
+		fPANDASimRun->PushBackModuleMuEdep(muEdep);
+
 	/*vector <vector<G4int> > int_empty2DVec(arraySize, vector<G4int>(2));
 	vector<vector<vector<G4int> > > int_empty3DVec(arraySize, int_empty2DVec);
 	if (nAbPhVec != int_empty3DVec)
@@ -256,9 +269,10 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 		G4int minuteNow = minutes % 60;
 		auto hours = (minutes - minuteNow) / 60;
 		G4int hourNow = hours % 24;
+		G4cout
+			<< " Time now: " << setw(2) << setfill('0') << hourNow << ":" << setw(2) << minuteNow << ":" << setw(2) << secondNow << ". ";
 		G4cout 
-			<< " Time now: " << setw(2) << hourNow << ":" << setw(2) << minuteNow << ":" << setw(2) << secondNow << ". " 
-			<< setw(3) << per << "% of simulation completed."
+			<< setw(3) << setfill(' ') << per << "% of simulation completed."
 			<< G4endl;
 		//getchar();
 	}

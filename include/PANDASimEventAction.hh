@@ -77,10 +77,12 @@ public:
 	/*void AddAllAbPh(G4int i);
 	void AddAllDtPh(G4int i);*/
 
+	inline G4bool GetDelayedFlag() const { return delayedFlag; }
 	inline G4bool GetDelayFlagH() const { return delayFlagH; }
 	inline G4bool GetDelayFlagGd() const { return delayFlagGd; }
 	inline G4bool GetDecayFlagMu() const { return decayFlagMu; }
 
+	inline void SetDelayedFlag(G4bool flag) { delayedFlag = flag; }
 	inline void SetDelayFlagH(G4bool flag) { delayFlagH = flag; }
 	inline void SetDelayFlagGd(G4bool flag) { delayFlagGd = flag; }
 	inline void SetDecayFlagMu(G4bool flag) { decayFlagMu = flag; }
@@ -93,6 +95,7 @@ private:
 	G4int fGdHCID;
 	G4int fPhocathHCID;
 
+	G4bool delayedFlag;
 	G4bool delayFlagH;
 	G4bool delayFlagGd;
 	G4bool decayFlagMu;
@@ -113,6 +116,7 @@ private:
 	vector<vector<G4double> > capTimeGd;
 	vector<vector<G4double> > decayTimeMu;
 	vector<vector<G4double> > muTrackLength;
+	vector<vector<G4double> > muEdep;
 
 	G4VHitsCollection* GetHitsCollection(G4int hcID, const G4Event* event) const;
 

@@ -232,7 +232,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
 		if (sourceType == "Am-Be/n")
 		{
 			fParticle = fNeutron;
-			primaryParticleEnergy = EnergySampling(neutronCDFSpectrum, neutronCDFSpectrum);
+			primaryParticleEnergy = EnergySampling(neutronEnergy, neutronCDFSpectrum);
 
 			G4double phi = twopi * G4UniformRand();
 			G4double costheta = -1. * G4UniformRand();
@@ -279,6 +279,8 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
 			if (sourceType == "Co60")
 			{
 				fParticle = ionTable->GetIon(27, 60);
+				//fParticle = ionTable->GetIon(2, 8);
+				//fParticle = ionTable->GetIon(3, 9);
 				primaryParticleEnergy = 0. * MeV;
 				directionVector = G4ThreeVector();
 			}

@@ -71,6 +71,7 @@ class PANDASimRun : public G4Run
     void PushBackModuleDecayTimeMu(vector<vector<G4double> > moduleDecayTimeMu);
 
     void PushBackModuleMuTrackLength(vector<vector<G4double> > moduleMuTrackLength);
+    void PushBackModuleMuEdep(vector<vector<G4double> > moduleMuEdep);
 
     void PushBackModuleAbPh(vector<vector<vector<G4int> > > nAbPhVec);
     void PushBackModuleDtPh(vector<vector<vector<G4int> > > nDtPhVec);
@@ -100,6 +101,7 @@ class PANDASimRun : public G4Run
     inline list<vector<vector<G4double> > > GetModuleDecayTimeMu() const { return moduleDecayTimeMu; }
 
     inline list<vector<vector<G4double> > > GetModuleMuTrackLength() const { return moduleMuTrackLength; }
+    inline list<vector<vector<G4double> > > GetModuleMuEdep() const { return moduleMuEdep; }
 
     inline list<vector<vector<vector<G4int> > > > GetModuleAbPh() const { return moduleAbPh; }
     inline list<vector<vector<vector<G4int> > > > GetModuleDtPh() const { return moduleDtPh; }
@@ -129,6 +131,7 @@ class PANDASimRun : public G4Run
     list<vector<vector<G4double> > > moduleDecayTimeMu;
 
     list<vector<vector<G4double> > > moduleMuTrackLength;
+    list<vector<vector<G4double> > > moduleMuEdep;
 
     list<vector<vector<vector<G4int> > > > moduleAbPh;
     list<vector<vector<vector<G4int> > > > moduleDtPh;
@@ -213,6 +216,11 @@ inline void PANDASimRun::PushBackModuleDecayTimeMu(vector<vector<G4double>> modu
 inline void PANDASimRun::PushBackModuleMuTrackLength(vector<vector<G4double>> moduleMuTrack)
 {
     moduleMuTrackLength.push_back(moduleMuTrack);
+}
+
+inline void PANDASimRun::PushBackModuleMuEdep(vector<vector<G4double>> moduleMuE)
+{
+    moduleMuEdep.push_back(moduleMuE);
 }
 
 inline void PANDASimRun::PushBackModuleAbPh(vector<vector<vector<G4int> > > nAbPhVec)
