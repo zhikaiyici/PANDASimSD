@@ -85,12 +85,12 @@ G4bool PANDASimGdFilmSD::ProcessHits(G4Step* step, G4TouchableHistory* history)
 		//G4cout << "processName: " << processName << G4endl;
 		if (processName == "nCapture")
 		{
-			const G4double capTimeGd1 = postStepPoint->GetGlobalTime() / us;
+			//const G4double capTimeGd1 = postStepPoint->GetGlobalTime() / us;
 			const G4double capTimeGd = postStepPoint->GetLocalTime() / us;
 			hit->TimeGd(capTimeGd);
 			fEventAction->SetDelayFlagGd(true);
-			G4cout << "global capTimeGd1: " << capTimeGd1 << G4endl;
-			G4cout << "local capTimeGd: " << capTimeGd << G4endl;
+			//G4cout << "global capTimeGd1: " << capTimeGd1 << G4endl;
+			//G4cout << "local capTimeGd: " << capTimeGd << G4endl;
 		}
 	}
 	return true;

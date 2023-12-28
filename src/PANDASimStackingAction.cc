@@ -31,5 +31,8 @@ G4ClassificationOfNewTrack PANDASimStackingAction::ClassifyNewTrack(const G4Trac
 
 void PANDASimStackingAction::NewStage()
 {
+	// This method is called by G4StackManager when the urgentStack
+	// becomes empty and contents in the waitingStack are transferred
+	// to the urgentStack.
 	fEventAction->SetDelayedFlag(true);
 }

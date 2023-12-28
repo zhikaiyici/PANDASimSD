@@ -64,6 +64,9 @@ public:
     void AddMuTrack(G4double tl);
     void AddMuEdep(G4double de);
 
+    void AddNLi9();
+    void AddNHe8();
+
     // get methods
     G4double GetEdep() const;
     G4double GetEdepH() const;
@@ -72,7 +75,10 @@ public:
     G4double GetCapTimeH() const;
     G4double GetDecayTimeMu() const;
     G4double GetMuTrack() const; 
-    G4double GetMuEdep() const; 
+    G4double GetMuEdep() const;
+
+    G4int GetNLi9() const; 
+    G4int GetNHe8() const; 
 
 private:
     G4double fEdep;
@@ -83,6 +89,9 @@ private:
     G4double decayTimeMu;
     G4double muTrack;
     G4double muEdep; // edep of muon itself
+
+    G4int numLi9;
+    G4int numHe8;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,6 +154,16 @@ inline G4double PANDASimScinitillatorHit::GetMuEdep() const
     return muEdep;
 }
 
+inline void PANDASimScinitillatorHit::AddNLi9()
+{
+    numLi9++;
+}
+
+inline void PANDASimScinitillatorHit::AddNHe8()
+{
+    numHe8++;
+}
+
 inline void PANDASimScinitillatorHit::Add(G4double de) {
     fEdep += de;
 }
@@ -177,6 +196,16 @@ inline void PANDASimScinitillatorHit::AddMuTrack(G4double tl)
 inline void PANDASimScinitillatorHit::AddMuEdep(G4double de)
 {
     muEdep += de;
+}
+
+inline G4int PANDASimScinitillatorHit::GetNLi9() const
+{
+    return numLi9;
+}
+
+inline G4int PANDASimScinitillatorHit::GetNHe8() const
+{
+    return numHe8;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

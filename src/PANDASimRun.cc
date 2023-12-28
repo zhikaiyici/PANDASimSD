@@ -88,19 +88,19 @@ void PANDASimRun::Merge(const G4Run* run)
 	list<vector<vector<G4double> > > localModuleEnergyDepositDecayMu = localRun->moduleEnergyDepositDecayMu;
 	moduleEnergyDepositDecayMu.merge(localModuleEnergyDepositDecayMu);
 
-	auto localModuleCapTimeGd = localRun->moduleCapTimeGd;
+	list<vector<vector<G4double> > > localModuleCapTimeGd = localRun->moduleCapTimeGd;
 	moduleCapTimeGd.merge(localModuleCapTimeGd);
 
-	auto localModuleCapTimeH = localRun->moduleCapTimeH;
+	list<vector<vector<G4double> > > localModuleCapTimeH = localRun->moduleCapTimeH;
 	moduleCapTimeH.merge(localModuleCapTimeH);
 
-	auto localModuleDecayTimeMu = localRun->moduleDecayTimeMu;
+	list<vector<vector<G4double> > > localModuleDecayTimeMu = localRun->moduleDecayTimeMu;
 	moduleDecayTimeMu.merge(localModuleDecayTimeMu);
 
-	auto localModuleMuTrackLength = localRun->moduleMuTrackLength;
+	list<vector<vector<G4double> > > localModuleMuTrackLength = localRun->moduleMuTrackLength;
 	moduleMuTrackLength.merge(localModuleMuTrackLength);
 
-	auto localModuleMuEdep = localRun->moduleMuEdep;
+	list<vector<vector<G4double> > > localModuleMuEdep = localRun->moduleMuEdep;
 	moduleMuEdep.merge(localModuleMuEdep);
 
 	list<vector<vector<vector<G4int> > > > localModuleAbPh = localRun->moduleAbPh;

@@ -58,12 +58,17 @@ PANDASimRunAction::PANDASimRunAction()
 	: G4UserRunAction()
 {
 	arraySize = UserDataInput::GetSizeOfArray();
+	myAccu = new PANDASimAccumulable();
+
+	G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+	accumulableManager->RegisterAccumulable(myAccu);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PANDASimRunAction::~PANDASimRunAction()
 {
+	delete myAccu;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,6 +80,9 @@ G4Run* PANDASimRunAction::GenerateRun()
 
 void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 {
+	G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+	accumulableManager->Reset();
+
 	if (IsMaster())
 	{
 		G4int nofEvents = run->GetNumberOfEventToBeProcessed();
@@ -125,14 +133,15 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 		G4String sourcePosition = UserDataInput::GetSourePosition();
 
 		runCondition = "(" + strArraySize + "x" + strArraySize + "_" + strEventNumber + "_";
-		if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY")
+		if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY" && sourceType != "He8" && sourceType != "Li9")
 			runCondition += sourceType + "_" + sourcePosition + ")";
-		else if (sourceType == "COSMICNEUTRON")
-			runCondition += sourceType + ")";
-		else if (sourceType == "CRY")
-			runCondition += sourceType + ")";
-		else
-			runCondition += sourceType + "_" + strNeutrinoPercentage + "%_" + strNeutrinoPosition + ")";
+		else 
+		{
+			if (sourceType != "NEUTRINO")
+				runCondition += sourceType + ")";
+			else
+				runCondition += sourceType + "_" + strNeutrinoPercentage + "%_" + strNeutrinoPosition + ")";
+		}
 	}
 }
 
@@ -142,6 +151,17 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 {
 	G4int nofEvents = run->GetNumberOfEvent();
 	if (nofEvents == 0) return;
+
+	G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+	accumulableManager->Merge();
+
+	std::list<G4double> betaKEHe8 = myAccu->GetBetaKEHe8();
+	std::list<G4double> betaKELi9 = myAccu->GetBetaKELi9();
+	std::list<G4double> decayTimeHe8 = myAccu->GetDecayTimeHe8();
+	std::list<G4double> decayTimeLi9 = myAccu->GetDecayTimeLi9();
+
+	std::vector<std::vector<G4int> > numHe8 = myAccu->GetNHe8();
+	std::vector<std::vector<G4int> > numLi9 = myAccu->GetNLi9();
 
 	// Print
 	//  
@@ -191,22 +211,40 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		//	runCondition += "neutrino_" + strNeutrinoPercentage + "%_" + strNeutrinoPosition + ")";
 		//}
 
+		G4String betaKEHe8FileName = "output/betaKEHe8" + runCondition + ".txt";
+		WriteDataToFile(betaKEHe8FileName, betaKEHe8);
+
+		G4String betaKELi9FileName = "output/betaKELi9" + runCondition + ".txt";
+		WriteDataToFile(betaKELi9FileName, betaKELi9);
+
+		G4String decayTimeHe8FileName = "output/decayTimeHe8" + runCondition + ".txt";
+		WriteDataToFile(decayTimeHe8FileName, decayTimeHe8);
+
+		G4String decayTimeLi9FileName = "output/decayTimeLi9" + runCondition + ".txt";
+		WriteDataToFile(decayTimeLi9FileName, decayTimeLi9);
+
+		G4String numLi9FileName = "output/numLi9" + runCondition + ".txt";
+		WriteDataToFile(numLi9FileName, numLi9);
+
+		G4String numHe8FileName = "output/numHe8" + runCondition + ".txt";
+		WriteDataToFile(numHe8FileName, numHe8);
+
 		const PANDASimRun* fPANDASimRun = static_cast<const PANDASimRun*>(run);
 
-		list<G4double> capTimeH = fPANDASimRun->GetCaptureTimeH();
-		G4String capTimeHFileName = "output/capTimeH" + runCondition + ".txt";
-		WriteDataToFile(capTimeHFileName, capTimeH);
+		//list<G4double> capTimeH = fPANDASimRun->GetCaptureTimeH();
+		//G4String capTimeHFileName = "output/capTimeH" + runCondition + ".txt";
+		//WriteDataToFile(capTimeHFileName, capTimeH);
 
-		list<G4double> capTimeGd = fPANDASimRun->GetCaptureTimeGd();
-		G4String capTimeGdFileName = "output/capTimeGd" + runCondition + ".txt";
-		WriteDataToFile(capTimeGdFileName, capTimeGd);
+		//list<G4double> capTimeGd = fPANDASimRun->GetCaptureTimeGd();
+		//G4String capTimeGdFileName = "output/capTimeGd" + runCondition + ".txt";
+		//WriteDataToFile(capTimeGdFileName, capTimeGd);
 
-		G4String decayTimeMuFileName = "output/decayTimeMu" + runCondition + ".txt";
-		list<G4double> decayTimeMu = fPANDASimRun->GetDecayTimeMu();
-		WriteDataToFile(decayTimeMuFileName, decayTimeMu);
+		//G4String decayTimeMuFileName = "output/decayTimeMu" + runCondition + ".txt";
+		//list<G4double> decayTimeMu = fPANDASimRun->GetDecayTimeMu();
+		//WriteDataToFile(decayTimeMuFileName, decayTimeMu);
 
-		G4String edepFileName = "output/edep" + runCondition + ".txt";
-		list<G4double> energyDeposit = fPANDASimRun->GetEnergyDeposit();
+		//G4String edepFileName = "output/edep" + runCondition + ".txt";
+		//list<G4double> energyDeposit = fPANDASimRun->GetEnergyDeposit();
 		//WriteDataToFile(edepFileName, energyDeposit);
 
 		list<vector<vector<G4double> > > moduleEnergyDeposit = fPANDASimRun->GetModuleEnergyDeposit();
@@ -303,17 +341,36 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, list<G4double> data)
 			outFile << *itr << G4endl;
 		}
 	}
-	outFile.close();;
+	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileName, list<vector<vector<G4double> > > data)
+void PANDASimRunAction::WriteDataToFile(G4String fileName, vector<vector<G4int> > data)
 {
 	if (data.empty()) return;
+	vector <vector<G4int> > empty2DVec(arraySize, vector<G4int>(arraySize, 0));
+	if (data == empty2DVec) return;
+	ofstream outFile;
+	outFile.open(fileName, ios_base::out);
+	for (auto itrVector = data.begin(); itrVector != data.end(); ++itrVector)
+	{
+		for (auto itr = (*itrVector).begin(); itr != (*itrVector).end(); ++itr)
+		{
+			outFile << " " << *itr;
+		}
+		outFile << G4endl;
+	}
+	//outFile << G4endl;
+	outFile.close();
+}
+
+void PANDASimRunAction::WriteDataToFile(G4String fileName, list<vector<vector<G4int> > > data)
+{
+	if (data.empty()) return;
+	vector <vector<G4int> > empty2DVec(arraySize, vector<G4int>(arraySize, 0));
 	ofstream outFile;
 	outFile.open(fileName, ios_base::out);
 	for (auto itrList = data.begin(); itrList != data.end(); ++itrList)
 	{
-		vector <vector<G4double> > empty2DVec(arraySize, vector<G4double>(arraySize));
 		if (*itrList != empty2DVec)
 		{
 			for (auto itr2DVector = (*itrList).begin(); itr2DVector != (*itrList).end(); ++itr2DVector)
@@ -327,20 +384,43 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, list<vector<vector<G4
 			//outFile << G4endl;
 		}
 	}
-	outFile.close();;
+	outFile.close();
+}
+
+void PANDASimRunAction::WriteDataToFile(G4String fileName, list<vector<vector<G4double> > > data)
+{
+	if (data.empty()) return;
+	vector <vector<G4double> > empty2DVec(arraySize, vector<G4double>(arraySize, 0));
+	ofstream outFile;
+	outFile.open(fileName, ios_base::out);
+	for (auto itrList = data.begin(); itrList != data.end(); ++itrList)
+	{
+		if (*itrList != empty2DVec)
+		{
+			for (auto itr2DVector = (*itrList).begin(); itr2DVector != (*itrList).end(); ++itr2DVector)
+			{
+				for (auto itrVector = (*itr2DVector).begin(); itrVector != (*itr2DVector).end(); ++itrVector)
+				{
+					outFile << " " << *itrVector;
+				}
+				outFile << G4endl;
+			}
+			//outFile << G4endl;
+		}
+	}
+	outFile.close();
 }
 
 void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, list<vector<vector<vector<G4int> > > > data)
 {
 	if (data.empty()) return;
+	vector <vector<G4int> > empty2DVec(arraySize, vector<G4int>(2, 0));
+	vector<vector<vector<G4int> > > empty3DVec(arraySize, empty2DVec);
 	ofstream outFileRight, outFileLeft;
-
 	outFileRight.open(fileNameRight, ios_base::out);
 	outFileLeft.open(fileNameLeft, ios_base::out);
 	for (auto itrList = data.begin(); itrList != data.end(); ++itrList)
 	{
-		vector <vector<G4int> > empty2DVec(arraySize, vector<G4int>(2));
-		vector<vector<vector<G4int> > > empty3DVec(arraySize, empty2DVec);
 		if (*itrList != empty3DVec)
 		{
 			for (auto itr3DVector = (*itrList).begin(); itr3DVector != (*itrList).end(); ++itr3DVector)
@@ -364,14 +444,13 @@ void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNam
 void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, list<vector<vector<vector<G4double> > > > data)
 {
 	if (data.empty()) return;
+	vector <vector<G4double> > empty2DVec(arraySize, vector<G4double>(2, 0));
+	vector<vector<vector<G4double> > > empty3DVec(arraySize, empty2DVec);
 	ofstream outFileRight, outFileLeft;
-
 	outFileRight.open(fileNameRight, ios_base::out);
 	outFileLeft.open(fileNameLeft, ios_base::out);
 	for (auto itrList = data.begin(); itrList != data.end(); ++itrList)
 	{
-		vector <vector<G4double> > empty2DVec(arraySize, vector<G4double>(2));
-		vector<vector<vector<G4double> > > empty3DVec(arraySize, empty2DVec);
 		if (*itrList != empty3DVec)
 		{
 			for (auto itr3DVector = (*itrList).begin(); itr3DVector != (*itrList).end(); ++itr3DVector)
@@ -392,5 +471,34 @@ void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNam
 	outFileLeft.close();
 }
 
+void PANDASimRunAction::PushBetaKEHe8(G4double bke)
+{
+	myAccu->PushBetaKEHe8(bke);
+}
+
+void PANDASimRunAction::PushBetaKELi9(G4double bke)
+{
+	myAccu->PushBetaKELi9(bke);
+}
+
+void PANDASimRunAction::PushDecayTimeHe8(G4double dt)
+{
+	myAccu->PushDecayTimeHe8(dt);
+}
+
+void PANDASimRunAction::PushDecayTimeLi9(G4double dt)
+{
+	myAccu->PushDecayTimeLi9(dt);
+}
+
+void PANDASimRunAction::AddNLi9(std::vector<std::vector<G4int>> nLi9)
+{
+	myAccu->AddNLi9(nLi9);
+}
+
+void PANDASimRunAction::AddNHe8(std::vector<std::vector<G4int>> nHe8)
+{
+	myAccu->AddNHe8(nHe8);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

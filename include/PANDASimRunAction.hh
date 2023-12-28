@@ -34,7 +34,7 @@
 #include "G4UserRunAction.hh"
 #include "G4Accumulable.hh"
 #include "globals.hh"
-//#include "PANDASimAccumulable.hh"
+#include "PANDASimAccumulable.hh"
 
 #include <vector>
 #include <list>
@@ -60,6 +60,14 @@ public:
 	virtual void BeginOfRunAction(const G4Run*);
 	virtual void   EndOfRunAction(const G4Run*);
 
+	void PushBetaKEHe8(G4double bke);
+	void PushBetaKELi9(G4double bke);
+	void PushDecayTimeHe8(G4double dt);
+	void PushDecayTimeLi9(G4double dt);
+
+	void AddNLi9(std::vector<std::vector<G4int> > nLi9);
+	void AddNHe8(std::vector<std::vector<G4int> > nHe8);
+
 	//inline void PushBackEnergyDepositOfEvent(G4double edep) { energyDeposit.push_back(edep); };
 	//inline void AddNeutronCount() { fAbsorbedOpPhoton += 1; }
 	//inline void AddNeutronNumber() { fDetectedOpPhoton += 1; }
@@ -75,11 +83,13 @@ private:
 	//G4Accumulable<G4int> fAbsorbedOpPhoton;
 	//G4Accumulable<G4int> fDetectedOpPhoton;
 
-	//PANDASimAccumulable edep;
+	PANDASimAccumulable* myAccu = nullptr;
 
 	G4String runCondition;
 	G4int arraySize;
 	void WriteDataToFile(G4String fileName, list<G4double> data);
+	void WriteDataToFile(G4String fileName, vector<vector<G4int> > data);
+	void WriteDataToFile(G4String fileName, list<vector<vector<G4int> > > data);
 	void WriteDataToFile(G4String fileName, list<vector<vector<G4double> > > data);
 	void WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, list<vector<vector<vector<G4int> > > > data);
 	void WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, list<vector<vector<vector<G4double> > > > data);

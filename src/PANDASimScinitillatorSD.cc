@@ -28,6 +28,8 @@
 /// \brief Implementation of the PANDASimScinitillatorSD class
 
 #include "PANDASimScinitillatorSD.hh"
+#include "PANDASimRunAction.hh"
+#include "UserDataInput.hh"
 
 #include "globals.hh"
 #include "G4HCofThisEvent.hh"
@@ -45,9 +47,8 @@ PANDASimScinitillatorSD::PANDASimScinitillatorSD(
                             const G4String& name, 
                             const G4String& hitsCollectionName,
                             G4int nofHits)
- : G4VSensitiveDetector(name),
-   fHitsCollection(nullptr), fEventAction(nullptr), fStackManager(nullptr),
-   fHitsNum(nofHits)
+ : G4VSensitiveDetector(name), fHitsCollection(nullptr), fHitsNum(nofHits),
+   fRunAction(nullptr), fEventAction(nullptr), fStackManager(nullptr), fTrackingAction(nullptr)
 {
   collectionName.insert(hitsCollectionName);
 }
@@ -105,6 +106,9 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     if (!fEventAction)
         fEventAction = static_cast<PANDASimEventAction*>(G4EventManager::GetEventManager()->GetUserEventAction());
 
+    if (!fTrackingAction)
+        fTrackingAction = static_cast<PANDASimTrackingAction*>(G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
+
     if (!fStackManager)
         fStackManager = G4EventManager::GetEventManager()->GetStackManager();
 
@@ -127,14 +131,14 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 
         if (processName == "nCapture")
         {
-            const G4double capTimeH1 = stepPoint->GetGlobalTime() / us;
+            //const G4double capTimeH1 = stepPoint->GetGlobalTime() / us;
             const G4double capTimeH = stepPoint->GetLocalTime() / us;
             hit->TimeH(capTimeH);
             fEventAction->SetDelayFlagH(true);
             //G4int nWaiting = fStackManager->GetNWaitingTrack();
             //G4int nUrgent = fStackManager->GetNUrgentTrack();
-            G4cout << "global capTimeH1: " << capTimeH1 << G4endl;
-            G4cout << "local capTimeH: " << capTimeH1 << G4endl;
+            //G4cout << "global capTimeH1: " << capTimeH1 << G4endl;
+            //G4cout << "local capTimeH: " << capTimeH1 << G4endl;
         }
     }
     else if (strPrtclName == "mu+" || strPrtclName == "mu-")
@@ -153,10 +157,28 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
         hit->AddMuEdep(muEdep);
     }
 
-    if (strPrtclName == "He8" || strPrtclName == "Li9")
+    G4int parentID = theTrack->GetParentID();
+    G4bool fLi9 = fTrackingAction->GetFlagLi9();
+    G4bool fHe8 = fTrackingAction->GetFlagHe8();
+    if (strPrtclName == "He8" && !fHe8)
     {
-        G4cout << "muon he8 / li9" << G4endl;
-        getchar();
+        if (parentID != 0)
+        {
+            hit->AddNHe8();
+            fTrackingAction->SetFlagHe8(true);
+            //G4cout << "muon He8" << G4endl;
+            //getchar();
+        }
+    }
+    else if (strPrtclName == "Li9" && !fLi9)
+    {
+        if (parentID != 0)
+        {
+            hit->AddNLi9();
+            fTrackingAction->SetFlagLi9(true);
+            //G4cout << "muon Li9" << G4endl;
+            //getchar();
+        }
     }
 
     // energy deposit
@@ -209,6 +231,44 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
     //        << " hits in the tracker chambers: " << G4endl;
     //    for (std::size_t i = 0; i < nofHits; ++i) (*fHitsCollection)[i]->Print();
     //}
+
+    if (!fRunAction)
+    {
+        //const G4UserRunAction* runActionC = G4RunManager::GetRunManager()->GetUserRunAction();
+        //G4UserRunAction runAction = *runActionC;
+        //fRunAction = static_cast<PANDASimRunAction*>(&runAction);
+        //fRunAction = static_cast<const PANDASimRunAction*>(G4RunManager::GetRunManager()->GetUserRunAction());
+        if (!fTrackingAction)
+            fTrackingAction = static_cast<PANDASimTrackingAction*>(G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
+
+        fRunAction = fTrackingAction->GetPANDASimRunAction();
+    }
+    
+    G4int arraySize = UserDataInput::GetSizeOfArray();
+    std::vector<std::vector<G4int> > numHe8(arraySize, std::vector<G4int>(arraySize, 0));
+    std::vector<std::vector<G4int> > numLi9(arraySize, std::vector<G4int>(arraySize, 0));
+
+    auto nofHits = fHitsCollection->entries();
+    for (G4int i = 0; i < nofHits; i++)
+    {
+        G4int moduleRowReplicaNumber = i % arraySize;
+        G4int moduleRepliaNumber = i / arraySize;
+        PANDASimScinitillatorHit* hit = (*fHitsCollection)[i];
+
+        G4int nHe8 = hit->GetNHe8();
+        numHe8[moduleRepliaNumber][moduleRowReplicaNumber] = nHe8;
+
+        G4int nLi9 = hit->GetNLi9();
+        numLi9[moduleRepliaNumber][moduleRowReplicaNumber] = nLi9;
+    }
+
+    std::vector <std::vector<G4int> > empty2DVec(arraySize, std::vector<G4int>(arraySize, 0));
+    if (numHe8 != empty2DVec)
+        fRunAction->AddNHe8(numHe8);
+    if (numLi9 != empty2DVec)
+        fRunAction->AddNLi9(numLi9);
+
+    //G4cout << "-----------------------EndOfEventFromScintillatorSD------------------------------" << G4endl << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

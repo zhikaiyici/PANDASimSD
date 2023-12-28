@@ -35,6 +35,7 @@
 #include "PANDASimScinitillatorHit.hh"
 #include "PANDASimEventAction.hh"
 #include "PANDASimStackingAction.hh"
+#include "PANDASimTrackingAction.hh"
 
 class G4Step;
 class G4HCofThisEvent;
@@ -59,8 +60,11 @@ public:
 
 private:
     PANDASimScinHitsCollection* fHitsCollection;
+    PANDASimRunAction* fRunAction;
     PANDASimEventAction* fEventAction;
+    PANDASimTrackingAction* fTrackingAction;
     G4StackManager* fStackManager;
+    //G4TrackingManager* fTrackingManager;
     G4int  fHitsNum;
     //G4int  nWaiting;
 };

@@ -68,6 +68,7 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction(const char *input
 	// fParticleGunP = new G4ParticleGun(n_particle);
 
 	particleTable = G4ParticleTable::GetParticleTable();
+	ionTable = G4IonTable::GetIonTable();
 	G4String particleName;
 	fPositron = particleTable->FindParticle(particleName = "e+");
 	fNeutron = particleTable->FindParticle(particleName = "neutron");
@@ -227,7 +228,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
 	G4ThreeVector positionVector, directionVector = G4ThreeVector();
 	G4double primaryParticleEnergy = 0. * MeV;
 
-	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY")
+	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY" && sourceType != "He8" && sourceType != "Li9")
 	{
 		if (sourceType == "Am-Be/n")
 		{
@@ -275,7 +276,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
 
 		if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino())
 		{
-			G4IonTable *ionTable = G4IonTable::GetIonTable();
+			//G4IonTable* ionTable = G4IonTable::GetIonTable();
 			if (sourceType == "Co60")
 			{
 				fParticle = ionTable->GetIon(27, 60);
@@ -371,6 +372,25 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
 		SamplingForMuon(positionVector, directionVector);
 		fParticleGun->SetParticlePosition(positionVector);
 		fParticleGun->SetParticleMomentumDirection(directionVector);
+		fParticleGun->GeneratePrimaryVertex(anEvent);
+	}
+	else if(sourceType == "He8" || sourceType == "Li9")
+	{
+		if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino())
+		{
+			//G4IonTable* ionTable = G4IonTable::GetIonTable();
+			if (sourceType == "He8")
+				fParticle = ionTable->GetIon(2, 8);
+			else
+				fParticle = ionTable->GetIon(3, 9);
+		}
+
+		fParticleGun->SetParticleDefinition(fParticle);
+		PositionSampling(positionVector);
+		fParticleGun->SetParticlePosition(positionVector);
+		fParticleGun->SetParticleMomentumDirection(directionVector);
+		fParticleGun->SetParticleCharge(0. * eplus);
+		fParticleGun->SetParticleEnergy(0. * MeV);
 		fParticleGun->GeneratePrimaryVertex(anEvent);
 	}
 	else
@@ -535,3 +555,24 @@ void PANDASimPrimaryGeneratorAction::SamplingForMuon(G4ThreeVector &positionVect
 	positionVector = G4ThreeVector(sourcePositionX, sourcePositionY, sourcePositionZ);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PANDASimPrimaryGeneratorAction::PositionSampling(G4ThreeVector& positionVector)
+{
+	G4double sourcePositionX = 0.;
+	G4double sourcePositionY = 0.;
+	G4double sourcePositionZ = 0.;
+
+	G4int randi = (G4int)(arraySize * arraySize * G4UniformRand());
+
+	sourcePositionX = 2. * scinitillatorXHalfLength * G4UniformRand() - scinitillatorXHalfLength;
+
+	G4double minZ = referencePoints[randi][0] - scinitillatorZHalfLength;
+	G4double maxZ = referencePoints[randi][0] + scinitillatorZHalfLength;
+	G4double minY = referencePoints[randi][1] - scinitillatorYHalfLength;
+	G4double maxY = referencePoints[randi][1] + scinitillatorYHalfLength;
+
+	sourcePositionY = minY + (maxY - minY) * G4UniformRand();
+	sourcePositionZ = minZ + (maxZ - minZ) * G4UniformRand();
+
+	positionVector = G4ThreeVector(sourcePositionX, sourcePositionY, sourcePositionZ);
+}

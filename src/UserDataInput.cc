@@ -119,7 +119,7 @@ void UserDataInput::ReadInputData()
 			{
 				prameterFile >> sourceType >> sourcePosition;
 				G4cout << sourceType << " source.";
-				if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY")
+				if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY" && sourceType != "He8" && sourceType != "Li9")
 				{
 					G4cout << " At " << sourcePosition << ".";
 				}

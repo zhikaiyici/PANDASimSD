@@ -258,23 +258,26 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 	G4int eventID = event->GetEventID();
 	//G4int eventNumber = UserDataInput::GetNumberOfEvents();
 	G4int eventNumber = G4RunManager::GetRunManager()->GetCurrentRun()->GetNumberOfEventToBeProcessed();
-	if (eventID == 0 || ((eventID + 1) % (eventNumber / 10) == 0))
+	if (eventNumber >= 10)
 	{
-		G4int per =(G4int) ((1. * eventID + 1) / (eventNumber * 0.01));
-		//G4cout << " eventNumber: "<< eventNumber << " eventID: "<< eventID <<G4endl;
-		auto seconds = time(NULL); // 格林威治时间
-		seconds = seconds + 8 * 3600; // 北京时间
-		G4int secondNow = seconds % 60;
-		auto minutes = (seconds - secondNow) / 60;
-		G4int minuteNow = minutes % 60;
-		auto hours = (minutes - minuteNow) / 60;
-		G4int hourNow = hours % 24;
-		G4cout
-			<< " Time now: " << setw(2) << setfill('0') << hourNow << ":" << setw(2) << minuteNow << ":" << setw(2) << secondNow << ". ";
-		G4cout 
-			<< setw(3) << setfill(' ') << per << "% of simulation completed."
-			<< G4endl;
-		//getchar();
+		if (eventID == 0 || ((eventID + 1) % (eventNumber / 10) == 0))
+		{
+			G4int per = (G4int)((1. * eventID + 1) / (eventNumber * 0.01));
+			//G4cout << " eventNumber: "<< eventNumber << " eventID: "<< eventID <<G4endl;
+			auto seconds = time(NULL); // 格林威治时间
+			seconds = seconds + 8 * 3600; // 北京时间
+			G4int secondNow = seconds % 60;
+			auto minutes = (seconds - secondNow) / 60;
+			G4int minuteNow = minutes % 60;
+			auto hours = (minutes - minuteNow) / 60;
+			G4int hourNow = hours % 24;
+			G4cout
+				<< " Time now: " << setw(2) << setfill('0') << hourNow << ":" << setw(2) << minuteNow << ":" << setw(2) << secondNow << ". ";
+			G4cout
+				<< setw(3) << setfill(' ') << per << "% of simulation completed."
+				<< G4endl;
+			//getchar();
+		}
 	}
 	//G4cout << "-----------------------EndOfEventAction------------------------------" << G4endl << G4endl;
 }

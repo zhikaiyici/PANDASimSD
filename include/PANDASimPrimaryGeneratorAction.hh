@@ -38,6 +38,7 @@
 
 #include "UserDataInput.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4IonTable.hh"
 
 #ifdef __linux__
 #include "RNGWrapper.hh"
@@ -81,6 +82,7 @@ private:
 	//G4GeneralParticleSource* fParticleGun; // pointer a to G4 gun class
 	//G4ParticleGun* fParticleGunP; // pointer a to G4 gun class
 	G4ParticleTable* particleTable;
+	G4IonTable* ionTable;
 	G4ParticleDefinition* fParticle;
 	G4ParticleDefinition* fPositron;
 	G4ParticleDefinition* fNeutron;
@@ -110,6 +112,7 @@ private:
 
 	void SamplingForMuon(G4ThreeVector& positionVector, G4ThreeVector& directionVector); //位置和方向抽样函数
 	void SamplingForIBD(G4ThreeVector& positionVector, G4ThreeVector& directionVector); //位置和方向抽样函数
+	void PositionSampling(G4ThreeVector& positionVector); //位置抽样函数
 	G4double EnergySampling(vector<G4double> energy, vector<G4double> cdfSpectrum); //能量抽样函数
 
 #ifdef __linux__
