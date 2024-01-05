@@ -32,6 +32,8 @@
 #define PANDASimPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "PANDASimPrimaryGeneratorMessenger.hh"
+
 #include "G4ParticleGun.hh"
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
@@ -50,11 +52,13 @@
 #include "CRYUtils.h"
 #endif
 
-using namespace std;
+//using namespace std;
 
 class G4ParticleGun;
 class G4Event;
 class G4Box;
+class G4LogicalVolumeStore;
+
 
 /// The primary generator action class with particle gun.
 ///
@@ -73,6 +77,20 @@ public:
 	// method to access particle gun
 	// const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
+	inline void SetSourceType(G4String s) { sourceType = s; }
+	inline const G4String GetSourceType() const { return sourceType; }
+
+	inline void SetSourcePosition(G4String s) { sourcePosition = s; }
+	inline const G4String GetSourcePosition() const { return sourcePosition; }
+
+	inline void SetNeutrinoPosition(std::array<G4int, 2> np) { neutrinoPosition = np; }
+	inline const std::array<G4int, 2> GetNeutrinoPosition() const { return neutrinoPosition; }
+
+	inline void SetNeutronEnergy(std::vector<G4double> energy) { neutronEnergy = energy; }
+	inline void SetNeutronCDF(std::vector<G4double> cdf) { neutronCDFSpectrum = cdf; }
+	inline void SetPositronEnergy(std::vector<G4double> energy) { positronEnergy = energy; }
+	inline void SetPositronCDF(std::vector<G4double> cdf) { positronCDFSpectrum = cdf; }
+
 	void InputCRY();
     void UpdateCRY(std::string* MessInput);
     void CRYFromFile(G4String newValue);
@@ -81,8 +99,10 @@ private:
 	G4ParticleGun* fParticleGun; // pointer a to G4 gun class
 	//G4GeneralParticleSource* fParticleGun; // pointer a to G4 gun class
 	//G4ParticleGun* fParticleGunP; // pointer a to G4 gun class
+
 	G4ParticleTable* particleTable;
 	G4IonTable* ionTable;
+
 	G4ParticleDefinition* fParticle;
 	G4ParticleDefinition* fPositron;
 	G4ParticleDefinition* fNeutron;
@@ -90,6 +110,7 @@ private:
 	G4ParticleDefinition* fMuonN;
 	G4ParticleDefinition* fMuonP;
 	G4ParticleDefinition* fGamma;
+
 	G4double scinitillatorXHalfLength;
 	G4double scinitillatorYHalfLength;
 	G4double scinitillatorZHalfLength;
@@ -98,22 +119,29 @@ private:
 	G4double containerZHalfLength;
 
 	G4double distanceBetweenModules;
+	G4int arraySize;
+
 	G4String sourceType;
 	G4String sourcePosition;
-	G4int arraySize;
-	array<G4int, 2> neutrinoPosition;
-	G4double neutrinoPercentage;// = UserDataInput::GetNeutrinoPercentage();
-	vector<G4double> neutronEnergy;// = userData.GetNeutronEnergy();
-	vector<G4double> neutronCDFSpectrum;// = userData.GetNeutronCDFSpectrum();
-	vector<G4double> positronEnergy;// = userData.GetPositronEnergy();
-	vector<G4double> positronCDFSpectrum;// = userData.GetPositronCDFSpectrum();
+	std::array<G4int, 2> neutrinoPosition;
 
-	vector<array<G4double, 2> > referencePoints;
+	//G4double neutrinoPercentage;// = UserDataInput::GetNeutrinoPercentage();
+
+	std::vector<G4double> neutronEnergy;// = userData.GetNeutronEnergy();
+	std::vector<G4double> neutronCDFSpectrum;// = userData.GetNeutronCDFSpectrum();
+	std::vector<G4double> positronEnergy;// = userData.GetPositronEnergy();
+	std::vector<G4double> positronCDFSpectrum;// = userData.GetPositronCDFSpectrum();
+
+	std::vector<std::array<G4double, 2> > referencePoints;
+
+	G4LogicalVolumeStore* logicVolStroe;
+
+	G4int runID;
 
 	void SamplingForMuon(G4ThreeVector& positionVector, G4ThreeVector& directionVector); //位置和方向抽样函数
 	void SamplingForIBD(G4ThreeVector& positionVector, G4ThreeVector& directionVector); //位置和方向抽样函数
 	void PositionSampling(G4ThreeVector& positionVector); //位置抽样函数
-	G4double EnergySampling(vector<G4double> energy, vector<G4double> cdfSpectrum); //能量抽样函数
+	G4double EnergySampling(std::vector<G4double> energy, std::vector<G4double> cdfSpectrum); //能量抽样函数
 
 #ifdef __linux__
 	G4String CRYDataPath;
@@ -123,6 +151,8 @@ private:
 	G4int InputState;
 	PrimaryGeneratorMessenger *gunMessenger;
 #endif
+
+	PANDASimPrimaryGeneratorMessenger* sourceMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

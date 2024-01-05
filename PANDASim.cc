@@ -29,14 +29,17 @@
 /// \brief Main program of the B1 example
 
 #include "PANDASimDetectorConstruction.hh"
-//#include "PANDASimPhysicsList.hh"
+#include "PANDASimPhysicsList.hh"
+#include "PANDASimPrimaryGeneratorAction.hh"
 #include "PANDASimActionInitialization.hh"
+#include "PANDASimPhysicsListMessenger.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+//#ifdef G4MULTITHREADED
+//#include "G4MTRunManager.hh"
+//#else
+//#include "G4RunManager.hh"
+//#endif
+#include "G4RunManagerFactory.hh"
 #include "G4EventManager.hh"
 #include "G4SteppingManager.hh"
 
@@ -45,6 +48,7 @@
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_BERT_HP.hh"
 #include "G4OpticalPhysics.hh"
+#include "G4MuonicAtomDecayPhysics.hh"
 #include "QBBC.hh"
 //#include "Shielding.hh"
 #include "G4EmStandardPhysics_option4.hh"
@@ -60,28 +64,41 @@
 
 int main(int argc, char** argv)
 {
-	UserDataInput::ReadInputData();
+	//UserDataInput::ReadInputData();
 
 	// Choose the Random engine
 	G4Random::setTheEngine(new CLHEP::RanecuEngine);
 	auto seed = time(NULL);
 	G4Random::setTheSeed(seed);
 
-	G4bool uiStatus = UserDataInput::GetStatusOfUI();
+	// 
+    // Get the pointer to the User Interface manager
+	G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+	PANDASimPhysicsListMessenger* physMessenger = new PANDASimPhysicsListMessenger(); 
+	//UImanager->ApplyCommand("/physics/optical true");
+	if (argc > 2)
+	{
+		// set optical process status
+		G4String command = "/control/execute ";
+		G4String fileName = argv[2];
+		UImanager->ApplyCommand(command + fileName);
+	}
 
 	// Construct the default run manager
 	//
-#ifdef G4MULTITHREADED
-	G4MTRunManager* runManager = new G4MTRunManager;
-	G4int threadNumber = UserDataInput::GetNumberOfThreads();
-	if (uiStatus != false)
-		threadNumber = 1;
-	else
-		threadNumber = UserDataInput::GetNumberOfThreads();
-	runManager->SetNumberOfThreads(threadNumber);
-#else
-	G4RunManager* runManager = new G4RunManager;
-#endif
+//#ifdef G4MULTITHREADED
+//	G4MTRunManager* runManager = new G4MTRunManager;
+//	G4int threadNumber = UserDataInput::GetNumberOfThreads();
+//	if (uiStatus != false)
+//		threadNumber = 1;
+//	else
+//		threadNumber = UserDataInput::GetNumberOfThreads();
+//	runManager->SetNumberOfThreads(threadNumber);
+//#else
+//	G4RunManager* runManager = new G4RunManager;
+//#endif
+	auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
 	// Set mandatory initialization classes
 	//
@@ -93,22 +110,30 @@ int main(int argc, char** argv)
 	//G4cout << "PANDASimPhysicsList" << G4endl;
 
 	// Physics list
-	G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP;
-	//G4VModularPhysicsList* physicsList = new QBBC;
-	//G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
-	//G4VModularPhysicsList* physicsList = new QGSP_BERT_HP;
-	physicsList->SetVerboseLevel(0);
-	if (UserDataInput::GetOpticalPhysicsStatus() == true)
+	G4int phyVer = 1;
+	//G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP(phyVer);
+	G4VModularPhysicsList* physicsList = new QBBC(phyVer);
+	//G4VModularPhysicsList* physicsList1 = new PANDASimPhysicsList(phyVer);
+	//G4VModularPhysicsList* physicsList = new QGSP_BIC_HP(phyVer);
+	//G4VModularPhysicsList* physicsList = new QGSP_BERT_HP(phyVer);
+	physicsList->RegisterPhysics(new G4MuonicAtomDecayPhysics(phyVer));
+	physicsList->SetVerboseLevel(phyVer);
+	G4bool opticalStatus = physMessenger->GetOpticalStatus();//UserDataInput::GetOpticalPhysicsStatus()
+	if ( opticalStatus == true)
 	{
 		G4OpticalParameters::Instance()->SetScintFiniteRiseTime(true);
-		G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+		G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics(phyVer);
 		physicsList->RegisterPhysics(opticalPhysics);
-		opticalPhysics->SetVerboseLevel(0);
+		opticalPhysics->SetVerboseLevel(phyVer);
+		if (phyVer > 0)
+			G4cout << "<<< Optical Physics is registered." << G4endl;
 	}
 	//G4double cutsValue = 10. * um;
 	//physicsList->SetDefaultCutValue(cutsValue);
 	//physicsList->SetCutValue(0, "proton");
 	runManager->SetUserInitialization(physicsList);
+
+	//runManager->SetUserAction(new PANDASimPrimaryGeneratorAction(""));
 
 	// User action initialization
 	runManager->SetUserInitialization(new PANDASimActionInitialization());
@@ -121,12 +146,25 @@ int main(int argc, char** argv)
 	//G4ParticleHPManager::GetInstance()->SetProduceFissionFragments(false);
 	//G4ParticleHPManager::GetInstance()->SetUseWendtFissionModel(false);
 	//G4ParticleHPManager::GetInstance()->SetUseNRESP71Model(false);
-	// 
-	// Get the pointer to the User Interface manager
-	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-	if (uiStatus != false)
+	if (argc > 1)
 	{
+		// batch mode
+		G4String command = "/control/execute ";
+		G4String fileName = argv[1];
+		UImanager->ApplyCommand(command + fileName);
+	}
+	//else if (true)
+	//{
+	//	runManager->Initialize();
+	//	UImanager->ApplyCommand("/source/type Cs137g");
+	//	G4String command = "/control/execute ";
+	//	UImanager->ApplyCommand(command + "run.mac");
+
+	//}
+	else
+	{
+		runManager->SetNumberOfThreads(1);
 		// Initialize visualization
 		//
 		G4VisManager* visManager = new G4VisExecutive;
@@ -139,56 +177,23 @@ int main(int argc, char** argv)
 		G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 
 		UImanager->ApplyCommand("/run/verbose 2");
-		UImanager->ApplyCommand("/event/verbose 2");
-		UImanager->ApplyCommand("/tracking/verbose 2");
+		UImanager->ApplyCommand("/event/verbose 0");
+		UImanager->ApplyCommand("/tracking/verbose 0");
+		//UImanager->ApplyCommand("/run/initialize");
+		//UImanager->ApplyCommand("/source/type Cs137g");
+		//UImanager->ApplyCommand("/control/execute vis.mac");
 		UImanager->ApplyCommand("/control/execute init_vis.mac");
 		ui->SessionStart();
 
 		delete ui;
-
-		// Job termination
-		// Free the store: user actions, physics_list and detector_description are
-		// owned and deleted by the run manager, so they should not be deleted 
-		// in the main() program !
 		delete visManager;
-		delete runManager;
 	}
-	else
-	{
-		G4int NumberOfEvents = UserDataInput::GetNumberOfEvents();
-		if (argc > 1)
-		{
-			// batch mode
-			G4String command = "/control/execute ";
-			G4String fileName = argv[1];
-			UImanager->ApplyCommand(command + fileName);
-			//runManager->BeamOn(NumberOfEvents);
-		}
-		else
-		{
-			runManager->SetVerboseLevel(2);
-			UImanager->ApplyCommand("/event/verbose 0");
-			UImanager->ApplyCommand("/tracking/verbose 0");
-
-			// initialize G4 kernel
-			runManager->Initialize();
-			
-			//auto neutrinoPosition = UserDataInput::GetPositionOfNeutrino();
-			//if (neutrinoPosition[1] < 5)
-			//{
-			//	for (G4int j = neutrinoPosition[1]; j < 5; j++)
-			//	{
-			//		UserDataInput::SetPositionOfNeutrino({ neutrinoPosition[0],j });
-			//		runManager->BeamOn(NumberOfEvents);
-			//	}
-			//}
-			//else
-				runManager->BeamOn(NumberOfEvents);
-		}
-		delete runManager;
-		G4cout << G4endl << "Press Enter to exit." << G4endl;
-		getchar();
-	}
+	// Job termination
+	// Free the store: user actions, physics_list and detector_description are
+	// owned and deleted by the run manager, so they should not be deleted 
+	// in the main() program !
+	delete physMessenger;
+	delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

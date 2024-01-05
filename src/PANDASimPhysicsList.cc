@@ -31,18 +31,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "QBBC.hh"
-#include "QGSP_BIC_HP.hh"
-
 #include "PANDASimPhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PANDASimPhysicsList::PANDASimPhysicsList() : G4VModularPhysicsList()
+PANDASimPhysicsList::PANDASimPhysicsList(G4int ver)
 {
+	RegisterPhysics(new G4OpticalPhysics(ver));
+	if (ver > 0)
+		G4cout << "<<< Optical Physics is registered." << G4endl;
 }
 
 PANDASimPhysicsList::~PANDASimPhysicsList()

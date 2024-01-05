@@ -31,7 +31,10 @@ void PANDASimTrackingAction::PreUserTrackingAction(const G4Track* track)
 
 void PANDASimTrackingAction::PostUserTrackingAction(const G4Track* track)
 {
-	G4String processName = track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
+	auto processDefinedStep = track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep();
+	G4String processName = "";
+	if (processDefinedStep)
+		processName = processDefinedStep->GetProcessName();
 
 	if (processName == "RadioactiveDecay")
 	{

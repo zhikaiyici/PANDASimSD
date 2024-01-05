@@ -6,31 +6,35 @@
 #include <fstream>
 #include <iomanip>
 
-using namespace std;
+//using namespace std;
 
 G4int UserDataInput::threadNumber = 4;
 G4int UserDataInput::eventNumber = 1000;
-G4int UserDataInput::arraySize = 3;
+G4int UserDataInput::arraySize = 4;
 
-G4bool UserDataInput::uiStatus = false;
-G4bool UserDataInput::opticalPhysics = true;
+G4bool UserDataInput::uiStatus = true;
+G4bool UserDataInput::opticalPhysics = false;
 
-G4double UserDataInput::distanceBetweenModules = 2.;
-G4double UserDataInput::gdFilmThickness = 30.;
-G4double UserDataInput::dtctrX = 10.;
-G4double UserDataInput::dtctrY = 10.;
-G4double UserDataInput::dtctrZ = 100.;
+G4double UserDataInput::distanceBetweenModules = 2. * cm;
+G4double UserDataInput::gdFilmThickness = 30. * um;
+G4double UserDataInput::dtctrX = 10. * cm;
+G4double UserDataInput::dtctrY = 10. * cm;
+G4double UserDataInput::dtctrZ = 100. * cm;
 G4double UserDataInput::neutrinoPercentage = 1.;
 
 G4String UserDataInput::sourceType = "NEUTRINO";
 G4String UserDataInput::sourcePosition = "CENTER";
 
-vector<G4double> UserDataInput::positronEnergy = *(new vector<G4double>); //粒子能量MeV
-vector<G4double> UserDataInput::positronCDFSpectrum = *(new vector<G4double>); //归一化能谱
-vector<G4double> UserDataInput::neutronEnergy = *(new vector<G4double>); //粒子能量MeV
-vector<G4double> UserDataInput::neutronCDFSpectrum = *(new vector<G4double>); //归一化能谱
+//std::vector<G4double> UserDataInput::positronEnergy = *(new std::vector<G4double>); //粒子能量MeV
+//std::vector<G4double> UserDataInput::positronCDFSpectrum = *(new std::vector<G4double>); //归一化能谱
+//std::vector<G4double> UserDataInput::neutronEnergy = *(new std::vector<G4double>); //粒子能量MeV
+//std::vector<G4double> UserDataInput::neutronCDFSpectrum = *(new std::vector<G4double>); //归一化能谱
+std::vector<G4double> UserDataInput::positronEnergy(0);// = std::vector<G4double>(0); //粒子能量MeV
+std::vector<G4double> UserDataInput::positronCDFSpectrum(0);// = std::vector<G4double>(0); //归一化能谱
+std::vector<G4double> UserDataInput::neutronEnergy(0);// = std::vector<G4double>(0); //粒子能量MeV
+std::vector<G4double> UserDataInput::neutronCDFSpectrum(0);// = std::vector<G4double>(0); //归一化能谱
 
-array<G4int, 2> UserDataInput::neutrinoPosition = { arraySize * arraySize, 5 };
+std::array<G4int, 2> UserDataInput::neutrinoPosition = { arraySize * arraySize, 5 };
 
 UserDataInput::UserDataInput()
 {
@@ -43,7 +47,7 @@ UserDataInput::~UserDataInput()
 void UserDataInput::ReadInputData()
 {
 	G4String prmtrFile = "InputSet.txt";
-	ifstream prameterFile(prmtrFile, ios_base::in);		//输入文件
+	std::ifstream prameterFile(prmtrFile, std::ios_base::in);		//输入文件
 	if (prameterFile.good() != true)
 		G4cout << "FAILED to open file " << prmtrFile << G4endl;
 	else
@@ -157,12 +161,12 @@ void UserDataInput::ReadInputData()
 	}
 }
 
-void UserDataInput::ReadSpectra(G4String spectrumName, vector<G4double>& energy, vector<G4double>& cdfSpectrum)
+void UserDataInput::ReadSpectra(G4String spectrumName, std::vector<G4double>& energy, std::vector<G4double>& cdfSpectrum)
 {
-	ifstream spcFile;
+	std::ifstream spcFile;
 	spectrumName = "spectra/" + spectrumName;
 
-	spcFile.open(spectrumName, ios_base::in);
+	spcFile.open(spectrumName, std::ios_base::in);
 	if (spcFile.good() != true)
 		G4cout << "FAILED to open spectrum file " << spectrumName << G4endl;
 	else
@@ -172,9 +176,13 @@ void UserDataInput::ReadSpectra(G4String spectrumName, vector<G4double>& energy,
 		//读取能谱,存入energy和spectrum中
 		unsigned int i = 0;
 		G4double temp, sum = 0;
-		vector<G4double> spectrum;
+		std::vector<G4double> spectrum;
+
+		spectrum.push_back(0.);
 		while (spcFile >> temp)
 		{
+			if (i == 0)
+				energy.push_back(temp * 0.9999);
 			energy.push_back(temp);
 			spcFile >> temp;
 			spectrum.push_back(temp);
@@ -185,7 +193,7 @@ void UserDataInput::ReadSpectra(G4String spectrumName, vector<G4double>& energy,
 		//归一化能谱
 		for (i = 0; i < energy.size(); ++i)
 			sum += spectrum[i]; //求能谱总和
-		vector<G4double> normSpectrum;
+		std::vector<G4double> normSpectrum;
 		for (i = 0; i < energy.size(); ++i)
 			normSpectrum.push_back(spectrum[i] / sum);  //归一化谱数据 
 		cdfSpectrum.push_back(normSpectrum[0]);

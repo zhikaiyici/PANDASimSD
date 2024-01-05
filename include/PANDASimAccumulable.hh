@@ -5,6 +5,7 @@
 #include "globals.hh"
 #include <list>
 #include <vector>
+#include <array>
 
 //using namespace std;
 
@@ -23,6 +24,12 @@ public:
 
     void AddNLi9(std::vector<std::vector<G4int> > n);
     void AddNHe8(std::vector<std::vector<G4int> > n);
+
+    inline void SetRunCondition(G4String rc) { runCondition = rc; };
+    inline void SetArraySize(G4int as) { arraySize = as; };
+
+    inline G4String GetRunCondition() const { return runCondition; }
+    inline G4int GetArraySize() const { return arraySize; }
 
     inline std::list<G4double> GetBetaKEHe8() const { return betaKEHe8; }
     inline std::list<G4double> GetBetaKELi9() const { return betaKELi9; }
@@ -43,6 +50,9 @@ private:
     std::vector<std::vector<G4int> >  numHe8;
 
     G4int arraySize;
+
+    G4String runCondition;
+    std::array<G4int, 2> neutrinoPosition;
 };
 
 #endif

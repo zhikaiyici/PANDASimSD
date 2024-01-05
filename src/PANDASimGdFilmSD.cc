@@ -80,7 +80,10 @@ G4bool PANDASimGdFilmSD::ProcessHits(G4Step* step, G4TouchableHistory* history)
 		//G4cout << "gd here" << G4endl;
 		//getchar();
 		const G4StepPoint* postStepPoint = step->GetPostStepPoint();
-		const G4String processName = postStepPoint->GetProcessDefinedStep()->GetProcessName();
+		auto processDefinedStep = postStepPoint->GetProcessDefinedStep();
+		G4String processName = "";
+		if (processDefinedStep)
+			processName = processDefinedStep->GetProcessName();
 		//const G4String processName_ = preStepPoint->GetProcessDefinedStep()->GetProcessName();
 		//G4cout << "processName: " << processName << G4endl;
 		if (processName == "nCapture")

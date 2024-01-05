@@ -1,0 +1,8 @@
+# Macro file
+# 
+# To turn on/off optical process
+# % optical.mac
+# This *.mac file is optional. Without this file optical process will be off. 
+#
+# Use this command as second input *.mac file, the first should be the one with run/initialize and /beamOn
+/physics/optical true

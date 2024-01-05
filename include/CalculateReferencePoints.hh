@@ -7,7 +7,8 @@
 #include<vector>
 #include<array>
 
-using namespace std;
+//using namespace std;
+
 class CalculateReferencePoints
 {
 public:
@@ -15,11 +16,11 @@ public:
 	~CalculateReferencePoints();
 
 	//static 
-		inline vector<array<G4double, 2> > GetRefrencePoints() const { return referencePoints; };
+	inline std::vector<std::array<G4double, 2> > GetRefrencePoints() const { return referencePoints; };
 
 private:
 	//static 
-		vector<array<G4double, 2> > referencePoints;
+	std::vector<std::array<G4double, 2> > referencePoints;
 
 	//static 
 		void Calculate();

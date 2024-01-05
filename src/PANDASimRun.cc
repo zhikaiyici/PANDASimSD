@@ -58,67 +58,67 @@ void PANDASimRun::Merge(const G4Run* run)
 
 	const PANDASimRun* localRun = static_cast<const PANDASimRun*>(run);
 
-	list<G4double> localEnergyDeposit = localRun->energyDeposit;
+	std::list<G4double> localEnergyDeposit = localRun->energyDeposit;
 	energyDeposit.merge(localEnergyDeposit);
 
-	list<G4double> localCaptureTimeH = localRun->capTimeH;
+	std::list<G4double> localCaptureTimeH = localRun->capTimeH;
 	capTimeH.merge(localCaptureTimeH);
 
-	list<G4double> localCaptureTimeGd = localRun->capTimeGd;
+	std::list<G4double> localCaptureTimeGd = localRun->capTimeGd;
 	capTimeGd.merge(localCaptureTimeGd);
 
-	list<G4double> localDecayTimeMu = localRun->decayTimeMu;
+	std::list<G4double> localDecayTimeMu = localRun->decayTimeMu;
 	decayTimeMu.merge(localDecayTimeMu);
 
-	list<vector<G4int> > localAbsorbedPhoton = localRun->allAbPh;
+	std::list<std::vector<G4int> > localAbsorbedPhoton = localRun->allAbPh;
 	allAbPh.merge(localAbsorbedPhoton);
 
-	list<vector<G4int> > localDetectedPhoton = localRun->allDtPh;
+	std::list<std::vector<G4int> > localDetectedPhoton = localRun->allDtPh;
 	allDtPh.merge(localDetectedPhoton);
 
-	list<vector<vector<G4double> > > localModuleEnergyDeposit = localRun->moduleEnergyDeposit;
+	std::list<std::vector<std::vector<G4double> > > localModuleEnergyDeposit = localRun->moduleEnergyDeposit;
 	moduleEnergyDeposit.merge(localModuleEnergyDeposit);
 
-	list<vector<vector<G4double> > > localModuleEnergyDepositDelayH = localRun->moduleEnergyDepositDelayH;
+	std::list<std::vector<std::vector<G4double> > > localModuleEnergyDepositDelayH = localRun->moduleEnergyDepositDelayH;
 	moduleEnergyDepositDelayH.merge(localModuleEnergyDepositDelayH);
 
-	list<vector<vector<G4double> > > localModuleEnergyDepositDelayGd = localRun->moduleEnergyDepositDelayGd;
+	std::list<std::vector<std::vector<G4double> > > localModuleEnergyDepositDelayGd = localRun->moduleEnergyDepositDelayGd;
 	moduleEnergyDepositDelayGd.merge(localModuleEnergyDepositDelayGd);
 
-	list<vector<vector<G4double> > > localModuleEnergyDepositDecayMu = localRun->moduleEnergyDepositDecayMu;
+	std::list<std::vector<std::vector<G4double> > > localModuleEnergyDepositDecayMu = localRun->moduleEnergyDepositDecayMu;
 	moduleEnergyDepositDecayMu.merge(localModuleEnergyDepositDecayMu);
 
-	list<vector<vector<G4double> > > localModuleCapTimeGd = localRun->moduleCapTimeGd;
+	std::list<std::vector<std::vector<G4double> > > localModuleCapTimeGd = localRun->moduleCapTimeGd;
 	moduleCapTimeGd.merge(localModuleCapTimeGd);
 
-	list<vector<vector<G4double> > > localModuleCapTimeH = localRun->moduleCapTimeH;
+	std::list<std::vector<std::vector<G4double> > > localModuleCapTimeH = localRun->moduleCapTimeH;
 	moduleCapTimeH.merge(localModuleCapTimeH);
 
-	list<vector<vector<G4double> > > localModuleDecayTimeMu = localRun->moduleDecayTimeMu;
+	std::list<std::vector<std::vector<G4double> > > localModuleDecayTimeMu = localRun->moduleDecayTimeMu;
 	moduleDecayTimeMu.merge(localModuleDecayTimeMu);
 
-	list<vector<vector<G4double> > > localModuleMuTrackLength = localRun->moduleMuTrackLength;
+	std::list<std::vector<std::vector<G4double> > > localModuleMuTrackLength = localRun->moduleMuTrackLength;
 	moduleMuTrackLength.merge(localModuleMuTrackLength);
 
-	list<vector<vector<G4double> > > localModuleMuEdep = localRun->moduleMuEdep;
+	std::list<std::vector<std::vector<G4double> > > localModuleMuEdep = localRun->moduleMuEdep;
 	moduleMuEdep.merge(localModuleMuEdep);
 
-	list<vector<vector<vector<G4int> > > > localModuleAbPh = localRun->moduleAbPh;
+	std::list<std::vector<std::vector<std::vector<G4int> > > > localModuleAbPh = localRun->moduleAbPh;
 	moduleAbPh.merge(localModuleAbPh);
 
-	list<vector<vector<vector<G4int> > > > localModuleDtPh = localRun->moduleDtPh;
+	std::list<std::vector<std::vector<std::vector<G4int> > > > localModuleDtPh = localRun->moduleDtPh;
 	moduleDtPh.merge(localModuleDtPh);
 
-	list<vector<vector<vector<G4double> > > > localModuleCalPh = localRun->moduleCalPh;
+	std::list<std::vector<std::vector<std::vector<G4double> > > > localModuleCalPh = localRun->moduleCalPh;
 	moduleCalPh.merge(localModuleCalPh);
 
-	list<vector<vector<vector<G4double> > > > localModuleCalPhDelayH = localRun->moduleCalPhDelayH;
+	std::list<std::vector<std::vector<std::vector<G4double> > > > localModuleCalPhDelayH = localRun->moduleCalPhDelayH;
 	moduleCalPhDelayH.merge(localModuleCalPhDelayH);
 
-	list<vector<vector<vector<G4double> > > > localModuleCalPhDelayGd = localRun->moduleCalPhDelayGd;
+	std::list<std::vector<std::vector<std::vector<G4double> > > > localModuleCalPhDelayGd = localRun->moduleCalPhDelayGd;
 	moduleCalPhDelayGd.merge(localModuleCalPhDelayGd);
 
-	list<vector<vector<vector<G4double> > > > localModuleCalPhDecayMu = localRun->moduleCalPhDecayMu;
+	std::list<std::vector<std::vector<std::vector<G4double> > > > localModuleCalPhDecayMu = localRun->moduleCalPhDecayMu;
 	moduleCalPhDelayGd.merge(localModuleCalPhDecayMu);
 
 	G4Run::Merge(run);

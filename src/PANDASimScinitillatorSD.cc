@@ -29,6 +29,7 @@
 
 #include "PANDASimScinitillatorSD.hh"
 #include "PANDASimRunAction.hh"
+#include "PANDASimDetectorConstruction.hh"
 #include "UserDataInput.hh"
 
 #include "globals.hh"
@@ -48,7 +49,7 @@ PANDASimScinitillatorSD::PANDASimScinitillatorSD(
                             const G4String& hitsCollectionName,
                             G4int nofHits)
  : G4VSensitiveDetector(name), fHitsCollection(nullptr), fHitsNum(nofHits),
-   fRunAction(nullptr), fEventAction(nullptr), fStackManager(nullptr), fTrackingAction(nullptr)
+   fRunAction(nullptr), fEventAction(nullptr), /*fStackManager(nullptr),*/ fTrackingAction(nullptr)
 {
   collectionName.insert(hitsCollectionName);
 }
@@ -81,11 +82,11 @@ void PANDASimScinitillatorSD::Initialize(G4HCofThisEvent* hce)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
+G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* history)
 {
     G4Track* theTrack = step->GetTrack();
     const G4ParticleDefinition* particleDefinition = theTrack->GetDynamicParticle()->GetParticleDefinition();
-    const G4String& strPrtclName = particleDefinition->GetParticleName();
+    G4String strPrtclName = particleDefinition->GetParticleName();
 
     //if (particleDefinition == G4OpticalPhoton::OpticalPhotonDefinition()) return false;
     if (strPrtclName == "opticalphoton") return false;
@@ -109,12 +110,15 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     if (!fTrackingAction)
         fTrackingAction = static_cast<PANDASimTrackingAction*>(G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
 
-    if (!fStackManager)
-        fStackManager = G4EventManager::GetEventManager()->GetStackManager();
+    //if (!fStackManager)
+    //    fStackManager = G4EventManager::GetEventManager()->GetStackManager();
 
-    auto stepPoint = step->GetPostStepPoint();
+    auto postStepPoint = step->GetPostStepPoint();
     //auto stepPoint = step->GetPreStepPoint();
-    const G4String processName = stepPoint->GetProcessDefinedStep()->GetProcessName();
+    auto processDefinedStep = postStepPoint->GetProcessDefinedStep();
+    G4String processName = "";
+    if (processDefinedStep)
+        processName = processDefinedStep->GetProcessName();
     //const G4String processName_ = preStepPoint->GetProcessDefinedStep()->GetProcessName();
     //G4cout << "processName: " << processName << G4endl;
     
@@ -132,7 +136,7 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
         if (processName == "nCapture")
         {
             //const G4double capTimeH1 = stepPoint->GetGlobalTime() / us;
-            const G4double capTimeH = stepPoint->GetLocalTime() / us;
+            const G4double capTimeH = postStepPoint->GetLocalTime() / us;
             hit->TimeH(capTimeH);
             fEventAction->SetDelayFlagH(true);
             //G4int nWaiting = fStackManager->GetNWaitingTrack();
@@ -146,7 +150,7 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory*)
         if (processName == "Decay")
         {
             //const G4double muDecayTime = stepPoint->GetglobalTime() / us;
-            const G4double muDecayTime = stepPoint->GetLocalTime() / us;
+            const G4double muDecayTime = postStepPoint->GetLocalTime() / us;
             hit->TimeMu(muDecayTime);
             fEventAction->SetDecayFlagMu(true);
         }
@@ -243,8 +247,11 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
 
         fRunAction = fTrackingAction->GetPANDASimRunAction();
     }
+
+    //G4ThreadLocalStatic auto fRunAction = static_cast<const PANDASimRunAction*>(G4RunManager::GetRunManager()->GetUserRunAction());
     
-    G4int arraySize = UserDataInput::GetSizeOfArray();
+    G4int arraySize = 
+        (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();// UserDataInput::GetSizeOfArray();
     std::vector<std::vector<G4int> > numHe8(arraySize, std::vector<G4int>(arraySize, 0));
     std::vector<std::vector<G4int> > numLi9(arraySize, std::vector<G4int>(arraySize, 0));
 

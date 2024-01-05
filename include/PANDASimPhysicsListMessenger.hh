@@ -23,53 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
 //
-/// \file PANDASimScinitillatorSD.hh
-/// \brief Definition of the PANDASimScinitillatorSD class
+// $Id$
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PANDASimScinitillatorSD_h
-#define PANDASimScinitillatorSD_h 1
+//#include "G4PhysicalConstants.hh"
+//#include "G4SystemOfUnits.hh"
 
-#include "G4VSensitiveDetector.hh"
+#ifndef PANDASimPhysicsListMessenger_hh
+#define PANDASimPhysicsListMessenger_hh
 
-#include "PANDASimScinitillatorHit.hh"
-#include "PANDASimEventAction.hh"
-#include "PANDASimStackingAction.hh"
-#include "PANDASimTrackingAction.hh"
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
-class G4Step;
-class G4HCofThisEvent;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/// PlasticScinitillator sensitive detector class
-///
-/// The values are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step.
+class G4UIcmdWithABool;
 
-class PANDASimScinitillatorSD : public G4VSensitiveDetector
+class PANDASimPhysicsListMessenger : public G4UImessenger
 {
 public:
-    PANDASimScinitillatorSD(const G4String& name,
-        const G4String& hitsCollectionName,
-        G4int nofHits);
-    virtual ~PANDASimScinitillatorSD();
+    PANDASimPhysicsListMessenger();
+    virtual ~PANDASimPhysicsListMessenger();
 
-    // methods from base class
-    virtual void   Initialize(G4HCofThisEvent* hitCollection);
-    virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* history);
-    virtual void   EndOfEvent(G4HCofThisEvent* hitCollection);
+    void SetNewValue(G4UIcommand*, G4String);
+
+    inline G4bool GetOpticalStatus() const { return opticalStatus; }
 
 private:
-    PANDASimScinHitsCollection* fHitsCollection;
-    PANDASimRunAction* fRunAction;
-    PANDASimEventAction* fEventAction;
-    PANDASimTrackingAction* fTrackingAction;
-   // G4StackManager* fStackManager;
-    //G4TrackingManager* fTrackingManager;
-    G4int  fHitsNum;
-    //G4int  nWaiting;
+
+    G4bool opticalStatus;
+
+    G4UIcmdWithABool* optiaclPhysicsCMD;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
-
+#endif // !PANDASimPhysicsListMessenger_hh

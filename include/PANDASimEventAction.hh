@@ -39,7 +39,7 @@
 #include <vector>
 #include <list>
 
-using namespace std;
+//using namespace std;
 
 class PANDASimRunAction;
 
@@ -104,29 +104,29 @@ private:
 	//vector<G4int> nDetectedOpPhoton;
 	//vector<vector<vector<G4int> > > nAbPhVec;
 	//vector<vector<vector<G4int> > > nDtPhVec;
-	vector<vector<vector<G4double> > > nCalPhVec;
-	vector<vector<vector<G4double> > > nCalPhDelayHVec;
-	vector<vector<vector<G4double> > > nCalPhDelayGdVec;
-	vector<vector<vector<G4double> > > nCalPhDecayMuVec;
-	vector<vector<G4double> > energyDeposit;
-	vector<vector<G4double> > energyDepositDelayH;
-	vector<vector<G4double> > energyDepositDelayGd;
-	vector<vector<G4double> > energyDepositDecayMu;
-	vector<vector<G4double> > capTimeH;
-	vector<vector<G4double> > capTimeGd;
-	vector<vector<G4double> > decayTimeMu;
-	vector<vector<G4double> > muTrackLength;
-	vector<vector<G4double> > muEdep;
+	std::vector<std::vector<std::vector<G4double> > > nCalPhVec;
+	std::vector<std::vector<std::vector<G4double> > > nCalPhDelayHVec;
+	std::vector<std::vector<std::vector<G4double> > > nCalPhDelayGdVec;
+	std::vector<std::vector<std::vector<G4double> > > nCalPhDecayMuVec;
+	std::vector<std::vector<G4double> > energyDeposit;
+	std::vector<std::vector<G4double> > energyDepositDelayH;
+	std::vector<std::vector<G4double> > energyDepositDelayGd;
+	std::vector<std::vector<G4double> > energyDepositDecayMu;
+	std::vector<std::vector<G4double> > capTimeH;
+	std::vector<std::vector<G4double> > capTimeGd;
+	std::vector<std::vector<G4double> > decayTimeMu;
+	std::vector<std::vector<G4double> > muTrackLength;
+	std::vector<std::vector<G4double> > muEdep;
 
 	G4VHitsCollection* GetHitsCollection(G4int hcID, const G4Event* event) const;
 
-	void ResizeVector(vector<vector<G4double> >& energyDeposit, G4int arrayNumber);
-	void ResizeVector(vector<vector<vector<G4int> > >& nPhVec, G4int arrayNumber);
-	void ResizeVector(vector<vector<vector<G4double> > >& nPhVec, G4int arrayNumber);
+	void InitVector(std::vector<std::vector<G4double> >& energyDeposit, G4int arrayNumber);
+	void InitVector(std::vector<std::vector<std::vector<G4int> > >& nPhVec, G4int arrayNumber);
+	void InitVector(std::vector<std::vector<std::vector<G4double> > >& nPhVec, G4int arrayNumber);
 
-	void InitializeVector(vector<vector<G4double> >& energyDeposit);
-	void InitializeVector(vector<vector<vector<G4int> > >& nPhVec);
-	void InitializeVector(vector<vector<vector<G4double> > >& nPhVec);
+	void InitializeVector(std::vector<std::vector<G4double> >& energyDeposit);
+	void InitializeVector(std::vector<std::vector<std::vector<G4int> > >& nPhVec);
+	void InitializeVector(std::vector<std::vector<std::vector<G4double> > >& nPhVec);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-//
+﻿//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,53 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PANDASimDetectorConstruction.cc 94307 2015-11-11 13:42:46Z gcosmo $
 //
-/// \file PANDASimScinitillatorSD.hh
-/// \brief Definition of the PANDASimScinitillatorSD class
+/// \file PANDASimDetectorConstruction.cc
+/// \brief Implementation of the PANDASimDetectorConstruction class
 
-#ifndef PANDASimScinitillatorSD_h
-#define PANDASimScinitillatorSD_h 1
+#include "PANDASimDetectorConstructionMessenger.hh"
 
-#include "G4VSensitiveDetector.hh"
-
-#include "PANDASimScinitillatorHit.hh"
-#include "PANDASimEventAction.hh"
-#include "PANDASimStackingAction.hh"
-#include "PANDASimTrackingAction.hh"
-
-class G4Step;
-class G4HCofThisEvent;
-
-/// PlasticScinitillator sensitive detector class
-///
-/// The values are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step.
-
-class PANDASimScinitillatorSD : public G4VSensitiveDetector
+PANDASimDetectorConstructionMessenger::PANDASimDetectorConstructionMessenger(PANDASimDetectorConstruction* pndCnstrctn)
+	: G4UImessenger(), pandaDetectorConstruction(pndCnstrctn)
 {
-public:
-    PANDASimScinitillatorSD(const G4String& name,
-        const G4String& hitsCollectionName,
-        G4int nofHits);
-    virtual ~PANDASimScinitillatorSD();
+}
 
-    // methods from base class
-    virtual void   Initialize(G4HCofThisEvent* hitCollection);
-    virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* history);
-    virtual void   EndOfEvent(G4HCofThisEvent* hitCollection);
+PANDASimDetectorConstructionMessenger::~PANDASimDetectorConstructionMessenger()
+{
+}
 
-private:
-    PANDASimScinHitsCollection* fHitsCollection;
-    PANDASimRunAction* fRunAction;
-    PANDASimEventAction* fEventAction;
-    PANDASimTrackingAction* fTrackingAction;
-   // G4StackManager* fStackManager;
-    //G4TrackingManager* fTrackingManager;
-    G4int  fHitsNum;
-    //G4int  nWaiting;
-};
+void PANDASimDetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+	//// Define detector command directory using generic messenger class
+	//fMessenger = new G4GenericMessenger(this, "/detector/",	"Detector control");
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+	//auto& gdFilmCMD = fMessenger->DeclarePropertyWithUnit("gdFilmThickness", "um", gdFilmThickness, "Set Gd film thickness.");
+	//gdFilmCMD.SetParameterName("gdFilmThickness", true);
+	//gdFilmCMD.SetDefaultUnit("um");
+	//gdFilmCMD.SetDefaultValue("30.");
+	//gdFilmCMD.SetRange("gdFilmThickness >= 0");
 
-#endif
-
+	//auto& armAngleCmd = fMessenger->DeclareMethodWithUnit("armAngle", "deg",
+	//		&DetectorConstruction::SetArmAngle,
+	//		"Set rotation angle of the second arm.");
+	//armAngleCmd.SetParameterName("GdFilm", true);
+	//armAngleCmd.SetRange("GdFilm >= 0.");
+	//armAngleCmd.SetDefaultValue("30.");
+}

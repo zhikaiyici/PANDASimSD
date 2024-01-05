@@ -39,12 +39,17 @@
 
 #include "G4VModularPhysicsList.hh"
 
+#include "QBBC.hh"
+#include "QGSP_BIC_HP.hh"
+#include "QGSP_BIC_AllHP.hh"
+#include "G4OpticalPhysics.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PANDASimPhysicsList : public G4VModularPhysicsList
+class PANDASimPhysicsList : public QBBC
 {
 public:
-    PANDASimPhysicsList();
+    PANDASimPhysicsList(G4int ver = 1);
     virtual ~PANDASimPhysicsList();
 private:
 };

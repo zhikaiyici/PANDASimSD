@@ -2,7 +2,7 @@
 #include <cstring>
 #include <algorithm>
 
-using namespace std;
+//using namespace std;
 
 namespace SplineSpace
 {
@@ -17,8 +17,8 @@ namespace SplineSpace
 			throw SplineFailure("构造失败,已知点数过少");
 		}
 		PartialDerivative = new double[GivenNum];	//给偏导分配空间
-		MaxX = *max_element(GivenX, GivenX + GivenNum);
-		MinX = *min_element(GivenX, GivenX + GivenNum);
+		MaxX = *std::max_element(GivenX, GivenX + GivenNum);
+		MinX = *std::min_element(GivenX, GivenX + GivenNum);
 		if (Bc == GivenFirstOrder)		//I型边界条件
 			PartialDerivative1();
 		else if (Bc == GivenSecondOrder)		//II型边界条件

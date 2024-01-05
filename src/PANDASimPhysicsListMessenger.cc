@@ -1,4 +1,4 @@
-//
+﻿//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -23,53 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
 //
-/// \file PANDASimScinitillatorSD.hh
-/// \brief Definition of the PANDASimScinitillatorSD class
+// $Id$
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PANDASimScinitillatorSD_h
-#define PANDASimScinitillatorSD_h 1
+#include "PANDASimPhysicsListMessenger.hh"
 
-#include "G4VSensitiveDetector.hh"
-
-#include "PANDASimScinitillatorHit.hh"
-#include "PANDASimEventAction.hh"
-#include "PANDASimStackingAction.hh"
-#include "PANDASimTrackingAction.hh"
-
-class G4Step;
-class G4HCofThisEvent;
-
-/// PlasticScinitillator sensitive detector class
-///
-/// The values are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step.
-
-class PANDASimScinitillatorSD : public G4VSensitiveDetector
-{
-public:
-    PANDASimScinitillatorSD(const G4String& name,
-        const G4String& hitsCollectionName,
-        G4int nofHits);
-    virtual ~PANDASimScinitillatorSD();
-
-    // methods from base class
-    virtual void   Initialize(G4HCofThisEvent* hitCollection);
-    virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* history);
-    virtual void   EndOfEvent(G4HCofThisEvent* hitCollection);
-
-private:
-    PANDASimScinHitsCollection* fHitsCollection;
-    PANDASimRunAction* fRunAction;
-    PANDASimEventAction* fEventAction;
-    PANDASimTrackingAction* fTrackingAction;
-   // G4StackManager* fStackManager;
-    //G4TrackingManager* fTrackingManager;
-    G4int  fHitsNum;
-    //G4int  nWaiting;
-};
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+PANDASimPhysicsListMessenger::PANDASimPhysicsListMessenger() : G4UImessenger(), opticalStatus(false)
+{
+	optiaclPhysicsCMD = new G4UIcmdWithABool("/physics/optical", this);
+	optiaclPhysicsCMD->SetGuidance("Turn on/off optical process.");
+	optiaclPhysicsCMD->SetParameterName("opticalProcess", true);
+	optiaclPhysicsCMD->SetDefaultValue(true);
+}
+
+PANDASimPhysicsListMessenger::~PANDASimPhysicsListMessenger()
+{
+	delete optiaclPhysicsCMD;
+}
+
+void PANDASimPhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+	if (command == optiaclPhysicsCMD)
+	{
+		opticalStatus = optiaclPhysicsCMD->GetNewBoolValue(newValue);
+	}
+}
 

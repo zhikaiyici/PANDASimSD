@@ -78,7 +78,7 @@ G4bool PANDASimPhotocathodeSD::ProcessHits(G4Step* step, G4TouchableHistory* his
 
 	try
 	{
-		static G4ThreadLocal SplineSpace::SplineInterface* sp = new SplineSpace::Spline(photonEnergy, quatumnEfficiency, nEntries);
+		G4ThreadLocalStatic SplineSpace::SplineInterface* sp = new SplineSpace::Spline(photonEnergy, quatumnEfficiency, nEntries);
 		const G4double photonKE = step->GetPreStepPoint()->GetKineticEnergy();
 		G4double pheNum;
 		sp->SinglePointInterp(photonKE, pheNum);

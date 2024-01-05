@@ -71,12 +71,12 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
   delete InputCmd;
   delete UpdateCmd;
   delete FileCmd;
+  delete MessInput;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorMessenger::SetNewValue(
-                                        G4UIcommand* command, G4String newValue)
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
   if( command == InputCmd )
    { 

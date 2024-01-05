@@ -35,12 +35,13 @@
 #include "G4Accumulable.hh"
 #include "globals.hh"
 #include "PANDASimAccumulable.hh"
+#include "PANDASimPrimaryGeneratorAction.hh"
 
 #include <vector>
 #include <list>
 #include <deque>
 
-using namespace std;
+//using namespace std;
 
 class G4Run;
 
@@ -76,8 +77,8 @@ private:
 	//G4Accumulable<G4double> fEdep;
 	//G4Accumulable<G4double> fEdep2;
 
-	// static list<G4double> energyDeposit;
-	// deque<G4double> EnergyDeposit;
+	// static std::list<G4double> energyDeposit;
+	// std::deque<G4double> EnergyDeposit;
 	//static G4int neutronCount;
 	//static G4int neutronNumber;
 	//G4Accumulable<G4int> fAbsorbedOpPhoton;
@@ -85,14 +86,16 @@ private:
 
 	PANDASimAccumulable* myAccu = nullptr;
 
-	G4String runCondition;
+	//PANDASimPrimaryGeneratorAction* generatorAction = nullptr;
+
+	//G4String runCondition;
 	G4int arraySize;
-	void WriteDataToFile(G4String fileName, list<G4double> data);
-	void WriteDataToFile(G4String fileName, vector<vector<G4int> > data);
-	void WriteDataToFile(G4String fileName, list<vector<vector<G4int> > > data);
-	void WriteDataToFile(G4String fileName, list<vector<vector<G4double> > > data);
-	void WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, list<vector<vector<vector<G4int> > > > data);
-	void WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, list<vector<vector<vector<G4double> > > > data);
+	void WriteDataToFile(G4String fileName, std::list<G4double> data);
+	void WriteDataToFile(G4String fileName, std::vector<std::vector<G4int> > data);
+	void WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4int> > > data);
+	void WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4double> > > data);
+	void WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4int> > > > data);
+	void WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4double> > > > data);
 };
 
 #endif

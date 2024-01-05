@@ -32,6 +32,7 @@
 #include "PANDASimRun.hh"
 #include "PANDASimEventAction.hh"
 #include "PANDASimRunAction.hh"
+#include "PANDASimDetectorConstruction.hh"
 
 #include "PANDASimScinitillatorSD.hh"
 #include "PANDASimScinitillatorHit.hh"
@@ -57,27 +58,28 @@ PANDASimEventAction::PANDASimEventAction(/*PANDASimRunAction* runAction*/)
 	//nAbsorbedOpPhoton(2), nDetectedOpPhoton(2),
 	delayedFlag(false), delayFlagH(false), delayFlagGd(false), decayFlagMu(false)
 {
-	arraySize = UserDataInput::GetSizeOfArray();
-	ResizeVector(energyDeposit, arraySize);
-	ResizeVector(energyDepositDelayH, arraySize);
-	ResizeVector(energyDepositDelayGd, arraySize);
-	ResizeVector(energyDepositDecayMu, arraySize);
+	//arraySize = UserDataInput::GetSizeOfArray();
+	arraySize = (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();
 
-	ResizeVector(capTimeH, arraySize);
-	ResizeVector(capTimeGd, arraySize);
-	ResizeVector(decayTimeMu, arraySize);
+	InitVector(energyDeposit, arraySize);
+	InitVector(energyDepositDelayH, arraySize);
+	InitVector(energyDepositDelayGd, arraySize);
+	InitVector(energyDepositDecayMu, arraySize);
 
-	ResizeVector(muTrackLength, arraySize);
-	ResizeVector(muEdep, arraySize);
+	InitVector(capTimeH, arraySize);
+	InitVector(capTimeGd, arraySize);
+	InitVector(decayTimeMu, arraySize);
+
+	InitVector(muTrackLength, arraySize);
+	InitVector(muEdep, arraySize);
 
 	//ResizeVector(nAbPhVec, arraySize);
 	//ResizeVector(nDtPhVec, arraySize);
 
-	ResizeVector(nCalPhVec, arraySize);
-	ResizeVector(nCalPhDelayHVec, arraySize);
-	ResizeVector(nCalPhDelayGdVec, arraySize);
-	ResizeVector(nCalPhDecayMuVec, arraySize);
-
+	InitVector(nCalPhVec, arraySize);
+	InitVector(nCalPhDelayHVec, arraySize);
+	InitVector(nCalPhDelayGdVec, arraySize);
+	InitVector(nCalPhDecayMuVec, arraySize);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,25 +91,47 @@ PANDASimEventAction::~PANDASimEventAction()
 
 void PANDASimEventAction::BeginOfEventAction(const G4Event* /*event*/)
 {
-	InitializeVector(energyDeposit);
-	InitializeVector(energyDepositDelayH);
-	InitializeVector(energyDepositDelayGd);
-	InitializeVector(energyDepositDecayMu);
+	arraySize = (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();
 
-	InitializeVector(capTimeH);
-	InitializeVector(capTimeGd);
-	InitializeVector(decayTimeMu);
+	InitVector(energyDeposit, arraySize);
+	InitVector(energyDepositDelayH, arraySize);
+	InitVector(energyDepositDelayGd, arraySize);
+	InitVector(energyDepositDecayMu, arraySize);
 
-	InitializeVector(muTrackLength);
-	InitializeVector(muEdep);
+	InitVector(capTimeH, arraySize);
+	InitVector(capTimeGd, arraySize);
+	InitVector(decayTimeMu, arraySize);
 
-	//InitializeVector(nAbPhVec);
-	//InitializeVector(nDtPhVec);
+	InitVector(muTrackLength, arraySize);
+	InitVector(muEdep, arraySize);
 
-	InitializeVector(nCalPhVec);
-	InitializeVector(nCalPhDelayHVec);
-	InitializeVector(nCalPhDelayGdVec);
-	InitializeVector(nCalPhDecayMuVec);
+	//InitVector(nAbPhVec, arraySize);
+	//InitVector(nDtPhVec, arraySize);
+
+	InitVector(nCalPhVec, arraySize);
+	InitVector(nCalPhDelayHVec, arraySize);
+	InitVector(nCalPhDelayGdVec, arraySize);
+	InitVector(nCalPhDecayMuVec, arraySize);
+
+	//InitializeVector(energyDeposit);
+	//InitializeVector(energyDepositDelayH);
+	//InitializeVector(energyDepositDelayGd);
+	//InitializeVector(energyDepositDecayMu);
+
+	//InitializeVector(capTimeH);
+	//InitializeVector(capTimeGd);
+	//InitializeVector(decayTimeMu);
+
+	//InitializeVector(muTrackLength);
+	//InitializeVector(muEdep);
+
+	////InitializeVector(nAbPhVec);
+	////InitializeVector(nDtPhVec);
+
+	//InitializeVector(nCalPhVec);
+	//InitializeVector(nCalPhDelayHVec);
+	//InitializeVector(nCalPhDelayGdVec);
+	//InitializeVector(nCalPhDecayMuVec);
 
 	fEdep = 0.;
 
@@ -210,7 +234,7 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 	if (fEdep != 0)
 		fPANDASimRun->PushBackEnergyDeposit(fEdep);
 
-	vector <vector<G4double> > double_empty2DVec(arraySize, vector<G4double>(arraySize));
+	std::vector<std::vector<G4double> > double_empty2DVec(arraySize, std::vector<G4double>(arraySize));
 	if (energyDeposit != double_empty2DVec)
 		fPANDASimRun->PushBackModuleEnergyDeposit(energyDeposit);
 	if (energyDepositDelayH != double_empty2DVec)
@@ -233,8 +257,8 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 	if (muEdep != double_empty2DVec)
 		fPANDASimRun->PushBackModuleMuEdep(muEdep);
 
-	/*vector <vector<G4int> > int_empty2DVec(arraySize, vector<G4int>(2));
-	vector<vector<vector<G4int> > > int_empty3DVec(arraySize, int_empty2DVec);
+	/*std::vector<std::vector<G4int> > int_empty2DVec(arraySize, std::vector<G4int>(2));
+	std::vector<std::vector<std::vector<G4int> > > int_empty3DVec(arraySize, int_empty2DVec);
 	if (nAbPhVec != int_empty3DVec)
 	{
 		fPANDASimRun->PushBackModuleAbPh(nAbPhVec);
@@ -244,8 +268,8 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 		fPANDASimRun->PushBackModuleDtPh(nDtPhVec);
 	}*/
 
-	vector <vector<G4double> > double_empty2DVec32(arraySize, vector<G4double>(2));
-	vector<vector<vector<G4double> > > double_empty3DVec(arraySize, double_empty2DVec32);
+	std::vector<std::vector<G4double> > double_empty2DVec32(arraySize, std::vector<G4double>(2));
+	std::vector<std::vector<std::vector<G4double> > > double_empty3DVec(arraySize, double_empty2DVec32);
 	if (nCalPhVec != double_empty3DVec)
 		fPANDASimRun->PushBackModuleCalPh(nCalPhVec);
 	if (nCalPhDelayHVec != double_empty3DVec)
@@ -272,9 +296,9 @@ void PANDASimEventAction::EndOfEventAction(const G4Event* event)
 			auto hours = (minutes - minuteNow) / 60;
 			G4int hourNow = hours % 24;
 			G4cout
-				<< " Time now: " << setw(2) << setfill('0') << hourNow << ":" << setw(2) << minuteNow << ":" << setw(2) << secondNow << ". ";
+				<< " Time now: " << std::setw(2) << std::setfill('0') << hourNow << ":" << std::setw(2) << minuteNow << ":" << std::setw(2) << secondNow << ". ";
 			G4cout
-				<< setw(3) << setfill(' ') << per << "% of simulation completed."
+				<< std::setw(3) << std::setfill(' ') << per << "% of simulation completed."
 				<< G4endl;
 			//getchar();
 		}
@@ -297,42 +321,45 @@ G4VHitsCollection* PANDASimEventAction::GetHitsCollection(G4int hcID, const G4Ev
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void PANDASimEventAction::ResizeVector(vector<vector<G4double> >& edepVec, G4int arrayNumber)
+void PANDASimEventAction::InitVector(std::vector<std::vector<G4double>>& edepVec, G4int arrayNumber)
 {
-	edepVec.resize(arrayNumber);
-	for (G4int i = 0; i < arrayNumber; i++)
-	{
-		edepVec[i].resize(arrayNumber);
-	}
+	edepVec = std::vector<std::vector<G4double>>(arrayNumber, std::vector<G4double>(arrayNumber, 0));
+	//edepVec.resize(arrayNumber);
+	//for (G4int i = 0; i < arrayNumber; i++)
+	//{
+	//	edepVec[i].resize(arrayNumber);
+	//}
 }
 
-void PANDASimEventAction::ResizeVector(vector<vector<vector<G4int> > >& nPhVec, G4int arrayNumber)
+void PANDASimEventAction::InitVector(std::vector<std::vector<std::vector<G4int>>>& nPhVec, G4int arrayNumber)
 {
-	nPhVec.resize(arrayNumber);
-	for (G4int i = 0; i < arrayNumber; ++i)
-	{
-		nPhVec[i].resize(arrayNumber);
-		for (G4int j = 0; j < arrayNumber; ++j)
-		{
-			nPhVec[i][j].resize(2);
-		}
-	}
+	nPhVec = std::vector<std::vector<std::vector<G4int>>>(arrayNumber, std::vector <std::vector<G4int>>(arrayNumber, std::vector<G4int>(2, 0)));
+	//nPhVec.resize(arrayNumber);
+	//for (G4int i = 0; i < arrayNumber; ++i)
+	//{
+	//	nPhVec[i].resize(arrayNumber);
+	//	for (G4int j = 0; j < arrayNumber; ++j)
+	//	{
+	//		nPhVec[i][j].resize(2);
+	//	}
+	//}
 }
 
-void PANDASimEventAction::ResizeVector(vector<vector<vector<G4double> > >& nPhVec, G4int arrayNumber)
+void PANDASimEventAction::InitVector(std::vector<std::vector<std::vector<G4double>>>& nPhVec, G4int arrayNumber)
 {
-	nPhVec.resize(arrayNumber);
-	for (G4int i = 0; i < arrayNumber; ++i)
-	{
-		nPhVec[i].resize(arrayNumber);
-		for (G4int j = 0; j < arrayNumber; ++j)
-		{
-			nPhVec[i][j].resize(2);
-		}
-	}
+	nPhVec = std::vector<std::vector<std::vector<G4double>>>(arrayNumber, std::vector <std::vector<G4double>>(arrayNumber, std::vector<G4double>(2, 0)));
+	//nPhVec.resize(arrayNumber);
+	//for (G4int i = 0; i < arrayNumber; ++i)
+	//{
+	//	nPhVec[i].resize(arrayNumber);
+	//	for (G4int j = 0; j < arrayNumber; ++j)
+	//	{
+	//		nPhVec[i][j].resize(2);
+	//	}
+	//}
 }
 
-void PANDASimEventAction::InitializeVector(vector<vector<G4double> >& edepVec)
+void PANDASimEventAction::InitializeVector(std::vector<std::vector<G4double>>& edepVec)
 {
 	for (G4int i = 0; i < edepVec.size(); i++)
 	{
@@ -343,7 +370,7 @@ void PANDASimEventAction::InitializeVector(vector<vector<G4double> >& edepVec)
 	}
 }
 
-void PANDASimEventAction::InitializeVector(vector<vector<vector<G4int> > >& nPhVec)
+void PANDASimEventAction::InitializeVector(std::vector<std::vector<std::vector<G4int>>>& nPhVec)
 {
 	for (G4int i = 0; i < nPhVec.size(); i++)
 	{
@@ -357,7 +384,7 @@ void PANDASimEventAction::InitializeVector(vector<vector<vector<G4int> > >& nPhV
 	}
 }
 
-void PANDASimEventAction::InitializeVector(vector<vector<vector<G4double> > >& nPhVec)
+void PANDASimEventAction::InitializeVector(std::vector<std::vector<std::vector<G4double>>>& nPhVec)
 {
 	for (G4int i = 0; i < nPhVec.size(); i++)
 	{

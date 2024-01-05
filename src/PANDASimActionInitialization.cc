@@ -53,6 +53,8 @@ void PANDASimActionInitialization::BuildForMaster() const
 {
 	PANDASimRunAction* runAction = new PANDASimRunAction;
 	SetUserAction(runAction);
+
+	//SetUserAction(new PANDASimPrimaryGeneratorAction(""));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
