@@ -8,7 +8,7 @@
 #       --/detectorY
 #       --/detectorZ
 #       --/moduleDistance
-#       --/update  ### DONOT USE!! BUG WITH SENSITIVE DETETOR ###
+#       --/update          ### DONOT USE!! BUG WITH SENSITIVE DETECTOR ###
 ### Use this command before /run/initialize ###
 #
 /detector/arraySize 4
@@ -24,7 +24,7 @@
 #/source/type              ## Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n with position CENTER/EDGE; He8; Li9; NEUTRINO; MUON; COSMICNEUTRON; CRY (Linux only) ##
 #     --/spectra           ## Spectra for neutron and position
 #     --/position          ## Position for Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n
-#     --/neutrinoPosition  ## Position for neutrino, two positive integers
+#     --/neutrinoPosition  ## Position for NEUTRINO, two positive integers
 ### Use this command after /run/initialize ###
 #
 /source/type NEUTRINO

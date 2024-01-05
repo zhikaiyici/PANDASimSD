@@ -1,7 +1,12 @@
+/detector/arraySize 4
+
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2
+/run/numberOfThreads 8
 /run/initialize
+
+/source/type CRY
 
 /CRY/input returnNeutrons 0
 /CRY/input returnProtons 0
