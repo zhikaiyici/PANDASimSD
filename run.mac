@@ -21,13 +21,15 @@
 /event/verbose 0
 /tracking/verbose 0
 #
-#/source/type              ## Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n with position CENTER/EDGE; He8; Li9; NEUTRINO; MUON; COSMICNEUTRON; CRY (Linux only) ##
+#/source/type              ## Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n with position CENTER/EDGE;
+                           ## He8; Li9; NEUTRINO; MUON; COSMICNEUTRON; CRY (Linux only); GUN; GPS
 #     --/spectra           ## Spectra for neutron and position
 #     --/position          ## Position for Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n
 #     --/neutrinoPosition  ## Position for neutrino, two positive integers
 ### Use this command after /run/initialize ###
 #
 /source/type NEUTRINO
+/source/spectra IBDNeutron.spec IBDPositron.spec
 /source/neutrinoPosition 16 5
 #/source/position CENTER
 #

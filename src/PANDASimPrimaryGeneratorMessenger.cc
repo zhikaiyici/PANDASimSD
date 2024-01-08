@@ -65,11 +65,11 @@ PANDASimPrimaryGeneratorMessenger::PANDASimPrimaryGeneratorMessenger(PANDASimPri
 	sourceTypeCMD = new G4UIcmdWithAString("/source/type", this);
 	sourceTypeCMD->SetGuidance("Available source type: ");
 	sourceTypeCMD->SetGuidance("Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n with position CENTER/EDGE ");
-	sourceTypeCMD->SetGuidance("or He8; Li9; NEUTRINO; MUON; COSMICNEUTRON; CRY (Linux only).");
+	sourceTypeCMD->SetGuidance("or He8; Li9; NEUTRINO; MUON; COSMICNEUTRON; CRY (Linux only); GUN; GPS.");
 	sourceTypeCMD->SetParameterName("sourceType", true);
 	sourceTypeCMD->SetDefaultValue("NEUTRINO");
-	sourceTypeCMD->SetCandidates("Cs137 Co60 Na22 Am-Be Cs137g Co60g Am-Be-n He8 Li9 NEUTRINO MUON COSMICNEUTRON CRY");
-	sourceTypeCMD->AvailableForStates(G4State_PreInit, G4State_Init, G4State_Idle);
+	sourceTypeCMD->SetCandidates("Cs137 Co60 Na22 Am-Be Cs137g Co60g Am-Be-n He8 Li9 NEUTRINO MUON COSMICNEUTRON CRY GUN GPS");
+	sourceTypeCMD->AvailableForStates(G4State_Idle);
 
 	sourceSpectraCMD = new G4UIcmdWithAString("/source/spectra", this);
 	sourceSpectraCMD->SetGuidance("Specify spectra file name.");
@@ -78,11 +78,11 @@ PANDASimPrimaryGeneratorMessenger::PANDASimPrimaryGeneratorMessenger(PANDASimPri
 
 	sourcePositionCMD = new G4UIcmdWithAString("/source/position", this);
 	sourcePositionCMD->SetGuidance("Source position only for the following souce type: ");
-	sourcePositionCMD->SetGuidance("Cs137/Co60/Na22/Am-Be/Cs137g/Co60g/Am-Be-n with position CENTER/EDGE ");
+	sourcePositionCMD->SetGuidance("Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n with position CENTER/EDGE. GUN and GPS with position INSIDE");
 	sourcePositionCMD->SetParameterName("sourcePosition", true);
 	sourcePositionCMD->SetDefaultValue("CENTER");
-	sourcePositionCMD->SetCandidates("CENTER EDGE");
-	sourcePositionCMD->AvailableForStates(G4State_PreInit, G4State_Init, G4State_Idle);
+	sourcePositionCMD->SetCandidates("CENTER EDGE INSIDE");
+	sourcePositionCMD->AvailableForStates(G4State_Idle);
 
 	G4UIparameter* parameter;
 

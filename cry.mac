@@ -3,6 +3,8 @@
 /run/verbose 2
 /run/initialize
 
+/source/type CRY
+
 /CRY/input returnNeutrons 0
 /CRY/input returnProtons 0
 /CRY/input returnGammas 0

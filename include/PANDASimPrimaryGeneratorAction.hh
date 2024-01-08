@@ -97,7 +97,7 @@ public:
 
 private:
 	G4ParticleGun* fParticleGun; // pointer a to G4 gun class
-	//G4GeneralParticleSource* fParticleGun; // pointer a to G4 gun class
+	G4GeneralParticleSource* fGPS;
 	//G4ParticleGun* fParticleGunP; // pointer a to G4 gun class
 
 	G4ParticleTable* particleTable;

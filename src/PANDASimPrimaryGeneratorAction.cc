@@ -67,7 +67,7 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction(const char* input
 {
 	G4int n_particle = 1;
 	fParticleGun = new G4ParticleGun(n_particle);
-	// fParticleGun = new G4GeneralParticleSource();
+	fGPS = new G4GeneralParticleSource();
 	// fParticleGunP = new G4ParticleGun(n_particle);
 
 	particleTable = G4ParticleTable::GetParticleTable();
@@ -198,6 +198,7 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction(const char* input
 PANDASimPrimaryGeneratorAction::~PANDASimPrimaryGeneratorAction()
 {
 	delete fParticleGun;
+	delete fGPS;
 	// delete fParticleGunP;
 
 #ifdef __linux__
@@ -315,26 +316,29 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		runID = thisID;
 	}
 
-	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY" && sourceType != "He8" && sourceType != "Li9" && sourceType != "MUON")
+	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY" && sourceType != "He8" && sourceType != "Li9"
+		&& sourceType != "MUON" && sourceType != "GPS" && sourceType != "GUN")
 	{
-		if (sourceType == "Am-Be-n")
+		if (sourceType == "Am-Be-n" || sourceType == "Cs137g" || sourceType == "Co60g")
 		{
-			fParticle = fNeutron;
-			primaryParticleEnergy = EnergySampling(neutronEnergy, neutronCDFSpectrum);
-
-			G4double phi = twopi * G4UniformRand();
-			G4double costheta = -1. * G4UniformRand();
-			G4double sintheta = sqrt(1 - pow(costheta, 2));
-			directionVector = G4ThreeVector(sintheta * cos(phi), sintheta * sin(phi), costheta);
-
-			fParticleGun->SetParticleDefinition(fParticle);
-			fParticleGun->SetParticleEnergy(primaryParticleEnergy);
-			fParticleGun->SetParticleMomentumDirection(directionVector);
-		}
-		else if (sourceType == "Cs137g")
-		{
-			fParticle = fGamma;
-			primaryParticleEnergy = 0.66166 * MeV;
+			if (sourceType == "Am-Be-n")
+			{
+				fParticle = fNeutron;
+				primaryParticleEnergy = EnergySampling(neutronEnergy, neutronCDFSpectrum);
+			}
+			else if (sourceType == "Cs137g")
+			{
+				fParticle = fGamma;
+				primaryParticleEnergy = 0.66166 * MeV;
+			}
+			else if (sourceType == "Co60g")
+			{
+				fParticle = fGamma;
+				if (G4UniformRand() > 0.5)
+					primaryParticleEnergy = 1.1732 * MeV;
+				else
+					primaryParticleEnergy = 1.3325 * MeV;
+			}
 			G4double costheta = 2. * G4UniformRand() - 1.;
 			G4double sintheta = sqrt(1 - pow(costheta, 2));
 			G4double phi = twopi * G4UniformRand();
@@ -344,22 +348,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			fParticleGun->SetParticleEnergy(primaryParticleEnergy);
 			fParticleGun->SetParticleMomentumDirection(directionVector);
 		}
-		else if (sourceType == "Co60g")
-		{
-			fParticle = fGamma;
-			if (G4UniformRand() > 0.5)
-				primaryParticleEnergy = 1.1732 * MeV;
-			else
-				primaryParticleEnergy = 1.3325 * MeV;
-			G4double costheta = 2. * G4UniformRand() - 1.;
-			G4double sintheta = sqrt(1 - pow(costheta, 2));
-			G4double phi = twopi * G4UniformRand();
-			directionVector = G4ThreeVector(sintheta * cos(phi), sintheta * sin(phi), costheta);
 
-			fParticleGun->SetParticleDefinition(fParticle);
-			fParticleGun->SetParticleEnergy(primaryParticleEnergy);
-			fParticleGun->SetParticleMomentumDirection(directionVector);
-		}
 
 		if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino())
 		{
@@ -400,7 +389,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		{
 			positionVector = G4ThreeVector(scinitillatorXHalfLength - distanceBetweenModules, 0., containerZHalfLength + 0.5 * mm);
 		}
-		else
+		else if(sourcePosition == "CENTER")
 		{
 			positionVector = G4ThreeVector(0., 0., containerZHalfLength + 0.5 * mm);
 		}
@@ -500,6 +489,28 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		fParticleGun->SetParticlePosition(positionVector);
 		fParticleGun->SetParticleMomentumDirection(directionVector);
 		fParticleGun->GeneratePrimaryVertex(anEvent);
+	}
+	else if (sourceType == "GUN")
+	{
+		if (sourcePosition == "EDGE")
+		{
+			positionVector = G4ThreeVector(scinitillatorXHalfLength - distanceBetweenModules, 0., containerZHalfLength + 0.5 * mm);
+		}
+		else if (sourcePosition == "CENTER")
+		{
+			positionVector = G4ThreeVector(0., 0., containerZHalfLength + 0.5 * mm);
+		}
+		else if (sourcePosition == "INSIDE")
+		{
+			SamplingForIBD(positionVector, directionVector);
+			fParticleGun->SetParticleMomentumDirection(directionVector);
+		}
+		fParticleGun->SetParticlePosition(positionVector);
+		fParticleGun->GeneratePrimaryVertex(anEvent);
+	}
+	else if (sourceType == "GPS")
+	{
+		fGPS->GeneratePrimaryVertex(anEvent);
 	}
 	else
 	{
