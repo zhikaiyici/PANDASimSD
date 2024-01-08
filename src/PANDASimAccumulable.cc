@@ -2,12 +2,13 @@
 #include "PANDASimAccumulable.hh"
 #include "UserDataInput.hh"
 
-PANDASimAccumulable::PANDASimAccumulable()
-	: G4VAccumulable(), energyDeposit(0), betaKEHe8(0), betaKELi9(0), decayTimeHe8(0), decayTimeLi9(0), runCondition(""), neutrinoPosition({100, 100})
+PANDASimAccumulable::PANDASimAccumulable(G4int as)
+	: G4VAccumulable(), energyDeposit(0), betaKEHe8(0), betaKELi9(0), decayTimeHe8(0), decayTimeLi9(0), runCondition(""), neutrinoPosition({16, 5})
 {
-	arraySize = 4;// UserDataInput::GetSizeOfArray();
+	arraySize = as;// UserDataInput::GetSizeOfArray();
 	numLi9 = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
 	numHe8 = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
+	numNeutron = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
 }
 
 PANDASimAccumulable::~PANDASimAccumulable()
@@ -36,6 +37,7 @@ void PANDASimAccumulable::Merge(const G4VAccumulable& other)
 		{
 			numLi9[i][j] += otherPANDASimAccumulable.numLi9[i][j];
 			numHe8[i][j] += otherPANDASimAccumulable.numHe8[i][j];
+			numNeutron[i][j] += otherPANDASimAccumulable.numNeutron[i][j];
 		}
 	}
 
@@ -54,6 +56,7 @@ void PANDASimAccumulable::Reset()
 
 	numLi9 = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
 	numHe8 = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
+	numNeutron = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
 
 	runCondition.clear();
 	neutrinoPosition = {16, 5};

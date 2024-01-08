@@ -37,7 +37,8 @@ void PANDASimTrackingAction::PostUserTrackingAction(const G4Track* track)
 	if (processDefinedStep)
 		processName = processDefinedStep->GetProcessName();
 
-	if (processName == "RadioactiveDecay")
+	//G4RadioactiveDecay is replaced with G4Radioactivation since 11.1.3
+	if (processName == "Radioactivation" || processName == "RadioactiveDecay") 
 	{
 		G4String particleName = track->GetParticleDefinition()->GetParticleName();
 		const std::vector<const G4Track*>* secondaries = track->GetStep()->GetSecondaryInCurrentStep();

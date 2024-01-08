@@ -72,7 +72,7 @@ PANDASimRunAction::PANDASimRunAction()
 {
 	//arraySize = UserDataInput::GetSizeOfArray();
 	arraySize = (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();
-	myAccu = new PANDASimAccumulable();
+	myAccu = new PANDASimAccumulable(arraySize);
 
 	G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
 	accumulableManager->RegisterAccumulable(myAccu);

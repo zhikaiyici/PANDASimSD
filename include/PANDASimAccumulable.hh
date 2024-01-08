@@ -12,7 +12,7 @@
 class PANDASimAccumulable : public G4VAccumulable
 {
 public:
-    PANDASimAccumulable();
+    PANDASimAccumulable(G4int as);
     ~PANDASimAccumulable();
     void Merge(const G4VAccumulable& other);
     void Reset();

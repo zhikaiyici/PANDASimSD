@@ -74,7 +74,7 @@ PANDASimDetectorConstruction::PANDASimDetectorConstruction()
 	fScoringVolume(nullptr), fPhotoelectricScoringVolume(nullptr), fGdFilmScoringVolume(nullptr),
 	checkOverlaps(true)
 {
-	arraySize = 1;// UserDataInput::GetSizeOfArray();
+	arraySize = 4;// UserDataInput::GetSizeOfArray();
 	dtctrX = 10. * cm;// UserDataInput::GetDectorDimensionX();
 	dtctrY = 10. * cm;// UserDataInput::GetDectorDimensionY();
 	dtctrZ = 100. * cm;// UserDataInput::GetDectorDimensionZ();
