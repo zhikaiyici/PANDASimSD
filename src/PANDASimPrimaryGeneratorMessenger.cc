@@ -78,10 +78,10 @@ PANDASimPrimaryGeneratorMessenger::PANDASimPrimaryGeneratorMessenger(PANDASimPri
 
 	sourcePositionCMD = new G4UIcmdWithAString("/source/position", this);
 	sourcePositionCMD->SetGuidance("Source position only for the following souce type: ");
-	sourcePositionCMD->SetGuidance("Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n with position CENTER/EDGE. GUN and GPS with position INSIDE");
+	sourcePositionCMD->SetGuidance("Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n/GUN with position CENTER/EDGE. GUN with position INSIDE");
 	sourcePositionCMD->SetParameterName("sourcePosition", true);
 	sourcePositionCMD->SetDefaultValue("CENTER");
-	sourcePositionCMD->SetCandidates("CENTER EDGE INSIDE");
+	sourcePositionCMD->SetCandidates("CENTER EDGE INSIDE COMMAND");
 	sourcePositionCMD->AvailableForStates(G4State_Idle);
 
 	G4UIparameter* parameter;

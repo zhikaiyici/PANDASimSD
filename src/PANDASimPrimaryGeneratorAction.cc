@@ -495,17 +495,19 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		if (sourcePosition == "EDGE")
 		{
 			positionVector = G4ThreeVector(scinitillatorXHalfLength - distanceBetweenModules, 0., containerZHalfLength + 0.5 * mm);
+			fParticleGun->SetParticlePosition(positionVector);
 		}
 		else if (sourcePosition == "CENTER")
 		{
 			positionVector = G4ThreeVector(0., 0., containerZHalfLength + 0.5 * mm);
+			fParticleGun->SetParticlePosition(positionVector);
 		}
 		else if (sourcePosition == "INSIDE")
 		{
 			SamplingForIBD(positionVector, directionVector);
 			fParticleGun->SetParticleMomentumDirection(directionVector);
+			fParticleGun->SetParticlePosition(positionVector);
 		}
-		fParticleGun->SetParticlePosition(positionVector);
 		fParticleGun->GeneratePrimaryVertex(anEvent);
 	}
 	else if (sourceType == "GPS")

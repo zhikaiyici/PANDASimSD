@@ -111,8 +111,8 @@ int main(int argc, char** argv)
 
 	// Physics list
 	G4int phyVer = 1;
-	//G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP(phyVer);
-	G4VModularPhysicsList* physicsList = new QBBC(phyVer);
+	G4VModularPhysicsList* physicsList = new QGSP_BIC_AllHP(phyVer);
+	//G4VModularPhysicsList* physicsList = new QBBC(phyVer);
 	//G4VModularPhysicsList* physicsList1 = new PANDASimPhysicsList(phyVer);
 	//G4VModularPhysicsList* physicsList = new QGSP_BIC_HP(phyVer);
 	//G4VModularPhysicsList* physicsList = new QGSP_BERT_HP(phyVer);

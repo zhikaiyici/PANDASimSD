@@ -8,10 +8,16 @@
 #       --/detectorY
 #       --/detectorZ
 #       --/moduleDistance
+#       --/gdFilmThickness
 #       --/update          ### DONOT USE!! BUG WITH SENSITIVE DETECTOR ###
 ### Use this command before /run/initialize ###
 #
 /detector/arraySize 4
+/detector/detectorX 10 cm
+/detector/detectorX 10 cm
+/detector/detectorZ 100 cm
+/detector/moduleDistance 2 cm
+/detector/gdFilmThickness 30 um
 #
 /run/numberOfThreads 8
 /run/initialize
@@ -21,11 +27,19 @@
 /event/verbose 0
 /tracking/verbose 0
 #
-#/source/type              ## Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n with position CENTER/EDGE;
-                           ## He8; Li9; NEUTRINO; MUON; COSMICNEUTRON; CRY (Linux only); GUN; GPS
-#     --/spectra           ## Spectra for neutron and position
+#/source/type              ## Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n/GNU with position CENTER/EDGE;
+                           ## GUN with position INSIDE or COMMAND (means defined by UI command);
+                           ## He8; Li9; NEUTRINO; MUON; COSMICNEUTRON; CRY (Linux only); GPS
+                           ## Position, momentum, particle etc. must be defined with source GPS.
+#     --/spectra           ## Spectra for neutron and position. See spectra directory.
 #     --/position          ## Position for Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n
-#     --/neutrinoPosition  ## Position for NEUTRINO, two positive integers
+#                          ## Direction must be defined for GUN with position CENTER/EDGE.
+#                          ## Direction and position must be defined for GUN with position COMMAND.
+#                          ## Direction is isotropic for GUN with position INSIDE.
+#     --/neutrinoPosition  ## Position for NEUTRINO, two positive integers [0 - size*size, 0 - 5]
+#                          ## First integer: Position in the detector array, size*size means random.
+#                          ## Second integer: Position in the detector module, 5 means random.
+#                          ## Second integer is valid only when arrayPosition < size*size.
 ### Use this command after /run/initialize ###
 #
 /source/type NEUTRINO
