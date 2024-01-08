@@ -122,6 +122,8 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
     //const G4String processName_ = preStepPoint->GetProcessDefinedStep()->GetProcessName();
     //G4cout << "processName: " << processName << G4endl;
     
+    G4int parentID = theTrack->GetParentID();
+
     // 判断是否为中子
     if (strPrtclName == "neutron")
     {
@@ -132,6 +134,15 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
         //G4cout << "parent id: " << theTrack->GetParentID() << G4endl;
         //G4cout << "scin here" << G4endl;
         //getchar();
+
+        G4bool flagNeutron = fTrackingAction->GetFlagNeutron();
+        if (parentID != 0 && !flagNeutron)
+        {
+            hit->AddNNeutron();
+            const G4double genicTime = step->GetPreStepPoint()->GetGlobalTime() / us;
+            hit->NeutronGenicTime(genicTime);
+            fTrackingAction->SetFlagNeutron(true);
+        }
 
         if (processName == "nCapture")
         {
@@ -161,7 +172,6 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
         hit->AddMuEdep(muEdep);
     }
 
-    G4int parentID = theTrack->GetParentID();
     G4bool fLi9 = fTrackingAction->GetFlagLi9();
     G4bool fHe8 = fTrackingAction->GetFlagHe8();
     if (strPrtclName == "He8" && !fHe8)
@@ -254,6 +264,7 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
         (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();// UserDataInput::GetSizeOfArray();
     std::vector<std::vector<G4int> > numHe8(arraySize, std::vector<G4int>(arraySize, 0));
     std::vector<std::vector<G4int> > numLi9(arraySize, std::vector<G4int>(arraySize, 0));
+    std::vector<std::vector<G4int> > numNeutron(arraySize, std::vector<G4int>(arraySize, 0));
 
     auto nofHits = fHitsCollection->entries();
     for (G4int i = 0; i < nofHits; i++)
@@ -267,6 +278,15 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
 
         G4int nLi9 = hit->GetNLi9();
         numLi9[moduleRepliaNumber][moduleRowReplicaNumber] = nLi9;
+
+        G4int nNeutron = hit->GetNNeutron();
+        numNeutron[moduleRepliaNumber][moduleRowReplicaNumber] = nNeutron;
+
+        G4double nGenicT = hit->GetNeutronGenicTime();
+        if (nGenicT)
+        {
+            fRunAction->PushNeutronGenicTime(nGenicT);
+        }
     }
 
     std::vector <std::vector<G4int> > empty2DVec(arraySize, std::vector<G4int>(arraySize, 0));
@@ -274,6 +294,8 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
         fRunAction->AddNHe8(numHe8);
     if (numLi9 != empty2DVec)
         fRunAction->AddNLi9(numLi9);
+    if (numNeutron != empty2DVec)
+        fRunAction->AddNNeutron(numNeutron);
 
     //G4cout << "-----------------------EndOfEventFromScintillatorSD------------------------------" << G4endl << G4endl;
 }

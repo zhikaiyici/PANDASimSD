@@ -79,6 +79,11 @@ void PANDASimAccumulable::PushDecayTimeLi9(G4double dt)
 	decayTimeLi9.push_back(dt);
 }
 
+void PANDASimAccumulable::PushNeutronGenicTime(G4double t)
+{
+	neutronGenicTime.push_back(t);
+}
+
 void PANDASimAccumulable::AddNLi9(std::vector<std::vector<G4int> > n)
 {
 	for (int i = 0; i < numLi9[0].size(); ++i)
@@ -97,6 +102,17 @@ void PANDASimAccumulable::AddNHe8(std::vector<std::vector<G4int> > n)
 		for (int j = 0; j < numHe8.size(); ++j)
 		{
 			numHe8[i][j] += n[i][j];
+		}
+	}
+}
+
+void PANDASimAccumulable::AddNNeurtron(std::vector<std::vector<G4int>> n)
+{
+	for (int i = 0; i < numNeutron[0].size(); ++i)
+	{
+		for (int j = 0; j < numNeutron.size(); ++j)
+		{
+			numNeutron[i][j] += n[i][j];
 		}
 	}
 }

@@ -18,6 +18,7 @@ void PANDASimTrackingAction::PreUserTrackingAction(const G4Track* track)
 {
 	flagHe8 = false;
 	flagLi9 = false;
+	flagNeutron= false;
 	//G4int parentID = track->GetParentID();
 	//if (parentID == 0) return;
 	//G4String processName = track->GetCreatorProcess()->GetProcessName();

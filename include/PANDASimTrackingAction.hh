@@ -18,9 +18,11 @@ public:
 	
 	inline void SetFlagHe8(G4bool f) { flagHe8 = f; }
 	inline void SetFlagLi9(G4bool f) { flagLi9 = f; }
+	inline void SetFlagNeutron(G4bool f) { flagNeutron = f; }
 
 	inline G4bool GetFlagHe8() const { return flagHe8; }
 	inline G4bool GetFlagLi9() const { return flagLi9; }
+	inline G4bool GetFlagNeutron() const { return flagNeutron; }
 
 	inline PANDASimRunAction* GetPANDASimRunAction() const { return fRunAction; }
 
@@ -29,6 +31,7 @@ private:
 
 	G4bool flagHe8;
 	G4bool flagLi9;
+	G4bool flagNeutron;
 
 	G4bool IsInPlasticScintillator(const G4Track* track);
 

@@ -233,9 +233,11 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		std::list<G4double> betaKELi9 = myAccu->GetBetaKELi9();
 		std::list<G4double> decayTimeHe8 = myAccu->GetDecayTimeHe8();
 		std::list<G4double> decayTimeLi9 = myAccu->GetDecayTimeLi9();
+		std::list<G4double> neutronGenicTime = myAccu->GetNeutronGenicTime();
 
 		std::vector<std::vector<G4int> > numHe8 = myAccu->GetNHe8();
 		std::vector<std::vector<G4int> > numLi9 = myAccu->GetNLi9();
+		std::vector<std::vector<G4int> > numNeutron = myAccu->GetNNeutron();
 
 		auto runCondition = myAccu->GetRunCondition();
 
@@ -251,11 +253,17 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		G4String decayTimeLi9FileName = "output/" + runCondition + "/decayTimeLi9" + runCondition + ".txt";
 		WriteDataToFile(decayTimeLi9FileName, decayTimeLi9);
 
+		G4String neutronGenicTimeFileName = "output/" + runCondition + "/neutronGenicTime" + runCondition + ".txt";
+		WriteDataToFile(neutronGenicTimeFileName, neutronGenicTime);
+
 		G4String numLi9FileName = "output/" + runCondition + "/numLi9" + runCondition + ".txt";
 		WriteDataToFile(numLi9FileName, numLi9);
 
 		G4String numHe8FileName = "output/" + runCondition + "/numHe8" + runCondition + ".txt";
 		WriteDataToFile(numHe8FileName, numHe8);
+
+		G4String numNeutronFileName = "output/" + runCondition + "/numNeutron" + runCondition + ".txt";
+		WriteDataToFile(numNeutronFileName, numNeutron);
 
 		const PANDASimRun* fPANDASimRun = static_cast<const PANDASimRun*>(run);
 
@@ -519,6 +527,11 @@ void PANDASimRunAction::PushDecayTimeLi9(G4double dt)
 	myAccu->PushDecayTimeLi9(dt);
 }
 
+void PANDASimRunAction::PushNeutronGenicTime(G4double t)
+{
+	myAccu->PushNeutronGenicTime(t);
+}
+
 void PANDASimRunAction::AddNLi9(std::vector<std::vector<G4int>> nLi9)
 {
 	myAccu->AddNLi9(nLi9);
@@ -527,6 +540,11 @@ void PANDASimRunAction::AddNLi9(std::vector<std::vector<G4int>> nLi9)
 void PANDASimRunAction::AddNHe8(std::vector<std::vector<G4int>> nHe8)
 {
 	myAccu->AddNHe8(nHe8);
+}
+
+void PANDASimRunAction::AddNNeutron(std::vector<std::vector<G4int>> nNeutron)
+{
+	myAccu->AddNNeurtron(nNeutron);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

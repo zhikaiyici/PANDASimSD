@@ -52,13 +52,16 @@ public:
 
     void SetNewValue(G4UIcommand*, G4String);
 
-    inline G4bool GetOpticalStatus() const { return opticalStatus; }
+    inline G4bool GetOptical() const { return optical; }
+    inline G4bool GetMuonicDecay() const { return muonicDecay; }
 
 private:
 
-    G4bool opticalStatus;
+    G4bool optical;
+    G4bool muonicDecay;
 
     G4UIcmdWithABool* optiaclPhysicsCMD;
+    G4UIcmdWithABool* muonicAtomDecayCMD;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

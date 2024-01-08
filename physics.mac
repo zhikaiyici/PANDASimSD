@@ -1,0 +1,11 @@
+# Macro file
+# 
+# To turn on/off optical process and muonic atom decay process
+# % physics.mac
+# This *.mac file is optional. 
+# Without this file optical process and muonic atom decay process will be off. 
+#
+# Use this command as second input *.mac file, 
+# the first should be the one with run/initialize and /beamOn
+/physics/optical true
+/physics/muonicDecay true

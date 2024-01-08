@@ -65,9 +65,11 @@ public:
 	void PushBetaKELi9(G4double bke);
 	void PushDecayTimeHe8(G4double dt);
 	void PushDecayTimeLi9(G4double dt);
+	void PushNeutronGenicTime(G4double t);
 
 	void AddNLi9(std::vector<std::vector<G4int> > nLi9);
 	void AddNHe8(std::vector<std::vector<G4int> > nHe8);
+	void AddNNeutron(std::vector<std::vector<G4int> > nNeutron);
 
 	//inline void PushBackEnergyDepositOfEvent(G4double edep) { energyDeposit.push_back(edep); };
 	//inline void AddNeutronCount() { fAbsorbedOpPhoton += 1; }

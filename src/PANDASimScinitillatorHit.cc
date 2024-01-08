@@ -35,8 +35,9 @@ G4ThreadLocal G4Allocator<PANDASimScinitillatorHit>* PANDASimScinHitAllocator = 
 
 PANDASimScinitillatorHit::PANDASimScinitillatorHit()
  : G4VHit(),
-	fEdep(0.),fEdepH(0.),fEdepGd(0.), fEdepMu(0.), capTimeH(0.), decayTimeMu(0.), muTrack(0.), muEdep(0.),
-	numHe8(0), numLi9(0)
+	fEdep(0.),fEdepH(0.),fEdepGd(0.), fEdepMu(0.), capTimeH(0.), decayTimeMu(0.), neutronGenicTime(0.),
+	muTrack(0.), muEdep(0.),
+	numHe8(0), numLi9(0), numNeutron(0)
 {
 	//ResizeVector(energyDeposit, UserDataInput::GetSizeOfArray());
 }
@@ -57,12 +58,14 @@ PANDASimScinitillatorHit::PANDASimScinitillatorHit(const PANDASimScinitillatorHi
 
 	capTimeH = right.capTimeH;
 	decayTimeMu = right.decayTimeMu;
+	neutronGenicTime = right.neutronGenicTime;
 
 	muTrack = right.muTrack;
 	muEdep = right.muEdep;
 
 	numHe8 = right.numHe8;
 	numLi9 = right.numLi9;
+	numNeutron = right.numNeutron;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,12 +79,14 @@ const PANDASimScinitillatorHit& PANDASimScinitillatorHit::operator=(const PANDAS
 
 	capTimeH = right.capTimeH;
 	decayTimeMu = right.decayTimeMu;
+	neutronGenicTime = right.neutronGenicTime;
 
 	muTrack = right.muTrack;
 	muEdep = right.muEdep;
 
 	numHe8 = right.numHe8;
 	numLi9 = right.numLi9;
+	numNeutron = right.numNeutron;
 
 	return *this;
 }

@@ -37,24 +37,34 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PANDASimPhysicsListMessenger::PANDASimPhysicsListMessenger() : G4UImessenger(), opticalStatus(false)
+PANDASimPhysicsListMessenger::PANDASimPhysicsListMessenger() : G4UImessenger(), optical(false), muonicDecay(false)
 {
 	optiaclPhysicsCMD = new G4UIcmdWithABool("/physics/optical", this);
 	optiaclPhysicsCMD->SetGuidance("Turn on/off optical process.");
 	optiaclPhysicsCMD->SetParameterName("opticalProcess", true);
 	optiaclPhysicsCMD->SetDefaultValue(true);
+
+	muonicAtomDecayCMD = new G4UIcmdWithABool("/physics/muonicDecay", this);
+	muonicAtomDecayCMD->SetGuidance("Turn on/off muonic atom decay process.");
+	muonicAtomDecayCMD->SetParameterName("muonicDecay", true);
+	muonicAtomDecayCMD->SetDefaultValue(true);
 }
 
 PANDASimPhysicsListMessenger::~PANDASimPhysicsListMessenger()
 {
 	delete optiaclPhysicsCMD;
+	delete muonicAtomDecayCMD;
 }
 
 void PANDASimPhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
 	if (command == optiaclPhysicsCMD)
 	{
-		opticalStatus = optiaclPhysicsCMD->GetNewBoolValue(newValue);
+		optical = optiaclPhysicsCMD->GetNewBoolValue(newValue);
+	}
+	if (command == muonicAtomDecayCMD)
+	{
+		muonicDecay = muonicAtomDecayCMD->GetNewBoolValue(newValue);
 	}
 }
 

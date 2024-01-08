@@ -116,17 +116,22 @@ int main(int argc, char** argv)
 	//G4VModularPhysicsList* physicsList1 = new PANDASimPhysicsList(phyVer);
 	//G4VModularPhysicsList* physicsList = new QGSP_BIC_HP(phyVer);
 	//G4VModularPhysicsList* physicsList = new QGSP_BERT_HP(phyVer);
-	physicsList->RegisterPhysics(new G4MuonicAtomDecayPhysics(phyVer));
+	if (physMessenger->GetMuonicDecay())
+	{
+		physicsList->RegisterPhysics(new G4MuonicAtomDecayPhysics(phyVer));
+		if (phyVer > 0)
+			G4cout << G4endl <<  "<<< Muonic Atom Decay Physics is registered." << G4endl << G4endl;
+	}
 	physicsList->SetVerboseLevel(phyVer);
-	G4bool opticalStatus = physMessenger->GetOpticalStatus();//UserDataInput::GetOpticalPhysicsStatus()
-	if ( opticalStatus == true)
+	G4bool opticalStatus = physMessenger->GetOptical();//UserDataInput::GetOpticalPhysicsStatus()
+	if (opticalStatus)
 	{
 		G4OpticalParameters::Instance()->SetScintFiniteRiseTime(true);
 		G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics(phyVer);
 		physicsList->RegisterPhysics(opticalPhysics);
 		opticalPhysics->SetVerboseLevel(phyVer);
 		if (phyVer > 0)
-			G4cout << "<<< Optical Physics is registered." << G4endl;
+			G4cout << G4endl <<  "<<< Optical Physics is registered." << G4endl << G4endl;
 	}
 	//G4double cutsValue = 10. * um;
 	//physicsList->SetDefaultCutValue(cutsValue);

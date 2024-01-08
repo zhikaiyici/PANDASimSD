@@ -64,8 +64,11 @@ public:
     void AddMuTrack(G4double tl);
     void AddMuEdep(G4double de);
 
+    inline void NeutronGenicTime(G4double t) { neutronGenicTime = t; }
+
     void AddNLi9();
     void AddNHe8();
+    void AddNNeutron();
 
     // get methods
     G4double GetEdep() const;
@@ -77,8 +80,11 @@ public:
     G4double GetMuTrack() const; 
     G4double GetMuEdep() const;
 
+    inline G4double GetNeutronGenicTime() const { return neutronGenicTime; }
+
     G4int GetNLi9() const; 
     G4int GetNHe8() const; 
+    G4int GetNNeutron() const; 
 
 private:
     G4double fEdep;
@@ -87,11 +93,13 @@ private:
     G4double fEdepMu; // edep after muon decay
     G4double capTimeH;
     G4double decayTimeMu;
+    G4double neutronGenicTime;
     G4double muTrack;
     G4double muEdep; // edep of muon itself
 
     G4int numLi9;
     G4int numHe8;
+    G4int numNeutron;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,6 +172,11 @@ inline void PANDASimScinitillatorHit::AddNHe8()
     numHe8++;
 }
 
+inline void PANDASimScinitillatorHit::AddNNeutron()
+{
+    numNeutron++;
+}
+
 inline void PANDASimScinitillatorHit::Add(G4double de) {
     fEdep += de;
 }
@@ -206,6 +219,11 @@ inline G4int PANDASimScinitillatorHit::GetNLi9() const
 inline G4int PANDASimScinitillatorHit::GetNHe8() const
 {
     return numHe8;
+}
+
+inline G4int PANDASimScinitillatorHit::GetNNeutron() const
+{
+    return numNeutron;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
