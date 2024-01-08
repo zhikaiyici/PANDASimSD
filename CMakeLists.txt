@@ -71,6 +71,7 @@ set(PANDASim_SCRIPTS
   vis.mac
   run.mac
   cry.mac
+  optical.mac
   InputSet.txt
   _readme.txt
   )
