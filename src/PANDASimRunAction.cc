@@ -172,7 +172,24 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 		auto sourcePosition = generatorAction->GetSourcePosition();
 
 		if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY" && sourceType != "He8" && sourceType != "Li9" && sourceType != "MUON")
-			runCondition += sourceType + "_" + sourcePosition;
+		{
+			if (sourceType == "GUN")
+			{
+				G4String particleName = generatorAction->GetParticleGun()->GetParticleDefinition()->GetParticleName();
+				G4double particleEnergy = generatorAction->GetParticleGun()->GetParticleEnergy();
+				std::ostringstream ossEnergy;
+				ossEnergy << G4BestUnit(particleEnergy, "Energy");
+				runCondition += particleName + "_" + ossEnergy.str() + "_" + sourcePosition;
+			}
+			else if (sourceType == "GPS")
+			{
+				runCondition += sourceType;
+			}
+			else
+			{
+				runCondition += sourceType + "_" + sourcePosition;
+			}
+		}
 		else
 		{
 			if (sourceType != "NEUTRINO")
