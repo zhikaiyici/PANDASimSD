@@ -312,8 +312,6 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 		CalculateReferencePoints refP = CalculateReferencePoints();
 		referencePoints = refP.GetRefrencePoints();
-
-		runID = thisID;
 	}
 
 	if (sourceType != "NEUTRINO" && sourceType != "COSMICNEUTRON" && sourceType != "CRY" && sourceType != "He8" && sourceType != "Li9"
@@ -350,7 +348,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		}
 
 
-		if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino())
+		if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino() || thisID != runID)
 		{
 			//G4IonTable* ionTable = G4IonTable::GetIonTable();
 			if (sourceType == "Co60")
@@ -454,7 +452,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	}
 	else if (sourceType == "He8" || sourceType == "Li9")
 	{
-		if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino())
+		if (fParticleGun->GetParticleDefinition() == G4Geantino::Geantino() || thisID != runID)
 		{
 			//G4IonTable* ionTable = G4IonTable::GetIonTable();
 			if (sourceType == "He8")
@@ -533,8 +531,8 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		SamplingForIBD(positionVector, directionVector);
 		fParticleGun->SetParticleMomentumDirection(directionVector);
 		fParticleGun->GeneratePrimaryVertex(anEvent);
-
 	}
+	runID = thisID;
 }
 
 G4double PANDASimPrimaryGeneratorAction::EnergySampling(std::vector<G4double> energy, std::vector<G4double> cdfSpectrum)
