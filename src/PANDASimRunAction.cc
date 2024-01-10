@@ -198,19 +198,7 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 				//runCondition += sourceType + "_" + strNeutrinoPercentage + "%_" + strNeutrinoPosition;
 				runCondition += sourceType + "_" + strNeutrinoPosition;
 		}
-
 		myAccu->SetRunCondition(runCondition);
-
-		G4String outDir = "output/" + runCondition;
-		if (access(outDir, 6) == -1)
-		{
-#ifdef _WIN32
-			mkdir(outDir);
-#endif // _WIN32
-#ifdef __linux__
-			mkdir(outDir, S_IRWXU);
-#endif
-		}
 	}
 
 }
@@ -233,13 +221,26 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		std::list<G4double> betaKELi9 = myAccu->GetBetaKELi9();
 		std::list<G4double> decayTimeHe8 = myAccu->GetDecayTimeHe8();
 		std::list<G4double> decayTimeLi9 = myAccu->GetDecayTimeLi9();
-		std::list<G4double> neutronGenicTime = myAccu->GetNeutronGenicTime();
+
+		std::list<std::vector<std::vector<G4double>>> neutronGenicTime = myAccu->GetNeutronGenicTime();
+		std::list<std::vector<std::vector<G4double>>> neutronKE = myAccu->GetNeutronKE();
 
 		std::vector<std::vector<G4int> > numHe8 = myAccu->GetNHe8();
 		std::vector<std::vector<G4int> > numLi9 = myAccu->GetNLi9();
 		std::vector<std::vector<G4int> > numNeutron = myAccu->GetNNeutron();
 
 		auto runCondition = myAccu->GetRunCondition();
+
+		G4String outDir = "output/" + runCondition;
+		if (access(outDir, 6) == -1)
+		{
+#ifdef _WIN32
+			mkdir(outDir);
+#endif // _WIN32
+#ifdef __linux__
+			mkdir(outDir, S_IRWXU);
+#endif
+		}
 
 		G4String betaKEHe8FileName = "output/" + runCondition + "/betaKEHe8" + runCondition + ".txt";
 		WriteDataToFile(betaKEHe8FileName, betaKEHe8);
@@ -255,6 +256,9 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 
 		G4String neutronGenicTimeFileName = "output/" + runCondition + "/neutronGenicTime" + runCondition + ".txt";
 		WriteDataToFile(neutronGenicTimeFileName, neutronGenicTime);
+
+		G4String neutronKEFileName = "output/" + runCondition + "/neutronKE" + runCondition + ".txt";
+		WriteDataToFile(neutronKEFileName, neutronKE);
 
 		G4String numLi9FileName = "output/" + runCondition + "/numLi9" + runCondition + ".txt";
 		WriteDataToFile(numLi9FileName, numLi9);
@@ -389,7 +393,7 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::vector<std::vect
 	outFile.open(fileName, std::ios_base::out);
 	for (auto itrVector = data.begin(); itrVector != data.end(); ++itrVector)
 	{
-		for (auto itr = (*itrVector).begin(); itr != (*itrVector).end(); ++itr)
+		for (auto itr = itrVector->begin(); itr != itrVector->end(); ++itr)
 		{
 			outFile << " " << *itr;
 		}
@@ -409,9 +413,9 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector
 	{
 		if (*itrList != empty2DVec)
 		{
-			for (auto itr2DVector = (*itrList).begin(); itr2DVector != (*itrList).end(); ++itr2DVector)
+			for (auto itr2DVector = itrList->begin(); itr2DVector != itrList->end(); ++itr2DVector)
 			{
-				for (auto itrVector = (*itr2DVector).begin(); itrVector != (*itr2DVector).end(); ++itrVector)
+				for (auto itrVector = itr2DVector->begin(); itrVector != itr2DVector->end(); ++itrVector)
 				{
 					outFile << " " << *itrVector;
 				}
@@ -433,9 +437,9 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector
 	{
 		if (*itrList != empty2DVec)
 		{
-			for (auto itr2DVector = (*itrList).begin(); itr2DVector != (*itrList).end(); ++itr2DVector)
+			for (auto itr2DVector = itrList->begin(); itr2DVector != itrList->end(); ++itr2DVector)
 			{
-				for (auto itrVector = (*itr2DVector).begin(); itrVector != (*itr2DVector).end(); ++itrVector)
+				for (auto itrVector = itr2DVector->begin(); itrVector != itr2DVector->end(); ++itrVector)
 				{
 					outFile << " " << *itrVector;
 				}
@@ -459,12 +463,12 @@ void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNam
 	{
 		if (*itrList != empty3DVec)
 		{
-			for (auto itr3DVector = (*itrList).begin(); itr3DVector != (*itrList).end(); ++itr3DVector)
+			for (auto itr3DVector = itrList->begin(); itr3DVector != itrList->end(); ++itr3DVector)
 			{
-				for (auto itr2DVector = (*itr3DVector).begin(); itr2DVector != (*itr3DVector).end(); ++itr2DVector)
+				for (auto itr2DVector = itr3DVector->begin(); itr2DVector != itr3DVector->end(); ++itr2DVector)
 				{
-					outFileRight << " " << *(*itr2DVector).begin();
-					outFileLeft << " " << *((*itr2DVector).end() - 1);
+					outFileRight << " " << *itr2DVector->begin();
+					outFileLeft << " " << *(itr2DVector->end() - 1);
 				}
 				outFileRight << G4endl;
 				outFileLeft << G4endl;
@@ -489,12 +493,12 @@ void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNam
 	{
 		if (*itrList != empty3DVec)
 		{
-			for (auto itr3DVector = (*itrList).begin(); itr3DVector != (*itrList).end(); ++itr3DVector)
+			for (auto itr3DVector = itrList->begin(); itr3DVector != itrList->end(); ++itr3DVector)
 			{
-				for (auto itr2DVector = (*itr3DVector).begin(); itr2DVector != (*itr3DVector).end(); ++itr2DVector)
+				for (auto itr2DVector = itr3DVector->begin(); itr2DVector != itr3DVector->end(); ++itr2DVector)
 				{
-					outFileRight << " "  << *(*itr2DVector).begin();
-					outFileLeft << " " << *((*itr2DVector).end() - 1);
+					outFileRight << " "  << *itr2DVector->begin();
+					outFileLeft << " " << *(itr2DVector->end() - 1);
 				}
 				outFileRight << G4endl;
 				outFileLeft << G4endl;
@@ -527,9 +531,14 @@ void PANDASimRunAction::PushDecayTimeLi9(G4double dt)
 	myAccu->PushDecayTimeLi9(dt);
 }
 
-void PANDASimRunAction::PushNeutronGenicTime(G4double t)
+void PANDASimRunAction::PushNeutronGenicTime(std::vector<std::vector<G4double>> t)
 {
 	myAccu->PushNeutronGenicTime(t);
+}
+
+void PANDASimRunAction::PushNeutronKE(std::vector<std::vector<G4double>> ke)
+{
+	myAccu->PushNeutronKE(ke);
 }
 
 void PANDASimRunAction::AddNLi9(std::vector<std::vector<G4int>> nLi9)

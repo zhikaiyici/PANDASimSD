@@ -98,7 +98,7 @@ int main(int argc, char** argv)
 //#else
 //	G4RunManager* runManager = new G4RunManager;
 //#endif
-	auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+	auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MT);
 
 	// Set mandatory initialization classes
 	//

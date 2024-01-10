@@ -3,7 +3,10 @@
 #include "UserDataInput.hh"
 
 PANDASimAccumulable::PANDASimAccumulable(G4int as)
-	: G4VAccumulable(), energyDeposit(0), betaKEHe8(0), betaKELi9(0), decayTimeHe8(0), decayTimeLi9(0), runCondition(""), neutrinoPosition({16, 5})
+	: G4VAccumulable(), 
+	energyDeposit(0), betaKEHe8(0), betaKELi9(0), decayTimeHe8(0), decayTimeLi9(0),
+	neutronGenicTime(0), neutronKE(0),
+	runCondition(""), neutrinoPosition({16, 5})
 {
 	arraySize = as;// UserDataInput::GetSizeOfArray();
 	numLi9 = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
@@ -30,6 +33,10 @@ void PANDASimAccumulable::Merge(const G4VAccumulable& other)
 	decayTimeHe8.merge(dtHe8);
 	std::list<G4double> dtLi9 = otherPANDASimAccumulable.decayTimeLi9;
 	decayTimeLi9.merge(dtLi9);
+	std::list<std::vector<std::vector<G4double>>> nGT = otherPANDASimAccumulable.neutronGenicTime;
+	neutronGenicTime.merge(nGT);
+	std::list<std::vector<std::vector<G4double>>> nKE = otherPANDASimAccumulable.neutronKE;
+	neutronKE.merge(nKE);
 
 	for (int i = 0; i < numLi9[0].size(); ++i) 
 	{
@@ -53,6 +60,8 @@ void PANDASimAccumulable::Reset()
 	betaKELi9.clear();
 	decayTimeHe8.clear();
 	decayTimeLi9.clear();
+	neutronGenicTime.clear();
+	neutronKE.clear();
 
 	numLi9 = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
 	numHe8 = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
@@ -82,9 +91,14 @@ void PANDASimAccumulable::PushDecayTimeLi9(G4double dt)
 	decayTimeLi9.push_back(dt);
 }
 
-void PANDASimAccumulable::PushNeutronGenicTime(G4double t)
+void PANDASimAccumulable::PushNeutronGenicTime(std::vector<std::vector<G4double>> t)
 {
 	neutronGenicTime.push_back(t);
+}
+
+void PANDASimAccumulable::PushNeutronKE(std::vector<std::vector<G4double>> ke)
+{
+	neutronKE.push_back(ke);
 }
 
 void PANDASimAccumulable::AddNLi9(std::vector<std::vector<G4int> > n)

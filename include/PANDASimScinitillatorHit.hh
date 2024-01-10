@@ -59,12 +59,13 @@ public:
     void AddH(G4double de);
     void AddGd(G4double de);
     void AddMu(G4double de);
-    void TimeH(G4double t);
-    void TimeMu(G4double t);
+    void SetTimeH(G4double t);
+    void SetTimeMu(G4double t);
     void AddMuTrack(G4double tl);
     void AddMuEdep(G4double de);
 
-    inline void NeutronGenicTime(G4double t) { neutronGenicTime = t; }
+    inline void SetNeutronGenicTime(G4double t) { neutronGenicTime = t; }
+    inline void SetNeutronKE(G4double ke) { neutronKE = ke; }
 
     void AddNLi9();
     void AddNHe8();
@@ -81,6 +82,7 @@ public:
     G4double GetMuEdep() const;
 
     inline G4double GetNeutronGenicTime() const { return neutronGenicTime; }
+    inline G4double GetNeutronKE() const { return neutronKE; }
 
     G4int GetNLi9() const; 
     G4int GetNHe8() const; 
@@ -94,6 +96,9 @@ private:
     G4double capTimeH;
     G4double decayTimeMu;
     G4double neutronGenicTime;
+    G4double neutronKE;
+
+
     G4double muTrack;
     G4double muEdep; // edep of muon itself
 
@@ -193,11 +198,11 @@ inline void PANDASimScinitillatorHit::AddMu(G4double de) {
     fEdepMu += de;
 }
 
-inline void PANDASimScinitillatorHit::TimeH(G4double t) {
+inline void PANDASimScinitillatorHit::SetTimeH(G4double t) {
     capTimeH = t;
 }
 
-inline void PANDASimScinitillatorHit::TimeMu(G4double t) {
+inline void PANDASimScinitillatorHit::SetTimeMu(G4double t) {
     decayTimeMu = t;
 }
 

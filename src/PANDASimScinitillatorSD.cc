@@ -140,7 +140,9 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
         {
             hit->AddNNeutron();
             const G4double genicTime = step->GetPreStepPoint()->GetGlobalTime() / us;
-            hit->NeutronGenicTime(genicTime);
+            hit->SetNeutronGenicTime(genicTime);
+            auto energy = theTrack->GetKineticEnergy() / keV;
+            hit->SetNeutronKE(energy);
             fTrackingAction->SetFlagNeutron(true);
         }
 
@@ -148,7 +150,7 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
         {
             //const G4double capTimeH1 = stepPoint->GetGlobalTime() / us;
             const G4double capTimeH = postStepPoint->GetLocalTime() / us;
-            hit->TimeH(capTimeH);
+            hit->SetTimeH(capTimeH);
             fEventAction->SetDelayFlagH(true);
             //G4int nWaiting = fStackManager->GetNWaitingTrack();
             //G4int nUrgent = fStackManager->GetNUrgentTrack();
@@ -162,10 +164,10 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
         {
             //const G4double muDecayTime = stepPoint->GetglobalTime() / us;
             const G4double muDecayTime = postStepPoint->GetLocalTime() / us;
-            hit->TimeMu(muDecayTime);
+            hit->SetTimeMu(muDecayTime);
             fEventAction->SetDecayFlagMu(true);
         }
-        G4double trackLength = step->GetStepLength();
+        G4double trackLength = step->GetStepLength() / mm;
         //G4cout << "trackLength:" << trackLength / mm << G4endl;
         hit->AddMuTrack(trackLength);
         G4double muEdep = step->GetTotalEnergyDeposit();
@@ -266,6 +268,9 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
     std::vector<std::vector<G4int> > numLi9(arraySize, std::vector<G4int>(arraySize, 0));
     std::vector<std::vector<G4int> > numNeutron(arraySize, std::vector<G4int>(arraySize, 0));
 
+    std::vector<std::vector<G4double> > nGenicT(arraySize, std::vector<G4double>(arraySize, 0.));
+    std::vector<std::vector<G4double> > nKineticE(arraySize, std::vector<G4double>(arraySize, 0.));
+
     auto nofHits = fHitsCollection->entries();
     for (G4int i = 0; i < nofHits; i++)
     {
@@ -282,11 +287,11 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
         G4int nNeutron = hit->GetNNeutron();
         numNeutron[moduleRepliaNumber][moduleRowReplicaNumber] = nNeutron;
 
-        G4double nGenicT = hit->GetNeutronGenicTime();
-        if (nGenicT)
-        {
-            fRunAction->PushNeutronGenicTime(nGenicT);
-        }
+        G4double nGT = hit->GetNeutronGenicTime();
+        nGenicT[moduleRepliaNumber][moduleRowReplicaNumber] = nGT;
+
+        G4double nKE = hit->GetNeutronKE();
+        nKineticE[moduleRepliaNumber][moduleRowReplicaNumber] = nKE;
     }
 
     std::vector <std::vector<G4int> > empty2DVec(arraySize, std::vector<G4int>(arraySize, 0));
@@ -296,6 +301,12 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
         fRunAction->AddNLi9(numLi9);
     if (numNeutron != empty2DVec)
         fRunAction->AddNNeutron(numNeutron);
+
+    std::vector <std::vector<G4double> > empty2DVecDoub(arraySize, std::vector<G4double>(arraySize, 0));
+    if (nGenicT != empty2DVecDoub)
+        fRunAction->PushNeutronGenicTime(nGenicT);
+    if (nKineticE != empty2DVecDoub)
+        fRunAction->PushNeutronKE(nKineticE);
 
     //G4cout << "-----------------------EndOfEventFromScintillatorSD------------------------------" << G4endl << G4endl;
 }

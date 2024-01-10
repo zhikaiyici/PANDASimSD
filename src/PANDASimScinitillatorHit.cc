@@ -35,7 +35,8 @@ G4ThreadLocal G4Allocator<PANDASimScinitillatorHit>* PANDASimScinHitAllocator = 
 
 PANDASimScinitillatorHit::PANDASimScinitillatorHit()
  : G4VHit(),
-	fEdep(0.),fEdepH(0.),fEdepGd(0.), fEdepMu(0.), capTimeH(0.), decayTimeMu(0.), neutronGenicTime(0.),
+	fEdep(0.),fEdepH(0.),fEdepGd(0.), fEdepMu(0.), capTimeH(0.), decayTimeMu(0.),
+	neutronGenicTime(0.), neutronKE(0.),
 	muTrack(0.), muEdep(0.),
 	numHe8(0), numLi9(0), numNeutron(0)
 {
@@ -59,6 +60,7 @@ PANDASimScinitillatorHit::PANDASimScinitillatorHit(const PANDASimScinitillatorHi
 	capTimeH = right.capTimeH;
 	decayTimeMu = right.decayTimeMu;
 	neutronGenicTime = right.neutronGenicTime;
+	neutronKE = right.neutronKE;
 
 	muTrack = right.muTrack;
 	muEdep = right.muEdep;
@@ -80,6 +82,7 @@ const PANDASimScinitillatorHit& PANDASimScinitillatorHit::operator=(const PANDAS
 	capTimeH = right.capTimeH;
 	decayTimeMu = right.decayTimeMu;
 	neutronGenicTime = right.neutronGenicTime;
+	neutronKE = right.neutronKE;
 
 	muTrack = right.muTrack;
 	muEdep = right.muEdep;

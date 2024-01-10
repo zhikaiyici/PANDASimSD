@@ -65,7 +65,9 @@ public:
 	void PushBetaKELi9(G4double bke);
 	void PushDecayTimeHe8(G4double dt);
 	void PushDecayTimeLi9(G4double dt);
-	void PushNeutronGenicTime(G4double t);
+
+	void PushNeutronGenicTime(std::vector<std::vector<G4double>> t);
+	void PushNeutronKE(std::vector<std::vector<G4double>> ke);
 
 	void AddNLi9(std::vector<std::vector<G4int> > nLi9);
 	void AddNHe8(std::vector<std::vector<G4int> > nHe8);
