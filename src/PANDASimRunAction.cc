@@ -242,22 +242,22 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 #endif
 		}
 
-		G4String betaKEHe8FileName = "output/" + runCondition + "/betaKEHe8" + runCondition + ".txt";
+		G4String betaKEHe8FileName = "output/" + runCondition + "/betaKEHe8" + runCondition + ".data";
 		WriteDataToFile(betaKEHe8FileName, betaKEHe8);
 
-		G4String betaKELi9FileName = "output/" + runCondition + "/betaKELi9" + runCondition + ".txt";
+		G4String betaKELi9FileName = "output/" + runCondition + "/betaKELi9" + runCondition + ".data";
 		WriteDataToFile(betaKELi9FileName, betaKELi9);
 
-		G4String decayTimeHe8FileName = "output/" + runCondition + "/decayTimeHe8" + runCondition + ".txt";
+		G4String decayTimeHe8FileName = "output/" + runCondition + "/decayTimeHe8" + runCondition + ".data";
 		WriteDataToFile(decayTimeHe8FileName, decayTimeHe8);
 
-		G4String decayTimeLi9FileName = "output/" + runCondition + "/decayTimeLi9" + runCondition + ".txt";
+		G4String decayTimeLi9FileName = "output/" + runCondition + "/decayTimeLi9" + runCondition + ".data";
 		WriteDataToFile(decayTimeLi9FileName, decayTimeLi9);
 
-		G4String neutronGenicTimeFileName = "output/" + runCondition + "/neutronGenicTime" + runCondition + ".txt";
+		G4String neutronGenicTimeFileName = "output/" + runCondition + "/neutronGenicTime" + runCondition + ".data";
 		WriteDataToFile(neutronGenicTimeFileName, neutronGenicTime);
 
-		G4String neutronKEFileName = "output/" + runCondition + "/neutronKE" + runCondition + ".txt";
+		G4String neutronKEFileName = "output/" + runCondition + "/neutronKE" + runCondition + ".data";
 		WriteDataToFile(neutronKEFileName, neutronKE);
 
 		G4String numLi9FileName = "output/" + runCondition + "/numLi9" + runCondition + ".txt";
@@ -272,87 +272,87 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		const PANDASimRun* fPANDASimRun = static_cast<const PANDASimRun*>(run);
 
 		//list<G4double> capTimeH = fPANDASimRun->GetCaptureTimeH();
-		//G4String capTimeHFileName = "output/" + runCondition + "/capTimeH" + runCondition + ".txt";
+		//G4String capTimeHFileName = "output/" + runCondition + "/capTimeH" + runCondition + ".data";
 		//WriteDataToFile(capTimeHFileName, capTimeH);
 
 		//list<G4double> capTimeGd = fPANDASimRun->GetCaptureTimeGd();
-		//G4String capTimeGdFileName = "output/" + runCondition + "/capTimeGd" + runCondition + ".txt";
+		//G4String capTimeGdFileName = "output/" + runCondition + "/capTimeGd" + runCondition + ".data";
 		//WriteDataToFile(capTimeGdFileName, capTimeGd);
 
-		//G4String decayTimeMuFileName = "output/" + runCondition + "/decayTimeMu" + runCondition + ".txt";
+		//G4String decayTimeMuFileName = "output/" + runCondition + "/decayTimeMu" + runCondition + ".data";
 		//list<G4double> decayTimeMu = fPANDASimRun->GetDecayTimeMu();
 		//WriteDataToFile(decayTimeMuFileName, decayTimeMu);
 
-		//G4String edepFileName = "output/" + runCondition + "/edep" + runCondition + ".txt";
+		//G4String edepFileName = "output/" + runCondition + "/edep" + runCondition + ".data";
 		//list<G4double> energyDeposit = fPANDASimRun->GetEnergyDeposit();
 		//WriteDataToFile(edepFileName, energyDeposit);
 
 		std::list<std::vector<std::vector<G4double> > > moduleEnergyDeposit = fPANDASimRun->GetModuleEnergyDeposit();
-		G4String moduleEdepFileName = "output/" + runCondition + "/moduleEdepPrompt" + runCondition + ".txt";
+		G4String moduleEdepFileName = "output/" + runCondition + "/moduleEdepPrompt" + runCondition + ".data";
 		WriteDataToFile(moduleEdepFileName, moduleEnergyDeposit);
 
 		std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDelayH = fPANDASimRun->GetModuleEnergyDepositDelayH();
-		G4String moduleEdepDelayHFileName = "output/" + runCondition + "/moduleEdepDelayH" + runCondition + ".txt";
+		G4String moduleEdepDelayHFileName = "output/" + runCondition + "/moduleEdepDelayH" + runCondition + ".data";
 		WriteDataToFile(moduleEdepDelayHFileName, moduleEnergyDepositDelayH);
 
 		std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDelayGd = fPANDASimRun->GetModuleEnergyDepositDelayGd();
-		G4String moduleEdepDelayGdFileName = "output/" + runCondition + "/moduleEdepDelayGd" + runCondition + ".txt";
+		G4String moduleEdepDelayGdFileName = "output/" + runCondition + "/moduleEdepDelayGd" + runCondition + ".data";
 		WriteDataToFile(moduleEdepDelayGdFileName, moduleEnergyDepositDelayGd);
 
 		std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDecayMu = fPANDASimRun->GetModuleEnergyDepositDecayMu();
-		G4String moduleEdepDecayMuFileName = "output/" + runCondition + "/moduleEdepDecayMu" + runCondition + ".txt";
+		G4String moduleEdepDecayMuFileName = "output/" + runCondition + "/moduleEdepDecayMu" + runCondition + ".data";
 		WriteDataToFile(moduleEdepDecayMuFileName, moduleEnergyDepositDecayMu);
 
 		std::list<std::vector<std::vector<G4double> > > moduleCapTimeGd = fPANDASimRun->GetModuleCapTimeGd();
-		G4String moduleCapTimeGdFileName = "output/" + runCondition + "/moduleCapTimeGd" + runCondition + ".txt";
+		G4String moduleCapTimeGdFileName = "output/" + runCondition + "/moduleCapTimeGd" + runCondition + ".data";
 		WriteDataToFile(moduleCapTimeGdFileName, moduleCapTimeGd);
 
 		std::list<std::vector<std::vector<G4double> > > moduleCapTimeH = fPANDASimRun->GetModuleCapTimeH();
-		G4String moduleCapTimeHFileName = "output/" + runCondition + "/moduleCapTimeH" + runCondition + ".txt";
+		G4String moduleCapTimeHFileName = "output/" + runCondition + "/moduleCapTimeH" + runCondition + ".data";
 		WriteDataToFile(moduleCapTimeHFileName, moduleCapTimeH);
 
 		std::list<std::vector<std::vector<G4double> > > moduleDecayTimeMu = fPANDASimRun->GetModuleDecayTimeMu();
-		G4String moduleDecayTimeMuFileName = "output/" + runCondition + "/moduleDecayTimeMu" + runCondition + ".txt";
+		G4String moduleDecayTimeMuFileName = "output/" + runCondition + "/moduleDecayTimeMu" + runCondition + ".data";
 		WriteDataToFile(moduleDecayTimeMuFileName, moduleDecayTimeMu);
 
 		std::list<std::vector<std::vector<G4double> > > moduleMuTrackLength = fPANDASimRun->GetModuleMuTrackLength();
-		G4String moduleMuTrackLengthFileName = "output/" + runCondition + "/moduleMuTrackLength" + runCondition + ".txt";
+		G4String moduleMuTrackLengthFileName = "output/" + runCondition + "/moduleMuTrackLength" + runCondition + ".data";
 		WriteDataToFile(moduleMuTrackLengthFileName, moduleMuTrackLength);
 
 		std::list<std::vector<std::vector<G4double> > > moduleMuEdep = fPANDASimRun->GetModuleMuEdep();
-		G4String moduleMuEdepFileName = "output/" + runCondition + "/moduleMuEdep" + runCondition + ".txt";
+		G4String moduleMuEdepFileName = "output/" + runCondition + "/moduleMuEdep" + runCondition + ".data";
 		WriteDataToFile(moduleMuEdepFileName, moduleMuEdep);
 
 		//if (UserDataInput::GetOpticalPhysicsStatus() == true)
 		//{
 			auto moduleAbPh = fPANDASimRun->GetModuleAbPh();
-			G4String moduleAbPhFileNameRight = "output/" + runCondition + "/moduleAbPhRight" + runCondition + ".txt";
-			G4String moduleAbPhFileNameLeft = "output/" + runCondition + "/moduleAbPhLeft" + runCondition + ".txt";
+			G4String moduleAbPhFileNameRight = "output/" + runCondition + "/moduleAbPhRight" + runCondition + ".data";
+			G4String moduleAbPhFileNameLeft = "output/" + runCondition + "/moduleAbPhLeft" + runCondition + ".data";
 			WriteDataToFile(moduleAbPhFileNameRight, moduleAbPhFileNameLeft, moduleAbPh);
 
 			auto moduleDtPh = fPANDASimRun->GetModuleDtPh();
-			G4String moduleDtPhFileNameRight = "output/" + runCondition + "/moduleDtPhRight" + runCondition + ".txt";
-			G4String moduleDtPhFileNameLeft = "output/" + runCondition + "/moduleDtPhLeft" + runCondition + ".txt";
+			G4String moduleDtPhFileNameRight = "output/" + runCondition + "/moduleDtPhRight" + runCondition + ".data";
+			G4String moduleDtPhFileNameLeft = "output/" + runCondition + "/moduleDtPhLeft" + runCondition + ".data";
 			WriteDataToFile(moduleDtPhFileNameRight, moduleDtPhFileNameLeft, moduleDtPh);
 
 			auto moduleCalPh = fPANDASimRun->GetModuleCalPh();
-			G4String moduleCalPhFileNameRight = "output/" + runCondition + "/moduleCalPhPromptRight" + runCondition + ".txt";
-			G4String moduleCalPhFileNameLeft = "output/" + runCondition + "/moduleCalPhPromptLeft" + runCondition + ".txt";
+			G4String moduleCalPhFileNameRight = "output/" + runCondition + "/moduleCalPhPromptRight" + runCondition + ".data";
+			G4String moduleCalPhFileNameLeft = "output/" + runCondition + "/moduleCalPhPromptLeft" + runCondition + ".data";
 			WriteDataToFile(moduleCalPhFileNameRight, moduleCalPhFileNameLeft, moduleCalPh);
 
 			auto moduleCalPhDelayH = fPANDASimRun->GetModuleCalPhDelayH();
-			G4String moduleCalPhDelayHFileNameRight = "output/" + runCondition + "/moduleCalPhDelayHRight" + runCondition + ".txt";
-			G4String moduleCalPhDelayHFileNameLeft = "output/" + runCondition + "/moduleCalPhDelayHLeft" + runCondition + ".txt";
+			G4String moduleCalPhDelayHFileNameRight = "output/" + runCondition + "/moduleCalPhDelayHRight" + runCondition + ".data";
+			G4String moduleCalPhDelayHFileNameLeft = "output/" + runCondition + "/moduleCalPhDelayHLeft" + runCondition + ".data";
 			WriteDataToFile(moduleCalPhDelayHFileNameRight, moduleCalPhDelayHFileNameLeft, moduleCalPhDelayH);
 
 			auto moduleCalPhDelayGd = fPANDASimRun->GetModuleCalPhDelayGd();
-			G4String moduleCalPhDelayGdFileNameRight = "output/" + runCondition + "/moduleCalPhDelayGdRight" + runCondition + ".txt";
-			G4String moduleCalPhDelayGdFileNameLeft = "output/" + runCondition + "/moduleCalPhDelayGdLeft" + runCondition + ".txt";
+			G4String moduleCalPhDelayGdFileNameRight = "output/" + runCondition + "/moduleCalPhDelayGdRight" + runCondition + ".data";
+			G4String moduleCalPhDelayGdFileNameLeft = "output/" + runCondition + "/moduleCalPhDelayGdLeft" + runCondition + ".data";
 			WriteDataToFile(moduleCalPhDelayGdFileNameRight, moduleCalPhDelayGdFileNameLeft, moduleCalPhDelayGd);
 
 			auto moduleCalPhDecayMu = fPANDASimRun->GetModuleCalPhDecayMu();
-			G4String moduleCalPhDecayMuFileNameRight = "output/" + runCondition + "/moduleCalPhDecayMuRight" + runCondition + ".txt";
-			G4String moduleCalPhDecayMuFileNameLeft = "output/" + runCondition + "/moduleCalPhDecayMuLeft" + runCondition + ".txt";
+			G4String moduleCalPhDecayMuFileNameRight = "output/" + runCondition + "/moduleCalPhDecayMuRight" + runCondition + ".data";
+			G4String moduleCalPhDecayMuFileNameLeft = "output/" + runCondition + "/moduleCalPhDecayMuLeft" + runCondition + ".data";
 			WriteDataToFile(moduleCalPhDecayMuFileNameRight, moduleCalPhDecayMuFileNameLeft, moduleCalPhDecayMu);
 		//}
 
@@ -373,12 +373,14 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<G4double> d
 {
 	if (data.empty()) return;
 	std::ofstream outFile;
-	outFile.open(fileName, std::ios_base::out);
+	//outFile.open(fileName, std::ios_base::out);
+	outFile.open(fileName, std::ios_base::out | std::ios::binary);
 	for (auto itr = data.begin(); itr != data.end(); ++itr)
 	{
 		if (*itr != 0)
 		{
-			outFile << *itr << G4endl;
+			//outFile << *itr << G4endl;
+			outFile.write((char*)&(*itr), sizeof(*itr));
 		}
 	}
 	outFile.close();
@@ -391,74 +393,79 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::vector<std::vect
 	if (data == empty2DVec) return;
 	std::ofstream outFile;
 	outFile.open(fileName, std::ios_base::out);
+	//outFile.open(fileName, std::ios_base::out | std::ios::binary);
 	for (auto itrVector = data.begin(); itrVector != data.end(); ++itrVector)
 	{
+		//outFile.write((char*)itrVector->data(), sizeof((*itrVector)[0]) * itrVector->size());
 		for (auto itr = itrVector->begin(); itr != itrVector->end(); ++itr)
 		{
 			outFile << " " << *itr;
 		}
 		outFile << G4endl;
 	}
-	//outFile << G4endl;
 	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4int> > > data)
+void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4int>>> data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4int> > empty2DVec(arraySize, std::vector<G4int>(arraySize, 0));
 	std::ofstream outFile;
-	outFile.open(fileName, std::ios_base::out);
+	//outFile.open(fileName, std::ios_base::out);
+	outFile.open(fileName, std::ios_base::out | std::ios::binary);
 	for (auto itrList = data.begin(); itrList != data.end(); ++itrList)
 	{
 		if (*itrList != empty2DVec)
 		{
 			for (auto itr2DVector = itrList->begin(); itr2DVector != itrList->end(); ++itr2DVector)
 			{
-				for (auto itrVector = itr2DVector->begin(); itrVector != itr2DVector->end(); ++itrVector)
-				{
-					outFile << " " << *itrVector;
-				}
-				outFile << G4endl;
+				outFile.write((char*)itr2DVector->data(), sizeof((*itr2DVector)[0]) * itr2DVector->size());
+				//for (auto itrVector = itr2DVector->begin(); itrVector != itr2DVector->end(); ++itrVector)
+				//{
+				//	outFile << " " << *itrVector;
+				//}
+				//outFile << G4endl;
 			}
-			//outFile << G4endl;
 		}
 	}
 	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4double> > > data)
+void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4double>>> data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4double> > empty2DVec(arraySize, std::vector<G4double>(arraySize, 0));
 	std::ofstream outFile;
-	outFile.open(fileName, std::ios_base::out);
+	//outFile.open(fileName, std::ios_base::out);
+	outFile.open(fileName, std::ios_base::out | std::ios::binary);
 	for (auto itrList = data.begin(); itrList != data.end(); ++itrList)
 	{
 		if (*itrList != empty2DVec)
 		{
 			for (auto itr2DVector = itrList->begin(); itr2DVector != itrList->end(); ++itr2DVector)
 			{
-				for (auto itrVector = itr2DVector->begin(); itrVector != itr2DVector->end(); ++itrVector)
-				{
-					outFile << " " << *itrVector;
-				}
-				outFile << G4endl;
+				outFile.write((char*)itr2DVector->data(), sizeof((*itr2DVector)[0]) * itr2DVector->size());
+				//for (auto itrVector = itr2DVector->begin(); itrVector != itr2DVector->end(); ++itrVector)
+				//{
+				//	outFile << " " << *itrVector;
+				//}
+				//outFile << G4endl;
 			}
-			//outFile << G4endl;
 		}
 	}
 	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4int> > > > data)
+void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4int>>>> data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4int> > empty2DVec(arraySize, std::vector<G4int>(2, 0));
 	std::vector<std::vector<std::vector<G4int> > > empty3DVec(arraySize, empty2DVec);
 	std::ofstream outFileRight, outFileLeft;
-	outFileRight.open(fileNameRight, std::ios_base::out);
-	outFileLeft.open(fileNameLeft, std::ios_base::out);
+	//outFileRight.open(fileNameRight, std::ios_base::out);
+	//outFileLeft.open(fileNameLeft, std::ios_base::out);
+	outFileRight.open(fileNameRight, std::ios_base::out | std::ios::binary);
+	outFileLeft.open(fileNameLeft, std::ios_base::out | std::ios::binary);
 	for (auto itrList = data.begin(); itrList != data.end(); ++itrList)
 	{
 		if (*itrList != empty3DVec)
@@ -467,28 +474,30 @@ void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNam
 			{
 				for (auto itr2DVector = itr3DVector->begin(); itr2DVector != itr3DVector->end(); ++itr2DVector)
 				{
-					outFileRight << " " << *itr2DVector->begin();
-					outFileLeft << " " << *(itr2DVector->end() - 1);
+					outFileRight.write((char*)itr2DVector->data(), sizeof((*itr2DVector)[0]) * itr2DVector->size());
+					outFileLeft.write((char*)itr2DVector->data(), sizeof((*itr2DVector)[0]) * itr2DVector->size());
+					//outFileRight << " " << *itr2DVector->begin();
+					//outFileLeft << " " << *(itr2DVector->end() - 1);
 				}
-				outFileRight << G4endl;
-				outFileLeft << G4endl;
+				//outFileRight << G4endl;
+				//outFileLeft << G4endl;
 			}
-			//outFileRight << G4endl;
-			//outFileLeft << G4endl;
 		}
 	}
 	outFileRight.close();
 	outFileLeft.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4double> > > > data)
+void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4double>>>> data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4double> > empty2DVec(arraySize, std::vector<G4double>(2, 0));
 	std::vector<std::vector<std::vector<G4double> > > empty3DVec(arraySize, empty2DVec);
 	std::ofstream outFileRight, outFileLeft;
-	outFileRight.open(fileNameRight, std::ios_base::out);
-	outFileLeft.open(fileNameLeft, std::ios_base::out);
+	//outFileRight.open(fileNameRight, std::ios_base::out);
+	//outFileLeft.open(fileNameLeft, std::ios_base::out);
+	outFileRight.open(fileNameRight, std::ios_base::out | std::ios::binary);
+	outFileLeft.open(fileNameLeft, std::ios_base::out | std::ios::binary);
 	for (auto itrList = data.begin(); itrList != data.end(); ++itrList)
 	{
 		if (*itrList != empty3DVec)
@@ -497,14 +506,14 @@ void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNam
 			{
 				for (auto itr2DVector = itr3DVector->begin(); itr2DVector != itr3DVector->end(); ++itr2DVector)
 				{
-					outFileRight << " "  << *itr2DVector->begin();
-					outFileLeft << " " << *(itr2DVector->end() - 1);
+					outFileRight.write((char*)itr2DVector->data(), sizeof((*itr2DVector)[0]) * itr2DVector->size());
+					outFileLeft.write((char*)itr2DVector->data(), sizeof((*itr2DVector)[0]) * itr2DVector->size());
+					//outFileRight << " "  << *itr2DVector->begin();
+					//outFileLeft << " " << *(itr2DVector->end() - 1);
 				}
-				outFileRight << G4endl;
-				outFileLeft << G4endl;
+				//outFileRight << G4endl;
+				//outFileLeft << G4endl;
 			}
-			//outFileRight << G4endl;
-			//outFileLeft << G4endl;
 		}
 	}
 	outFileRight.close();
