@@ -28,6 +28,12 @@ e.g. 4 × 4
 
 0 1 2 ... 14 15 0 1 2 ... 14 15 0 ...
 
+
 #光电子二进制文件中Right和Left文件内容相同，均保存了左右两端的数据：
 
 0R 0L 1R 1L ... 14R 14L 15R 15L 0R 0L ...
+
+
+#以下数据未按照阵列结构存储(顺序存储)
+
+betaKEHe8, betaKELi9, decayTimeHe8, decayTimeLi9
