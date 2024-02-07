@@ -61,13 +61,13 @@ public:
 	virtual void BeginOfRunAction(const G4Run*);
 	virtual void   EndOfRunAction(const G4Run*);
 
-	void PushBetaKEHe8(G4double bke);
-	void PushBetaKELi9(G4double bke);
-	void PushDecayTimeHe8(G4double dt);
-	void PushDecayTimeLi9(G4double dt);
+	void PushBetaKEHe8(const G4double& bke);
+	void PushBetaKELi9(const G4double& bke);
+	void PushDecayTimeHe8(const G4double& dt);
+	void PushDecayTimeLi9(const G4double& dt);
 
-	void PushNeutronGenicTime(std::vector<std::vector<G4double>> t);
-	void PushNeutronKE(std::vector<std::vector<G4double>> ke);
+	void PushNeutronGenicTime(const std::vector<std::vector<G4double>>& t);
+	void PushNeutronKE(const std::vector<std::vector<G4double>>& ke);
 
 	void AddNLi9(std::vector<std::vector<G4int> > nLi9);
 	void AddNHe8(std::vector<std::vector<G4int> > nHe8);
@@ -94,12 +94,12 @@ private:
 
 	//G4String runCondition;
 	G4int arraySize;
-	void WriteDataToFile(G4String fileName, std::list<G4double> data);
-	void WriteDataToFile(G4String fileName, std::vector<std::vector<G4int> > data);
-	void WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4int> > > data);
-	void WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4double> > > data);
-	void WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4int> > > > data);
-	void WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4double> > > > data);
+	void WriteDataToFile(const G4String& fileName, const std::list<G4double>& data);
+	void WriteDataToFile(const G4String& fileName, const std::vector<std::vector<G4int>>& data);
+	void WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4int>>>& data);
+	void WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4double>>> data);
+	void WriteDataToFile(const G4String& fileNameRight, const G4String& fileNameLeft, const std::list<std::vector<std::vector<std::vector<G4int>>>>& data);
+	void WriteDataToFile(const G4String& fileNameRight, const G4String& fileNameLeft, const std::list<std::vector<std::vector<std::vector<G4double>>>>& data);
 };
 
 #endif

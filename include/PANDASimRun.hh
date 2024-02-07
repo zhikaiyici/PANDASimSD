@@ -52,34 +52,34 @@ class PANDASimRun : public G4Run
     // method from the base class
     virtual void Merge(const G4Run*);
     
-    void PushBackEnergyDeposit(G4double edep);
+    void PushBackEnergyDeposit(const G4double& edep);
 
-    void PushBackCaptureTimeH(G4double capTime);
-    void PushBackCaptureTimeGd(G4double capTime);
-    void PushBackDecayTimeMu(G4double decayTime);
+    void PushBackCaptureTimeH(const G4double& capTime);
+    void PushBackCaptureTimeGd(const G4double& capTime);
+    void PushBackDecayTimeMu(const G4double& decayTime);
 
-    void PushBackAllAbPh(std::vector<G4int> nAbPh);
-    void PushBackAllDtPh(std::vector<G4int> nDtPh);
+    void PushBackAllAbPh(const std::vector<G4int>& nAbPh);
+    void PushBackAllDtPh(const std::vector<G4int>& nDtPh);
 
-    void PushBackModuleEnergyDeposit(std::vector<std::vector<G4double> > edepVec);
-    void PushBackModuleEnergyDepositDelayH(std::vector<std::vector<G4double> > energyDepositDelayH);
-    void PushBackModuleEnergyDepositDelayGd(std::vector<std::vector<G4double> > energyDepositDelayGd);
-    void PushBackModuleEnergyDepositDecayMu(std::vector<std::vector<G4double> > energyDepositDecayMu);
+    void PushBackModuleEnergyDeposit(const std::vector<std::vector<G4double>>& edepVec);
+    void PushBackModuleEnergyDepositDelayH(const std::vector<std::vector<G4double>>& energyDepositDelayH);
+    void PushBackModuleEnergyDepositDelayGd(const std::vector<std::vector<G4double>>& energyDepositDelayGd);
+    void PushBackModuleEnergyDepositDecayMu(const std::vector<std::vector<G4double>>& energyDepositDecayMu);
 
-    void PushBackModuleCapTimeGd(std::vector<std::vector<G4double> > moduleCapTimeGd);
-    void PushBackModuleCapTimeH(std::vector<std::vector<G4double> > moduleCapTimeH);
-    void PushBackModuleDecayTimeMu(std::vector<std::vector<G4double> > moduleDecayTimeMu);
+    void PushBackModuleCapTimeGd(const std::vector<std::vector<G4double>>& moduleCapTimeGd);
+    void PushBackModuleCapTimeH(const std::vector<std::vector<G4double>>& moduleCapTimeH);
+    void PushBackModuleDecayTimeMu(const std::vector<std::vector<G4double>>& moduleDecayTimeMu);
 
-    void PushBackModuleMuTrackLength(std::vector<std::vector<G4double> > moduleMuTrackLength);
-    void PushBackModuleMuEdep(std::vector<std::vector<G4double> > moduleMuEdep);
+    void PushBackModuleMuTrackLength(const std::vector<std::vector<G4double>>& moduleMuTrackLength);
+    void PushBackModuleMuEdep(const std::vector<std::vector<G4double>>& moduleMuEdep);
 
-    void PushBackModuleAbPh(std::vector<std::vector<std::vector<G4int> > > nAbPhVec);
-    void PushBackModuleDtPh(std::vector<std::vector<std::vector<G4int> > > nDtPhVec);
+    void PushBackModuleAbPh(const std::vector<std::vector<std::vector<G4int>>>& nAbPhVec);
+    void PushBackModuleDtPh(const std::vector<std::vector<std::vector<G4int>>>& nDtPhVec);
 
-    void PushBackModuleCalPh(std::vector<std::vector<std::vector<G4double> > > nCalPhVec);
-    void PushBackModuleCalPhDelayH(std::vector<std::vector<std::vector<G4double> > > nCalPhVec);
-    void PushBackModuleCalPhDelayGd(std::vector<std::vector<std::vector<G4double> > > nCalPhVec);
-    void PushBackModuleCalPhDecayMu(std::vector<std::vector<std::vector<G4double> > > nCalPhVec);
+    void PushBackModuleCalPh(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec);
+    void PushBackModuleCalPhDelayH(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec);
+    void PushBackModuleCalPhDelayGd(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec);
+    void PushBackModuleCalPhDecayMu(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec);
 
     // get methods
     inline std::list<G4double> GetEnergyDeposit() const { return energyDeposit; }
@@ -88,28 +88,28 @@ class PANDASimRun : public G4Run
     inline std::list<G4double> GetCaptureTimeGd() const { return capTimeGd; }
     inline std::list<G4double> GetDecayTimeMu() const { return decayTimeMu; }
 
-    inline std::list<std::vector<G4int> > GetAllAbPh() const { return allAbPh; }
-    inline std::list<std::vector<G4int> > GetAllDtPh() const { return allDtPh; }
+    inline std::list<std::vector<G4int>> GetAllAbPh() const { return allAbPh; }
+    inline std::list<std::vector<G4int>> GetAllDtPh() const { return allDtPh; }
 
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleEnergyDeposit() const { return moduleEnergyDeposit; }
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleEnergyDepositDelayH() const { return moduleEnergyDepositDelayH; }
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleEnergyDepositDelayGd() const { return moduleEnergyDepositDelayGd; }
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleEnergyDepositDecayMu() const { return moduleEnergyDepositDecayMu; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleEnergyDeposit() const { return moduleEnergyDeposit; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleEnergyDepositDelayH() const { return moduleEnergyDepositDelayH; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleEnergyDepositDelayGd() const { return moduleEnergyDepositDelayGd; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleEnergyDepositDecayMu() const { return moduleEnergyDepositDecayMu; }
 
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleCapTimeH() const { return moduleCapTimeH; }
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleCapTimeGd() const { return moduleCapTimeGd; }
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleDecayTimeMu() const { return moduleDecayTimeMu; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleCapTimeH() const { return moduleCapTimeH; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleCapTimeGd() const { return moduleCapTimeGd; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleDecayTimeMu() const { return moduleDecayTimeMu; }
 
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleMuTrackLength() const { return moduleMuTrackLength; }
-    inline std::list<std::vector<std::vector<G4double> > > GetModuleMuEdep() const { return moduleMuEdep; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleMuTrackLength() const { return moduleMuTrackLength; }
+    inline std::list<std::vector<std::vector<G4double>>> GetModuleMuEdep() const { return moduleMuEdep; }
 
-    inline std::list<std::vector<std::vector<std::vector<G4int> > > > GetModuleAbPh() const { return moduleAbPh; }
-    inline std::list<std::vector<std::vector<std::vector<G4int> > > > GetModuleDtPh() const { return moduleDtPh; }
+    inline std::list<std::vector<std::vector<std::vector<G4int>>>> GetModuleAbPh() const { return moduleAbPh; }
+    inline std::list<std::vector<std::vector<std::vector<G4int>>>> GetModuleDtPh() const { return moduleDtPh; }
 
-    inline std::list<std::vector<std::vector<std::vector<G4double> > > > GetModuleCalPh() const { return moduleCalPh; }
-    inline std::list<std::vector<std::vector<std::vector<G4double> > > > GetModuleCalPhDelayH() const { return moduleCalPhDelayH; }
-    inline std::list<std::vector<std::vector<std::vector<G4double> > > > GetModuleCalPhDelayGd() const { return moduleCalPhDelayGd; }
-    inline std::list<std::vector<std::vector<std::vector<G4double> > > > GetModuleCalPhDecayMu() const { return moduleCalPhDecayMu; }
+    inline std::list<std::vector<std::vector<std::vector<G4double>>>> GetModuleCalPh() const { return moduleCalPh; }
+    inline std::list<std::vector<std::vector<std::vector<G4double>>>> GetModuleCalPhDelayH() const { return moduleCalPhDelayH; }
+    inline std::list<std::vector<std::vector<std::vector<G4double>>>> GetModuleCalPhDelayGd() const { return moduleCalPhDelayGd; }
+    inline std::list<std::vector<std::vector<std::vector<G4double>>>> GetModuleCalPhDecayMu() const { return moduleCalPhDecayMu; }
 
   private:
     std::list<G4double> energyDeposit;
@@ -118,33 +118,33 @@ class PANDASimRun : public G4Run
     std::list<G4double> capTimeGd;
     std::list<G4double> decayTimeMu;
 
-    std::list<std::vector<G4int> > allAbPh;
-    std::list<std::vector<G4int> > allDtPh;
+    std::list<std::vector<G4int>> allAbPh;
+    std::list<std::vector<G4int>> allDtPh;
 
-    std::list<std::vector<std::vector<G4double> > > moduleEnergyDeposit;
-    std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDelayH;
-    std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDelayGd;
-    std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDecayMu;
+    std::list<std::vector<std::vector<G4double>>> moduleEnergyDeposit;
+    std::list<std::vector<std::vector<G4double>>> moduleEnergyDepositDelayH;
+    std::list<std::vector<std::vector<G4double>>> moduleEnergyDepositDelayGd;
+    std::list<std::vector<std::vector<G4double>>> moduleEnergyDepositDecayMu;
 
-    std::list<std::vector<std::vector<G4double> > > moduleCapTimeH;
-    std::list<std::vector<std::vector<G4double> > > moduleCapTimeGd;
-    std::list<std::vector<std::vector<G4double> > > moduleDecayTimeMu;
+    std::list<std::vector<std::vector<G4double>>> moduleCapTimeH;
+    std::list<std::vector<std::vector<G4double>>> moduleCapTimeGd;
+    std::list<std::vector<std::vector<G4double>>> moduleDecayTimeMu;
 
-    std::list<std::vector<std::vector<G4double> > > moduleMuTrackLength;
-    std::list<std::vector<std::vector<G4double> > > moduleMuEdep;
+    std::list<std::vector<std::vector<G4double>>> moduleMuTrackLength;
+    std::list<std::vector<std::vector<G4double>>> moduleMuEdep;
 
-    std::list<std::vector<std::vector<std::vector<G4int> > > > moduleAbPh;
-    std::list<std::vector<std::vector<std::vector<G4int> > > > moduleDtPh;
+    std::list<std::vector<std::vector<std::vector<G4int>>>> moduleAbPh;
+    std::list<std::vector<std::vector<std::vector<G4int>>>> moduleDtPh;
 
-    std::list<std::vector<std::vector<std::vector<G4double> > > > moduleCalPh;
-    std::list<std::vector<std::vector<std::vector<G4double> > > > moduleCalPhDelayH;
-    std::list<std::vector<std::vector<std::vector<G4double> > > > moduleCalPhDelayGd;
-    std::list<std::vector<std::vector<std::vector<G4double> > > > moduleCalPhDecayMu;
+    std::list<std::vector<std::vector<std::vector<G4double>>>> moduleCalPh;
+    std::list<std::vector<std::vector<std::vector<G4double>>>> moduleCalPhDelayH;
+    std::list<std::vector<std::vector<std::vector<G4double>>>> moduleCalPhDelayGd;
+    std::list<std::vector<std::vector<std::vector<G4double>>>> moduleCalPhDecayMu;
 };
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-inline void PANDASimRun::PushBackEnergyDeposit(G4double edep)
+inline void PANDASimRun::PushBackEnergyDeposit(const G4double& edep)
 {
     energyDeposit.push_back(edep);
     //for (std::list<G4double>::iterator itr = energyDeposit.begin(); itr != energyDeposit.end(); ++itr)
@@ -153,102 +153,102 @@ inline void PANDASimRun::PushBackEnergyDeposit(G4double edep)
     //}
 }
 
-inline void PANDASimRun::PushBackCaptureTimeH(G4double capTime)
+inline void PANDASimRun::PushBackCaptureTimeH(const G4double& capTime)
 {
     capTimeH.push_back(capTime);
 }
 
-inline void PANDASimRun::PushBackCaptureTimeGd(G4double capTime)
+inline void PANDASimRun::PushBackCaptureTimeGd(const G4double& capTime)
 {
     capTimeGd.push_back(capTime);
 }
 
-inline void PANDASimRun::PushBackDecayTimeMu(G4double decayTime)
+inline void PANDASimRun::PushBackDecayTimeMu(const G4double& decayTime)
 {
     decayTimeMu.push_back(decayTime);
 }
 
-inline void PANDASimRun::PushBackAllAbPh(std::vector<G4int> nAbPh)
+inline void PANDASimRun::PushBackAllAbPh(const std::vector<G4int>& nAbPh)
 {
     allAbPh.push_back(nAbPh);
 }
 
-inline void PANDASimRun::PushBackAllDtPh(std::vector<G4int> nDtPh)
+inline void PANDASimRun::PushBackAllDtPh(const std::vector<G4int>& nDtPh)
 {
     allDtPh.push_back(nDtPh);
 }
 
-inline void PANDASimRun::PushBackModuleEnergyDeposit(std::vector<std::vector<G4double> > edepVec)
+inline void PANDASimRun::PushBackModuleEnergyDeposit(const std::vector<std::vector<G4double>>& edepVec)
 {
     moduleEnergyDeposit.push_back(edepVec);
 }
 
-inline void PANDASimRun::PushBackModuleEnergyDepositDelayH(std::vector<std::vector<G4double> > edepVec)
+inline void PANDASimRun::PushBackModuleEnergyDepositDelayH(const std::vector<std::vector<G4double>>& edepVec)
 {
     moduleEnergyDepositDelayH.push_back(edepVec);
 }
 
-inline void PANDASimRun::PushBackModuleEnergyDepositDelayGd(std::vector<std::vector<G4double> > edepVec)
+inline void PANDASimRun::PushBackModuleEnergyDepositDelayGd(const std::vector<std::vector<G4double>>& edepVec)
 {
     moduleEnergyDepositDelayGd.push_back(edepVec);
 }
 
-inline void PANDASimRun::PushBackModuleEnergyDepositDecayMu(std::vector<std::vector<G4double> > edepVec)
+inline void PANDASimRun::PushBackModuleEnergyDepositDecayMu(const std::vector<std::vector<G4double>>& edepVec)
 {
     moduleEnergyDepositDecayMu.push_back(edepVec);
 }
 
-inline void PANDASimRun::PushBackModuleCapTimeGd(std::vector<std::vector<G4double>> moduleCapTime)
+inline void PANDASimRun::PushBackModuleCapTimeGd(const std::vector<std::vector<G4double>>& moduleCapTime)
 {
     moduleCapTimeGd.push_back(moduleCapTime);
 }
 
-inline void PANDASimRun::PushBackModuleCapTimeH(std::vector<std::vector<G4double>> moduleCapTime)
+inline void PANDASimRun::PushBackModuleCapTimeH(const std::vector<std::vector<G4double>>& moduleCapTime)
 {
     moduleCapTimeH.push_back(moduleCapTime);
 }
 
-inline void PANDASimRun::PushBackModuleDecayTimeMu(std::vector<std::vector<G4double>> moduleDecayTime)
+inline void PANDASimRun::PushBackModuleDecayTimeMu(const std::vector<std::vector<G4double>>& moduleDecayTime)
 {
     moduleDecayTimeMu.push_back(moduleDecayTime);
 }
 
-inline void PANDASimRun::PushBackModuleMuTrackLength(std::vector<std::vector<G4double>> moduleMuTrack)
+inline void PANDASimRun::PushBackModuleMuTrackLength(const std::vector<std::vector<G4double>>& moduleMuTrack)
 {
     moduleMuTrackLength.push_back(moduleMuTrack);
 }
 
-inline void PANDASimRun::PushBackModuleMuEdep(std::vector<std::vector<G4double>> moduleMuE)
+inline void PANDASimRun::PushBackModuleMuEdep(const std::vector<std::vector<G4double>>& moduleMuE)
 {
     moduleMuEdep.push_back(moduleMuE);
 }
 
-inline void PANDASimRun::PushBackModuleAbPh(std::vector<std::vector<std::vector<G4int> > > nAbPhVec)
+inline void PANDASimRun::PushBackModuleAbPh(const std::vector<std::vector<std::vector<G4int>>>& nAbPhVec)
 {
     moduleAbPh.push_back(nAbPhVec);
 }
 
-inline void PANDASimRun::PushBackModuleDtPh(std::vector<std::vector<std::vector<G4int> > > nDtPhVec)
+inline void PANDASimRun::PushBackModuleDtPh(const std::vector<std::vector<std::vector<G4int>>>& nDtPhVec)
 {
     moduleDtPh.push_back(nDtPhVec);
 }
 
-inline void PANDASimRun::PushBackModuleCalPh(std::vector<std::vector<std::vector<G4double> > > nCalPhVec)
+inline void PANDASimRun::PushBackModuleCalPh(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec)
 {
     moduleCalPh.push_back(nCalPhVec);
 }
 
-inline void PANDASimRun::PushBackModuleCalPhDelayH(std::vector<std::vector<std::vector<G4double> > > nCalPhVec)
+inline void PANDASimRun::PushBackModuleCalPhDelayH(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec)
 {
     moduleCalPhDelayH.push_back(nCalPhVec);
 }
 
-inline void PANDASimRun::PushBackModuleCalPhDelayGd(std::vector<std::vector<std::vector<G4double> > > nCalPhVec)
+inline void PANDASimRun::PushBackModuleCalPhDelayGd(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec)
 {
     moduleCalPhDelayGd.push_back(nCalPhVec);
 }
 
-inline void PANDASimRun::PushBackModuleCalPhDecayMu(std::vector<std::vector<std::vector<G4double> > > nCalPhVec)
+inline void PANDASimRun::PushBackModuleCalPhDecayMu(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec)
 {
     moduleCalPhDecayMu.push_back(nCalPhVec);
 }

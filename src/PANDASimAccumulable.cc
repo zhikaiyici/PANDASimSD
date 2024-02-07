@@ -71,37 +71,37 @@ void PANDASimAccumulable::Reset()
 	neutrinoPosition = {16, 5};
 }
 
-void PANDASimAccumulable::PushBetaKEHe8(G4double bke)
+void PANDASimAccumulable::PushBetaKEHe8(const G4double& bke)
 {
 	betaKEHe8.push_back(bke);
 }
 
-void PANDASimAccumulable::PushBetaKELi9(G4double bke)
+void PANDASimAccumulable::PushBetaKELi9(const G4double& bke)
 {
 	betaKELi9.push_back(bke);
 }
 
-void PANDASimAccumulable::PushDecayTimeHe8(G4double dt)
+void PANDASimAccumulable::PushDecayTimeHe8(const G4double& dt)
 {
 	decayTimeHe8.push_back(dt);
 }
 
-void PANDASimAccumulable::PushDecayTimeLi9(G4double dt)
+void PANDASimAccumulable::PushDecayTimeLi9(const G4double& dt)
 {
 	decayTimeLi9.push_back(dt);
 }
 
-void PANDASimAccumulable::PushNeutronGenicTime(std::vector<std::vector<G4double>> t)
+void PANDASimAccumulable::PushNeutronGenicTime(const std::vector<std::vector<G4double>>& t)
 {
 	neutronGenicTime.push_back(t);
 }
 
-void PANDASimAccumulable::PushNeutronKE(std::vector<std::vector<G4double>> ke)
+void PANDASimAccumulable::PushNeutronKE(const std::vector<std::vector<G4double>>& ke)
 {
 	neutronKE.push_back(ke);
 }
 
-void PANDASimAccumulable::AddNLi9(std::vector<std::vector<G4int> > n)
+void PANDASimAccumulable::AddNLi9(std::vector<std::vector<G4int>> n)
 {
 	for (int i = 0; i < numLi9[0].size(); ++i)
 	{
@@ -112,7 +112,7 @@ void PANDASimAccumulable::AddNLi9(std::vector<std::vector<G4int> > n)
 	}
 }
 
-void PANDASimAccumulable::AddNHe8(std::vector<std::vector<G4int> > n)
+void PANDASimAccumulable::AddNHe8(std::vector<std::vector<G4int>> n)
 {
 	for (int i = 0; i < numHe8[0].size(); ++i)
 	{

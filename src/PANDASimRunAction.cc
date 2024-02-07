@@ -370,7 +370,7 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 	}
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<G4double> data)
+void PANDASimRunAction::WriteDataToFile(const G4String& fileName, const std::list<G4double>& data)
 {
 	if (data.empty()) return;
 	std::ofstream outFile;
@@ -387,7 +387,7 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<G4double> d
 	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileName, std::vector<std::vector<G4int> > data)
+void PANDASimRunAction::WriteDataToFile(const G4String& fileName, const std::vector<std::vector<G4int>>& data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4int> > empty2DVec(arraySize, std::vector<G4int>(arraySize, 0));
@@ -407,7 +407,7 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::vector<std::vect
 	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4int>>> data)
+void PANDASimRunAction::WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4int>>>& data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4int> > empty2DVec(arraySize, std::vector<G4int>(arraySize, 0));
@@ -432,7 +432,7 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector
 	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector<std::vector<G4double>>> data)
+void PANDASimRunAction::WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4double>>> data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4double> > empty2DVec(arraySize, std::vector<G4double>(arraySize, 0));
@@ -457,7 +457,7 @@ void PANDASimRunAction::WriteDataToFile(G4String fileName, std::list<std::vector
 	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4int>>>> data)
+void PANDASimRunAction::WriteDataToFile(const G4String& fileNameRight, const G4String& fileNameLeft, const std::list<std::vector<std::vector<std::vector<G4int>>>>& data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4int> > empty2DVec(arraySize, std::vector<G4int>(2, 0));
@@ -489,7 +489,7 @@ void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNam
 	outFileLeft.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNameLeft, std::list<std::vector<std::vector<std::vector<G4double>>>> data)
+void PANDASimRunAction::WriteDataToFile(const G4String& fileNameRight, const G4String& fileNameLeft, const std::list<std::vector<std::vector<std::vector<G4double>>>>& data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4double> > empty2DVec(arraySize, std::vector<G4double>(2, 0));
@@ -521,32 +521,32 @@ void PANDASimRunAction::WriteDataToFile(G4String fileNameRight, G4String fileNam
 	outFileLeft.close();
 }
 
-void PANDASimRunAction::PushBetaKEHe8(G4double bke)
+void PANDASimRunAction::PushBetaKEHe8(const G4double& bke)
 {
 	myAccu->PushBetaKEHe8(bke);
 }
 
-void PANDASimRunAction::PushBetaKELi9(G4double bke)
+void PANDASimRunAction::PushBetaKELi9(const G4double& bke)
 {
 	myAccu->PushBetaKELi9(bke);
 }
 
-void PANDASimRunAction::PushDecayTimeHe8(G4double dt)
+void PANDASimRunAction::PushDecayTimeHe8(const G4double& dt)
 {
 	myAccu->PushDecayTimeHe8(dt);
 }
 
-void PANDASimRunAction::PushDecayTimeLi9(G4double dt)
+void PANDASimRunAction::PushDecayTimeLi9(const G4double& dt)
 {
 	myAccu->PushDecayTimeLi9(dt);
 }
 
-void PANDASimRunAction::PushNeutronGenicTime(std::vector<std::vector<G4double>> t)
+void PANDASimRunAction::PushNeutronGenicTime(const std::vector<std::vector<G4double>>& t)
 {
 	myAccu->PushNeutronGenicTime(t);
 }
 
-void PANDASimRunAction::PushNeutronKE(std::vector<std::vector<G4double>> ke)
+void PANDASimRunAction::PushNeutronKE(const std::vector<std::vector<G4double>>& ke)
 {
 	myAccu->PushNeutronKE(ke);
 }

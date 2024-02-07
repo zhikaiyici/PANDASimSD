@@ -17,17 +17,17 @@ public:
     void Merge(const G4VAccumulable& other);
     void Reset();
 
-    void PushBetaKEHe8(G4double bke);
-    void PushBetaKELi9(G4double bke);
-    void PushDecayTimeHe8(G4double dt);
-    void PushDecayTimeLi9(G4double dt);
+    void PushBetaKEHe8(const G4double& bke);
+    void PushBetaKELi9(const G4double& bke);
+    void PushDecayTimeHe8(const G4double& dt);
+    void PushDecayTimeLi9(const G4double& dt);
 
-    void PushNeutronGenicTime(std::vector<std::vector<G4double>> t);
-    void PushNeutronKE(std::vector<std::vector<G4double>> ke);
+    void PushNeutronGenicTime(const std::vector<std::vector<G4double>>& t);
+    void PushNeutronKE(const std::vector<std::vector<G4double>>& ke);
 
-    void AddNLi9(std::vector<std::vector<G4int> > n);
-    void AddNHe8(std::vector<std::vector<G4int> > n);
-    void AddNNeurtron(std::vector<std::vector<G4int> > n);
+    void AddNLi9(std::vector<std::vector<G4int>> n);
+    void AddNHe8(std::vector<std::vector<G4int>> n);
+    void AddNNeurtron(std::vector<std::vector<G4int>> n);
 
     inline void SetRunCondition(G4String rc) { runCondition = rc; };
     inline void SetArraySize(G4int as) { arraySize = as; };
@@ -57,9 +57,9 @@ private:
     std::list<std::vector<std::vector<G4double>>> neutronGenicTime;
     std::list<std::vector<std::vector<G4double>>> neutronKE;
 
-    std::vector<std::vector<G4int> >  numLi9;
-    std::vector<std::vector<G4int> >  numHe8;
-    std::vector<std::vector<G4int> >  numNeutron;
+    std::vector<std::vector<G4int>>  numLi9;
+    std::vector<std::vector<G4int>>  numHe8;
+    std::vector<std::vector<G4int>>  numNeutron;
 
     G4int arraySize;
 
