@@ -1,0 +1,8 @@
+# Macro file
+#
+# % calibration.mac
+#
+/source/position CENTER
+
+/source/type {sType}
+/run/beamOn 100000

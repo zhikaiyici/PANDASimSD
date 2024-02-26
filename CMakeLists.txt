@@ -71,6 +71,11 @@ set(PANDASim_SCRIPTS
   vis.mac
   run.mac
   cry.mac
+  calibration.mac
+  neutrino.mac
+  He8Li9.mac
+  calibration.mac
+  detector.mac
   physics.mac
   InputSet.txt
   _readme.txt

@@ -1,0 +1,7 @@
+# Macro file
+# 
+# To be run preferably in batch, without graphics:
+# % He8Li9.mac
+/source/type {sType}
+/run/beamOn 10
+

@@ -57,6 +57,7 @@
 
 #include "Randomize.hh"
 #include "G4ParticleHPManager.hh"
+#include "G4HadronicParameters.hh"
 
 #include "UserDataInput.hh"
 
@@ -142,6 +143,9 @@ int main(int argc, char** argv)
 
 	// User action initialization
 	runManager->SetUserInitialization(new PANDASimActionInitialization());
+
+	//The default value of the time threshold for radioactive decays of ions has been changed, from 10^27 ns to 1 year, sine 11.2
+	G4HadronicParameters::Instance()->SetTimeThresholdForRadioactiveDecay(1.0e+60 * CLHEP::year);
 
 	// Replaced HP environmental variables with C++ calls
 	G4ParticleHPManager::GetInstance()->SetSkipMissingIsotopes(true);

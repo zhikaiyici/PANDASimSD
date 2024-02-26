@@ -74,7 +74,7 @@ PANDASimPrimaryGeneratorMessenger::PANDASimPrimaryGeneratorMessenger(PANDASimPri
 	sourceSpectraCMD = new G4UIcmdWithAString("/source/spectra", this);
 	sourceSpectraCMD->SetGuidance("Specify spectra file name.");
 	sourceSpectraCMD->SetParameterName("spectraName", true);
-	sourceSpectraCMD->SetDefaultValue("IBDPositron.spec IBDNeutron.spec");
+	sourceSpectraCMD->SetDefaultValue("IBDNeutron.spec IBDPositron.spec");
 
 	sourcePositionCMD = new G4UIcmdWithAString("/source/position", this);
 	sourcePositionCMD->SetGuidance("Source position only for the following souce type: ");
