@@ -27,7 +27,7 @@
 /event/verbose 0
 /tracking/verbose 0
 #
-#/source/type              ## Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n/GNU with position CENTER/EDGE;
+#/source/type              ## Cs137/Co60/Na22/Cs137g/Co60g/Am-Be-n/GUN with position CENTER/EDGE;
                            ## GUN with position INSIDE or COMMAND (means defined by UI command);
                            ## He8; Li9; NEUTRINO; MUON; COSMICNEUTRON; CRY (Linux only); GPS
                            ## Position, momentum, particle etc. must be defined with source GPS.

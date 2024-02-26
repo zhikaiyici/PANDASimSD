@@ -225,9 +225,9 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		std::list<std::vector<std::vector<G4double>>> neutronGenicTime = myAccu->GetNeutronGenicTime();
 		std::list<std::vector<std::vector<G4double>>> neutronKE = myAccu->GetNeutronKE();
 
-		std::vector<std::vector<G4int> > numHe8 = myAccu->GetNHe8();
-		std::vector<std::vector<G4int> > numLi9 = myAccu->GetNLi9();
-		std::vector<std::vector<G4int> > numNeutron = myAccu->GetNNeutron();
+		std::vector<std::vector<G4int>> numHe8 = myAccu->GetNHe8();
+		std::vector<std::vector<G4int>> numLi9 = myAccu->GetNLi9();
+		std::vector<std::vector<G4int>> numNeutron = myAccu->GetNNeutron();
 
 		auto runCondition = myAccu->GetRunCondition();
 		G4int runID = G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID();
@@ -245,21 +245,27 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 
 		G4String betaKEHe8FileName = outDir + "/betaKEHe8" + runCondition + ".data";
 		WriteDataToFile(betaKEHe8FileName, betaKEHe8);
+		betaKEHe8.clear();
 
 		G4String betaKELi9FileName = outDir + "/betaKELi9" + runCondition + ".data";
 		WriteDataToFile(betaKELi9FileName, betaKELi9);
+		betaKELi9.clear();
 
 		G4String decayTimeHe8FileName = outDir + "/decayTimeHe8" + runCondition + ".data";
 		WriteDataToFile(decayTimeHe8FileName, decayTimeHe8);
+		decayTimeHe8.clear();
 
 		G4String decayTimeLi9FileName = outDir + "/decayTimeLi9" + runCondition + ".data";
 		WriteDataToFile(decayTimeLi9FileName, decayTimeLi9);
+		decayTimeLi9.clear();
 
 		G4String neutronGenicTimeFileName = outDir + "/neutronGenicTime" + runCondition + ".data";
 		WriteDataToFile(neutronGenicTimeFileName, neutronGenicTime);
+		neutronGenicTime.clear();
 
 		G4String neutronKEFileName = outDir + "/neutronKE" + runCondition + ".data";
 		WriteDataToFile(neutronKEFileName, neutronKE);
+		neutronKE.clear();
 
 		G4String numLi9FileName = outDir + "/numLi9" + runCondition + ".txt";
 		WriteDataToFile(numLi9FileName, numLi9);
@@ -288,41 +294,50 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		//list<G4double> energyDeposit = fPANDASimRun->GetEnergyDeposit();
 		//WriteDataToFile(edepFileName, energyDeposit);
 
-		std::list<std::vector<std::vector<G4double> > > moduleEnergyDeposit = fPANDASimRun->GetModuleEnergyDeposit();
+		std::list<std::vector<std::vector<G4double>>> moduleEnergyDeposit = fPANDASimRun->GetModuleEnergyDeposit();
 		G4String moduleEdepFileName = outDir + "/moduleEdepPrompt" + runCondition + ".data";
 		WriteDataToFile(moduleEdepFileName, moduleEnergyDeposit);
+		moduleEnergyDeposit.clear();
 
-		std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDelayH = fPANDASimRun->GetModuleEnergyDepositDelayH();
+		std::list<std::vector<std::vector<G4double>>> moduleEnergyDepositDelayH = fPANDASimRun->GetModuleEnergyDepositDelayH();
 		G4String moduleEdepDelayHFileName = outDir + "/moduleEdepDelayH" + runCondition + ".data";
 		WriteDataToFile(moduleEdepDelayHFileName, moduleEnergyDepositDelayH);
+		moduleEnergyDepositDelayH.clear();
 
-		std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDelayGd = fPANDASimRun->GetModuleEnergyDepositDelayGd();
+		std::list<std::vector<std::vector<G4double>>> moduleEnergyDepositDelayGd = fPANDASimRun->GetModuleEnergyDepositDelayGd();
 		G4String moduleEdepDelayGdFileName = outDir + "/moduleEdepDelayGd" + runCondition + ".data";
 		WriteDataToFile(moduleEdepDelayGdFileName, moduleEnergyDepositDelayGd);
+		moduleEnergyDepositDelayGd.clear();
 
-		std::list<std::vector<std::vector<G4double> > > moduleEnergyDepositDecayMu = fPANDASimRun->GetModuleEnergyDepositDecayMu();
+		std::list<std::vector<std::vector<G4double>>> moduleEnergyDepositDecayMu = fPANDASimRun->GetModuleEnergyDepositDecayMu();
 		G4String moduleEdepDecayMuFileName = outDir + "/moduleEdepDecayMu" + runCondition + ".data";
 		WriteDataToFile(moduleEdepDecayMuFileName, moduleEnergyDepositDecayMu);
+		moduleEnergyDepositDecayMu.clear();
 
-		std::list<std::vector<std::vector<G4double> > > moduleCapTimeGd = fPANDASimRun->GetModuleCapTimeGd();
+		std::list<std::vector<std::vector<G4double>>> moduleCapTimeGd = fPANDASimRun->GetModuleCapTimeGd();
 		G4String moduleCapTimeGdFileName = outDir + "/moduleCapTimeGd" + runCondition + ".data";
 		WriteDataToFile(moduleCapTimeGdFileName, moduleCapTimeGd);
+		moduleCapTimeGd.clear();
 
-		std::list<std::vector<std::vector<G4double> > > moduleCapTimeH = fPANDASimRun->GetModuleCapTimeH();
+		std::list<std::vector<std::vector<G4double>>> moduleCapTimeH = fPANDASimRun->GetModuleCapTimeH();
 		G4String moduleCapTimeHFileName = outDir + "/moduleCapTimeH" + runCondition + ".data";
 		WriteDataToFile(moduleCapTimeHFileName, moduleCapTimeH);
+		moduleCapTimeH.clear();
 
-		std::list<std::vector<std::vector<G4double> > > moduleDecayTimeMu = fPANDASimRun->GetModuleDecayTimeMu();
+		std::list<std::vector<std::vector<G4double>>> moduleDecayTimeMu = fPANDASimRun->GetModuleDecayTimeMu();
 		G4String moduleDecayTimeMuFileName = outDir + "/moduleDecayTimeMu" + runCondition + ".data";
 		WriteDataToFile(moduleDecayTimeMuFileName, moduleDecayTimeMu);
+		moduleDecayTimeMu.clear();
 
-		std::list<std::vector<std::vector<G4double> > > moduleMuTrackLength = fPANDASimRun->GetModuleMuTrackLength();
+		std::list<std::vector<std::vector<G4double>>> moduleMuTrackLength = fPANDASimRun->GetModuleMuTrackLength();
 		G4String moduleMuTrackLengthFileName = outDir + "/moduleMuTrackLength" + runCondition + ".data";
 		WriteDataToFile(moduleMuTrackLengthFileName, moduleMuTrackLength);
+		moduleMuTrackLength.clear();
 
-		std::list<std::vector<std::vector<G4double> > > moduleMuEdep = fPANDASimRun->GetModuleMuEdep();
+		std::list<std::vector<std::vector<G4double>>> moduleMuEdep = fPANDASimRun->GetModuleMuEdep();
 		G4String moduleMuEdepFileName = outDir + "/moduleMuEdep" + runCondition + ".data";
 		WriteDataToFile(moduleMuEdepFileName, moduleMuEdep);
+		moduleMuEdep.clear();
 
 		//if (UserDataInput::GetOpticalPhysicsStatus() == true)
 		//{
@@ -340,21 +355,25 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 			G4String moduleCalPhFileNameRight = outDir + "/moduleCalPhPromptRight" + runCondition + ".data";
 			G4String moduleCalPhFileNameLeft = outDir + "/moduleCalPhPromptLeft" + runCondition + ".data";
 			WriteDataToFile(moduleCalPhFileNameRight, moduleCalPhFileNameLeft, moduleCalPh);
+			moduleCalPh.clear();
 
 			auto moduleCalPhDelayH = fPANDASimRun->GetModuleCalPhDelayH();
 			G4String moduleCalPhDelayHFileNameRight = outDir + "/moduleCalPhDelayHRight" + runCondition + ".data";
 			G4String moduleCalPhDelayHFileNameLeft = outDir + "/moduleCalPhDelayHLeft" + runCondition + ".data";
 			WriteDataToFile(moduleCalPhDelayHFileNameRight, moduleCalPhDelayHFileNameLeft, moduleCalPhDelayH);
+			moduleCalPhDelayH.clear();
 
 			auto moduleCalPhDelayGd = fPANDASimRun->GetModuleCalPhDelayGd();
 			G4String moduleCalPhDelayGdFileNameRight = outDir + "/moduleCalPhDelayGdRight" + runCondition + ".data";
 			G4String moduleCalPhDelayGdFileNameLeft = outDir + "/moduleCalPhDelayGdLeft" + runCondition + ".data";
 			WriteDataToFile(moduleCalPhDelayGdFileNameRight, moduleCalPhDelayGdFileNameLeft, moduleCalPhDelayGd);
+			moduleCalPhDelayGd.clear();
 
 			auto moduleCalPhDecayMu = fPANDASimRun->GetModuleCalPhDecayMu();
 			G4String moduleCalPhDecayMuFileNameRight = outDir + "/moduleCalPhDecayMuRight" + runCondition + ".data";
 			G4String moduleCalPhDecayMuFileNameLeft = outDir + "/moduleCalPhDecayMuLeft" + runCondition + ".data";
 			WriteDataToFile(moduleCalPhDecayMuFileNameRight, moduleCalPhDecayMuFileNameLeft, moduleCalPhDecayMu);
+			moduleCalPhDecayMu.clear();
 		//}
 
 		G4cout
