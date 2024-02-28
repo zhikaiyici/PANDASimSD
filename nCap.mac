@@ -6,4 +6,4 @@
 /source/position INSIDE
 /gun/particle neutron
 /gun/energy {Ekin} keV
-/run/beamOn 100
+/run/beamOn 1000000

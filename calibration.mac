@@ -5,4 +5,4 @@
 /source/position CENTER
 
 /source/type {sType}
-/run/beamOn 100000
+/run/beamOn 1000000
