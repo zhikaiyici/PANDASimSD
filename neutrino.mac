@@ -20,4 +20,4 @@
 /source/type NEUTRINO
 /source/spectra IBDNeutron.spec IBDPositron.spec
 /source/neutrinoPosition 16 5
-
+/run/beamOn 1000000

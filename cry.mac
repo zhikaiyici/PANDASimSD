@@ -13,4 +13,4 @@
 /CRY/input subboxLength 10
 /CRY/update
 
-/run/beamOn 1000
+/run/beamOn 1000000
