@@ -77,6 +77,7 @@ set(PANDASim_SCRIPTS
   calibration.mac
   detector.mac
   physics.mac
+  README.md
   InputSet.txt
   _readme.txt
   )
