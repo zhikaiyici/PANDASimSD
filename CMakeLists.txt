@@ -74,7 +74,7 @@ set(PANDASim_SCRIPTS
   calibration.mac
   neutrino.mac
   He8Li9.mac
-  calibration.mac
+  nCap.mac
   detector.mac
   physics.mac
   README.md
