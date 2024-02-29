@@ -78,8 +78,6 @@ set(PANDASim_SCRIPTS
   detector.mac
   physics.mac
   README.md
-  InputSet.txt
-  _readme.txt
   )
 
 foreach(_script ${PANDASim_SCRIPTS})
