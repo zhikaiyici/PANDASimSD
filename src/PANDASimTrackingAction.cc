@@ -9,7 +9,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PANDASimTrackingAction::PANDASimTrackingAction(PANDASimRunAction* runAction)
-	: G4UserTrackingAction(), flagHe8(false), flagLi9(false),
+	: G4UserTrackingAction(), flagHe8(false), flagLi9(false), flagNeutron(false),
 	fRunAction(runAction)
 {
 }

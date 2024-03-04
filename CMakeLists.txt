@@ -70,6 +70,7 @@ set(PANDASim_SCRIPTS
   init_vis.mac
   vis.mac
   run.mac
+  run_phoeva.mac
   cry.mac
   calibration.mac
   neutrino.mac
