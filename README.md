@@ -39,7 +39,7 @@
 
 2. 以下数据未按照阵列结构存储(顺序存储)
 
-   > betaKEHe8, betaKELi9, decayTimeHe8, decayTimeLi9
+   > betaKEHe8, betaKELi9, decayTimeHe8, decayTimeLi9, neutronGT, neutronKE
 
 ## 自定义宏命令
 
