@@ -118,7 +118,7 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 		G4double dtctrZ = dtctrXYZ[2];//UserDataInput::GetDectorDimensionZ() / cm;
 		G4cout << G4endl << " Initialization completed. " << doubNumOfEvents << " event(s) will be simulated."
 			   << G4endl
-			   << " The dimension of detector module is " << dtctrX << " cm x " << dtctrY << " cm x " << dtctrZ << " cm."
+			   << " The dimension of detector module is " << dtctrX / cm << " cm x " << dtctrY /cm << " cm x " << dtctrZ / cm << " cm."
 			   << " The size of detector is " << arraySize << " x " << arraySize
 			   << G4endl
 			   << G4endl;
