@@ -110,6 +110,14 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
     if (!fTrackingAction)
         fTrackingAction = static_cast<PANDASimTrackingAction*>(G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
 
+    if (!fRunAction)
+    {
+        if (!fTrackingAction)
+            fTrackingAction = static_cast<PANDASimTrackingAction*>(G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
+
+        fRunAction = fTrackingAction->GetPANDASimRunAction();
+    }
+
     //if (!fStackManager)
     //    fStackManager = G4EventManager::GetEventManager()->GetStackManager();
 
@@ -141,9 +149,16 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
             hit->AddNNeutron();
             const G4double genicTime = step->GetPreStepPoint()->GetGlobalTime() / us;
             hit->SetNeutronGenicTime(genicTime);
+            fRunAction->PushNeutronGenicTime(genicTime);
+
             auto energy = theTrack->GetKineticEnergy() / keV;
             hit->SetNeutronKE(energy);
+            fRunAction->PushNeutronKE(energy);
+
             fTrackingAction->SetFlagNeutron(true);
+
+            //G4cout << "Neutron genic time (SD::Hits): " << genicTime << G4endl;
+            //G4cout << "Neutron kinetic energy (SD::Hits): " << energy << G4endl;
         }
 
         if (processName == "nCapture")

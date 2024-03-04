@@ -217,18 +217,6 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 	//  
 	if (IsMaster())
 	{
-		std::list<G4double> betaKEHe8 = myAccu->GetBetaKEHe8();
-		std::list<G4double> betaKELi9 = myAccu->GetBetaKELi9();
-		std::list<G4double> decayTimeHe8 = myAccu->GetDecayTimeHe8();
-		std::list<G4double> decayTimeLi9 = myAccu->GetDecayTimeLi9();
-
-		std::list<std::vector<std::vector<G4double>>> neutronGenicTime = myAccu->GetNeutronGenicTime();
-		std::list<std::vector<std::vector<G4double>>> neutronKE = myAccu->GetNeutronKE();
-
-		std::vector<std::vector<G4int>> numHe8 = myAccu->GetNHe8();
-		std::vector<std::vector<G4int>> numLi9 = myAccu->GetNLi9();
-		std::vector<std::vector<G4int>> numNeutron = myAccu->GetNNeutron();
-
 		auto runCondition = myAccu->GetRunCondition();
 		G4int runID = G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID();
 
@@ -243,36 +231,55 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 #endif
 		}
 
+		std::list<G4double> betaKEHe8 = myAccu->GetBetaKEHe8();
 		G4String betaKEHe8FileName = outDir + "/betaKEHe8" + runCondition + ".data";
 		WriteDataToFile(betaKEHe8FileName, betaKEHe8);
 		betaKEHe8.clear();
 
+		std::list<G4double> betaKELi9 = myAccu->GetBetaKELi9();
 		G4String betaKELi9FileName = outDir + "/betaKELi9" + runCondition + ".data";
 		WriteDataToFile(betaKELi9FileName, betaKELi9);
 		betaKELi9.clear();
 
+		std::list<G4double> decayTimeHe8 = myAccu->GetDecayTimeHe8();
 		G4String decayTimeHe8FileName = outDir + "/decayTimeHe8" + runCondition + ".data";
 		WriteDataToFile(decayTimeHe8FileName, decayTimeHe8);
 		decayTimeHe8.clear();
 
+		std::list<G4double> decayTimeLi9 = myAccu->GetDecayTimeLi9();
 		G4String decayTimeLi9FileName = outDir + "/decayTimeLi9" + runCondition + ".data";
 		WriteDataToFile(decayTimeLi9FileName, decayTimeLi9);
 		decayTimeLi9.clear();
 
-		G4String neutronGenicTimeFileName = outDir + "/neutronGenicTime" + runCondition + ".data";
-		WriteDataToFile(neutronGenicTimeFileName, neutronGenicTime);
-		neutronGenicTime.clear();
+		std::list<G4double> neutronGT = myAccu->GetNeutronGT();
+		G4String neutronGTFileName = outDir + "/neutronGT" + runCondition + ".data";
+		WriteDataToFile(neutronGTFileName, neutronGT);
+		neutronGT.clear();
 
+		std::list<G4double> neutronKE = myAccu->GetNeutronKE();
 		G4String neutronKEFileName = outDir + "/neutronKE" + runCondition + ".data";
 		WriteDataToFile(neutronKEFileName, neutronKE);
 		neutronKE.clear();
 
+		std::list<std::vector<std::vector<G4double>>> neutronGenicTime = myAccu->GetNeutronGenicTime();
+		G4String neutronGenicTimeFileName = outDir + "/neutronGenicTime" + runCondition + ".data";
+		WriteDataToFile(neutronGenicTimeFileName, neutronGenicTime);
+		neutronGenicTime.clear();
+
+		std::list<std::vector<std::vector<G4double>>> neutronKineticEnergy = myAccu->GetNeutronKineticEnergy();
+		G4String neutronKineticEnergyFileName = outDir + "/neutronKineticEnergy" + runCondition + ".data";
+		WriteDataToFile(neutronKineticEnergyFileName, neutronKineticEnergy);
+		neutronKineticEnergy.clear();
+
+		std::vector<std::vector<G4int>> numLi9 = myAccu->GetNLi9();
 		G4String numLi9FileName = outDir + "/numLi9" + runCondition + ".txt";
 		WriteDataToFile(numLi9FileName, numLi9);
 
+		std::vector<std::vector<G4int>> numHe8 = myAccu->GetNHe8();
 		G4String numHe8FileName = outDir + "/numHe8" + runCondition + ".txt";
 		WriteDataToFile(numHe8FileName, numHe8);
 
+		std::vector<std::vector<G4int>> numNeutron = myAccu->GetNNeutron();
 		G4String numNeutronFileName = outDir + "/numNeutron" + runCondition + ".txt";
 		WriteDataToFile(numNeutronFileName, numNeutron);
 
@@ -565,7 +572,17 @@ void PANDASimRunAction::PushNeutronGenicTime(const std::vector<std::vector<G4dou
 	myAccu->PushNeutronGenicTime(t);
 }
 
+void PANDASimRunAction::PushNeutronGenicTime(const G4double& t)
+{
+	myAccu->PushNeutronGenicTime(t);
+}
+
 void PANDASimRunAction::PushNeutronKE(const std::vector<std::vector<G4double>>& ke)
+{
+	myAccu->PushNeutronKE(ke);
+}
+
+void PANDASimRunAction::PushNeutronKE(const G4double& ke)
 {
 	myAccu->PushNeutronKE(ke);
 }

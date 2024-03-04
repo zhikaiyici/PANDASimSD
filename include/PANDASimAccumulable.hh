@@ -23,7 +23,9 @@ public:
     void PushDecayTimeLi9(const G4double& dt);
 
     void PushNeutronGenicTime(const std::vector<std::vector<G4double>>& t);
+    void PushNeutronGenicTime(const G4double& t);
     void PushNeutronKE(const std::vector<std::vector<G4double>>& ke);
+    void PushNeutronKE(const G4double& ke);
 
     void AddNLi9(std::vector<std::vector<G4int>> n);
     void AddNHe8(std::vector<std::vector<G4int>> n);
@@ -39,9 +41,11 @@ public:
     inline std::list<G4double> GetBetaKELi9() const { return betaKELi9; }
     inline std::list<G4double> GetDecayTimeHe8() const { return decayTimeHe8; }
     inline std::list<G4double> GetDecayTimeLi9() const { return decayTimeLi9; }
+    inline std::list<G4double> GetNeutronGT() const { return neutronGT; }
+    inline std::list<G4double> GetNeutronKE() const { return neutronKE; }
 
     inline std::list<std::vector<std::vector<G4double>>> GetNeutronGenicTime() const { return neutronGenicTime; }
-    inline std::list<std::vector<std::vector<G4double>>> GetNeutronKE() const { return neutronKE; }
+    inline std::list<std::vector<std::vector<G4double>>> GetNeutronKineticEnergy() const { return neutronKineticEnergy; }
 
     inline std::vector<std::vector<G4int> > GetNLi9() { return numLi9; }
     inline std::vector<std::vector<G4int> > GetNHe8() { return numHe8; }
@@ -54,8 +58,11 @@ private:
     std::list<G4double> betaKEHe8;
     std::list<G4double> betaKELi9;
 
+    std::list<G4double> neutronGT;
+    std::list<G4double> neutronKE;
+
     std::list<std::vector<std::vector<G4double>>> neutronGenicTime;
-    std::list<std::vector<std::vector<G4double>>> neutronKE;
+    std::list<std::vector<std::vector<G4double>>> neutronKineticEnergy;
 
     std::vector<std::vector<G4int>>  numLi9;
     std::vector<std::vector<G4int>>  numHe8;

@@ -5,7 +5,7 @@
 PANDASimAccumulable::PANDASimAccumulable(G4int as)
 	: G4VAccumulable(), 
 	energyDeposit(0), betaKEHe8(0), betaKELi9(0), decayTimeHe8(0), decayTimeLi9(0),
-	neutronGenicTime(0), neutronKE(0),
+	neutronGenicTime(0), neutronKineticEnergy(0), neutronGT(0), neutronKE(0),
 	runCondition(""), neutrinoPosition({16, 5})
 {
 	arraySize = as;// UserDataInput::GetSizeOfArray();
@@ -27,16 +27,27 @@ void PANDASimAccumulable::Merge(const G4VAccumulable& other)
 
 	std::list<G4double> bkeHe8 = otherPANDASimAccumulable.betaKEHe8;
 	betaKEHe8.merge(bkeHe8);
+
 	std::list<G4double> bkeLi9 = otherPANDASimAccumulable.betaKELi9;
 	betaKELi9.merge(bkeLi9);
+
 	std::list<G4double> dtHe8 = otherPANDASimAccumulable.decayTimeHe8;
 	decayTimeHe8.merge(dtHe8);
+
 	std::list<G4double> dtLi9 = otherPANDASimAccumulable.decayTimeLi9;
 	decayTimeLi9.merge(dtLi9);
+
+	std::list<G4double> nGT0 = otherPANDASimAccumulable.neutronGT;
+	neutronGT.merge(nGT0);
+
+	std::list<G4double> nKE0 = otherPANDASimAccumulable.neutronKE;
+	neutronKE.merge(nKE0);
+
 	std::list<std::vector<std::vector<G4double>>> nGT = otherPANDASimAccumulable.neutronGenicTime;
 	neutronGenicTime.merge(nGT);
-	std::list<std::vector<std::vector<G4double>>> nKE = otherPANDASimAccumulable.neutronKE;
-	neutronKE.merge(nKE);
+
+	std::list<std::vector<std::vector<G4double>>> nKE = otherPANDASimAccumulable.neutronKineticEnergy;
+	neutronKineticEnergy.merge(nKE);
 
 	for (int i = 0; i < numLi9[0].size(); ++i) 
 	{
@@ -61,6 +72,9 @@ void PANDASimAccumulable::Reset()
 	decayTimeHe8.clear();
 	decayTimeLi9.clear();
 	neutronGenicTime.clear();
+	neutronKineticEnergy.clear();
+
+	neutronGT.clear();
 	neutronKE.clear();
 
 	numLi9 = std::vector<std::vector<G4int>>(arraySize, std::vector<G4int>(arraySize, 0));
@@ -96,7 +110,17 @@ void PANDASimAccumulable::PushNeutronGenicTime(const std::vector<std::vector<G4d
 	neutronGenicTime.push_back(t);
 }
 
+void PANDASimAccumulable::PushNeutronGenicTime(const G4double& t)
+{
+	neutronGT.push_back(t);
+}
+
 void PANDASimAccumulable::PushNeutronKE(const std::vector<std::vector<G4double>>& ke)
+{
+	neutronKineticEnergy.push_back(ke);
+}
+
+void PANDASimAccumulable::PushNeutronKE(const G4double& ke)
 {
 	neutronKE.push_back(ke);
 }
