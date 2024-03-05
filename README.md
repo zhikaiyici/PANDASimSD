@@ -53,8 +53,11 @@
  /detector/detectorZ
  /detector/moduleDistance
  /detector/gdFilmThickness
+ ```
+ <!--
  /detector/update
 ```
+-->
 
 - `/detector/arraySize`
   - Setting detector array size, a positive integer.
@@ -80,9 +83,11 @@
   - Setting Gd film thickness, a positive double with unit (`um`, μm, by default).
   - Default value: `30. um`.
 
+<!--
 - `/detector/update`
   - Updating geometry after changing it, no parameter.
   - **DONOT USE!! BUG WITH SENSITIVE DETECTOR.**
+-->
 
 ### 2. source
 

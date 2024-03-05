@@ -90,14 +90,14 @@ PANDASimDetectorConstruction::~PANDASimDetectorConstruction()
 {
 	delete fMessenger;
 
-	for (auto visAttributes : fVisAttributes)
-	{
-		delete visAttributes;
-	}
-	for (auto rotationMatrix : fRotationMatrix)
-	{
-		delete rotationMatrix;
-	}
+	//for (auto visAttributes : fVisAttributes)
+	//{
+	//	delete visAttributes;
+	//}
+	//for (auto rotationMatrix : fRotationMatrix)
+	//{
+	//	delete rotationMatrix;
+	//}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -343,24 +343,24 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	G4RotationMatrix* rotC = new G4RotationMatrix();
 	rotC->rotateX(0/*pi / 2.*/);
 	G4PVPlacement* physContainer = new G4PVPlacement(rotC, G4ThreeVector(), logicContainer, "ContainerPV", world, false, 0, checkOverlaps);
-	fRotationMatrix.push_back(rotC);
-	fSolidVolume.push_back(solidContainer);
-	fLogicalVolume.push_back(logicContainer);
-	fPhysicalVolume.push_back(physContainer);
+	//fRotationMatrix.push_back(rotC);
+	//fSolidVolume.push_back(solidContainer);
+	//fLogicalVolume.push_back(logicContainer);
+	//fPhysicalVolume.push_back(physContainer);
 
 	G4Box* solidModuleRow = new G4Box("ModuleRowSV", moduleX / 2., moduleY / 2., arraySize * moduleZ / 2.);
 	G4LogicalVolume* logicModuleRow = new G4LogicalVolume(solidModuleRow, air, "ModuleRowLV");
 	G4PVReplica* physModuleRow = new G4PVReplica("ModuleRowPV", logicModuleRow, logicContainer, kYAxis, arraySize, moduleY);
-	fSolidVolume.push_back(solidModuleRow);
-	fLogicalVolume.push_back(logicModuleRow);
-	fPhysicalVolume.push_back(physModuleRow);
+	//fSolidVolume.push_back(solidModuleRow);
+	//fLogicalVolume.push_back(logicModuleRow);
+	//fPhysicalVolume.push_back(physModuleRow);
 
 	G4Box* solidModule = new G4Box("ModuleSV", moduleX / 2., moduleY / 2., moduleZ / 2.);
 	G4LogicalVolume* logicModule = new G4LogicalVolume(solidModule, air, "ModuleLV");
 	G4PVReplica* physModule = new G4PVReplica("ModulePV", logicModule, logicModuleRow, kZAxis, arraySize, moduleZ);
-	fSolidVolume.push_back(solidModule);
-	fLogicalVolume.push_back(logicModule);
-	fPhysicalVolume.push_back(physModule);
+	//fSolidVolume.push_back(solidModule);
+	//fLogicalVolume.push_back(logicModule);
+	//fPhysicalVolume.push_back(physModule);
 
 	G4double scintillatorHalfSize[3] = { dtctrZ / 2., dtctrY / 2., dtctrX / 2. };
 	G4double alFilmHalfSize[3] =
@@ -381,8 +381,8 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 		logicModule,  // mother logical volume
 		logicAlFilm,  // logical
 		physAlFilm);  // physical
-	fLogicalVolume.push_back(logicAlFilm);
-	fPhysicalVolume.push_back(physAlFilm);
+	//fLogicalVolume.push_back(logicAlFilm);
+	//fPhysicalVolume.push_back(physAlFilm);
 
 	G4LogicalVolume* logicAlMylarFilm;
 	G4PVPlacement* physAlMylarFilm;
@@ -393,32 +393,32 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 		logicModule,  // mother logical volume
 		logicAlMylarFilm,  // logical
 		physAlMylarFilm);  // physical
-	fLogicalVolume.push_back(logicAlMylarFilm);
-	fPhysicalVolume.push_back(physAlMylarFilm);
+	//fLogicalVolume.push_back(logicAlMylarFilm);
+	//fPhysicalVolume.push_back(physAlMylarFilm);
 
 	//G4LogicalVolume* 
 		logicGdFilm;
 	G4PVPlacement* physGdFilm;
 	DefineFilmLogicAndPhysVolume("GdFilm", gdFilmHalfSize, alMylarFilmHalfSize, gadoliniumOxide, logicModule, logicGdFilm, physGdFilm);
-	fLogicalVolume.push_back(logicGdFilm);
-	fPhysicalVolume.push_back(physGdFilm);
+	//fLogicalVolume.push_back(logicGdFilm);
+	//fPhysicalVolume.push_back(physGdFilm);
 
 	fGdFilmScoringVolume = logicGdFilm;
 
 	G4LogicalVolume* logicGdMylarFilm;
 	G4PVPlacement* physGdMylarFilm;
 	DefineFilmLogicAndPhysVolume("GdMylarFilm",	gdMylarFilmHalfSize, gdFilmHalfSize, mylarFilm,	logicModule, logicGdMylarFilm, physGdMylarFilm);
-	fLogicalVolume.push_back(logicGdMylarFilm);
-	fPhysicalVolume.push_back(physGdMylarFilm);
+	//fLogicalVolume.push_back(logicGdMylarFilm);
+	//fPhysicalVolume.push_back(physGdMylarFilm);
 
 	G4Box* solidPlasticScintillator = new G4Box("PlasticScintillatorSV", dtctrZ / 2., dtctrY / 2., dtctrX / 2.);
 	//G4LogicalVolume* 
 		logicPlasticScintillator = new G4LogicalVolume(solidPlasticScintillator, plasticScintillator, "PlasticScintillatorLV");
 	G4PVPlacement* physPlasticScinitillator = 
 		new G4PVPlacement(0, G4ThreeVector(), logicPlasticScintillator, "PlasticScintillatorPV", logicModule, false, 0, checkOverlaps);
-	fSolidVolume.push_back(solidPlasticScintillator);
-	fLogicalVolume.push_back(logicPlasticScintillator);
-	fPhysicalVolume.push_back(physPlasticScinitillator);
+	//fSolidVolume.push_back(solidPlasticScintillator);
+	//fLogicalVolume.push_back(logicPlasticScintillator);
+	//fPhysicalVolume.push_back(physPlasticScinitillator);
 
 	fScoringVolume = logicPlasticScintillator;
 
@@ -427,15 +427,15 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	//	new G4SubtractionSolid("TubePMT", solidPMT, solidChamberPMT, 0, G4ThreeVector(0, 0, -wallThicknessPMT));
 	//G4Box* solidPMTBox = new G4Box("PMTBox", dtctrX / 2., dtctrY / 2., heightPMT / 2.);
 	G4LogicalVolume* logicPMT = new G4LogicalVolume(solidPMT, glass, "PMTLV");
-	fSolidVolume.push_back(solidPMT);
-	fLogicalVolume.push_back(logicPMT);
+	//fSolidVolume.push_back(solidPMT);
+	//fLogicalVolume.push_back(logicPMT);
 
 	G4Tubs* solidChamberPMT = new G4Tubs("ChamberPMTSV", 0., innerRadiusPMT, heightPMT / 2. - glassThicknessPMT, 0., twopi);
 	G4LogicalVolume* logicChamberPMT = new G4LogicalVolume(solidChamberPMT, vacuum, "ChamberPMTLV");
 	G4PVPlacement* physChamberPMT = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), logicChamberPMT, "ChamberPMTPV", logicPMT, false, 0, checkOverlaps);
-	fSolidVolume.push_back(solidChamberPMT);
-	fLogicalVolume.push_back(logicChamberPMT);
-	fPhysicalVolume.push_back(physChamberPMT);
+	//fSolidVolume.push_back(solidChamberPMT);
+	//fLogicalVolume.push_back(logicChamberPMT);
+	//fPhysicalVolume.push_back(physChamberPMT);
 
 	G4Tubs* solidPhotocathode = new G4Tubs("PhotocathodeSV", 0., radiusPhotocathode, heightPhotocathode / 2., 0., twopi);
 	//G4Box* solidPhotocathodeBox = new G4Box("PhotocathodeBox", dtctrX / 2., dtctrY / 2., heightPhotocathode / 2.);
@@ -444,9 +444,9 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	G4PVPlacement* physPhotocathode =
 		new G4PVPlacement(0, G4ThreeVector(0, 0, -heightPhotocathode / 2. + solidChamberPMT->GetZHalfLength()),
 			logicPhotocathode, "PhotocathodePV", logicChamberPMT, false, 0, checkOverlaps);
-	fSolidVolume.push_back(solidPhotocathode);
-	fLogicalVolume.push_back(logicPhotocathode);
-	fPhysicalVolume.push_back(physPhotocathode);
+	//fSolidVolume.push_back(solidPhotocathode);
+	//fLogicalVolume.push_back(logicPhotocathode);
+	//fPhysicalVolume.push_back(physPhotocathode);
 
 	fPhotoelectricScoringVolume = logicPhotocathode;
 
@@ -454,15 +454,15 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	rotPMTLeft->rotateY(-pi / 2.);
 	G4PVPlacement* physPMTLeft =
 		new G4PVPlacement(rotPMTLeft, G4ThreeVector(-(scintillatorModuleX + heightPMT) / 2., 0., 0.), logicPMT, "PMTLeftPV", logicModule, false, 1, checkOverlaps);
-	fRotationMatrix.push_back(rotPMTLeft);
-	fPhysicalVolume.push_back(physPMTLeft);
+	//fRotationMatrix.push_back(rotPMTLeft);
+	//fPhysicalVolume.push_back(physPMTLeft);
 
 	G4RotationMatrix* rotPMTRight = new G4RotationMatrix();
 	rotPMTRight->rotateY(pi / 2.);
 	G4PVPlacement* physPMTRight =
 		new G4PVPlacement(rotPMTRight, G4ThreeVector((scintillatorModuleX + heightPMT) / 2., 0., 0.), logicPMT, "PMTRightPV", logicModule, false, 0, checkOverlaps);
-	fRotationMatrix.push_back(rotPMTRight);
-	fPhysicalVolume.push_back(physPMTRight);
+	//fRotationMatrix.push_back(rotPMTRight);
+	//fPhysicalVolume.push_back(physPMTRight);
 
 	G4double hatHalfThickness = 1.5 * cm;// distanceBetweenModules / 2.;
 	G4Box* solidHatBox = new G4Box("HatBoxSV", hatHalfThickness, moduleY / 2., moduleZ / 2.);
@@ -477,15 +477,15 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 		new G4PVPlacement(rotHat, G4ThreeVector(scintillatorModuleX / 2., 0, 0), logicHat, "HatRightPV", logicModule, false, 0, checkOverlaps);
 	G4VPhysicalVolume* physHatLeft =
 		new G4PVPlacement(0, G4ThreeVector(-scintillatorModuleX / 2., 0, 0), logicHat, "HatLeftPV", logicModule, false, 1, checkOverlaps);
-	fRotationMatrix.push_back(rotHat);
-	fSolidVolume.push_back(solidHatBox);
-	fSolidVolume.push_back(solidAntiHatBox);
-	fSolidVolume.push_back(solidAntiHatCylinder);
-	fSolidVolume.push_back(solidHatTemp);
-	fSolidVolume.push_back(solidHat);
-	fLogicalVolume.push_back(logicHat);
-	fPhysicalVolume.push_back(physHatRight);
-	fPhysicalVolume.push_back(physHatLeft);
+	//fRotationMatrix.push_back(rotHat);
+	//fSolidVolume.push_back(solidHatBox);
+	//fSolidVolume.push_back(solidAntiHatBox);
+	//fSolidVolume.push_back(solidAntiHatCylinder);
+	//fSolidVolume.push_back(solidHatTemp);
+	//fSolidVolume.push_back(solidHat);
+	//fLogicalVolume.push_back(logicHat);
+	//fPhysicalVolume.push_back(physHatRight);
+	//fPhysicalVolume.push_back(physHatLeft);
 
 	////G4_Be orb for Am-Be neutron source
 	//if (UserDataInput::GetSoureType() == "Am-Be")
@@ -516,21 +516,21 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	opScinRelfleSurface->SetType(dielectric_metal);
 	opScinRelfleSurface->SetFinish(polished);
 	opScinRelfleSurface->SetModel(glisur);
-	fOpticalSurface.push_back(opScinRelfleSurface);
+	//fOpticalSurface.push_back(opScinRelfleSurface);
 
 	G4LogicalBorderSurface* scinRefleSurface = new G4LogicalBorderSurface("ScinRefleSurface", physPlasticScinitillator, physAlFilm, opScinRelfleSurface);
 	G4LogicalBorderSurface* scinHatRightSurface = new G4LogicalBorderSurface("ScinHatRightSurface", physPlasticScinitillator, physHatRight, opScinRelfleSurface);
 	G4LogicalBorderSurface* scinHatLeftSurface = new G4LogicalBorderSurface("ScinHatLeftSurface", physPlasticScinitillator, physHatLeft, opScinRelfleSurface);
-	fLogicalSurface.push_back(scinRefleSurface);
-	fLogicalSurface.push_back(scinHatRightSurface);
-	fLogicalSurface.push_back(scinHatLeftSurface);
+	//fLogicalSurface.push_back(scinRefleSurface);
+	//fLogicalSurface.push_back(scinHatRightSurface);
+	//fLogicalSurface.push_back(scinHatLeftSurface);
 
 	// sci-PMT glss
 	G4OpticalSurface* opScinPMTSurface = new G4OpticalSurface("ScinPMTOpticalSurface");
 	opScinPMTSurface->SetType(dielectric_dielectric);
 	opScinPMTSurface->SetFinish(polished);
 	opScinPMTSurface->SetModel(unified);
-	fOpticalSurface.push_back(opScinPMTSurface);
+	//fOpticalSurface.push_back(opScinPMTSurface);
 
 	//G4double photonEnergy[] = { 2 * eV, 3.5 * eV };
 	//const G4int num = sizeof(photonEnergy) / sizeof(G4double);
@@ -548,8 +548,8 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 
 	G4LogicalBorderSurface* PMTRightSurface = new G4LogicalBorderSurface("ScinPMTRightSurface", physPlasticScinitillator, physPMTRight, opScinPMTSurface);
 	G4LogicalBorderSurface* PMTLeftSurface = new G4LogicalBorderSurface("ScinPMTLeftSurface", physPlasticScinitillator, physPMTLeft, opScinPMTSurface);
-	fLogicalSurface.push_back(PMTRightSurface);
-	fLogicalSurface.push_back(PMTLeftSurface);
+	//fLogicalSurface.push_back(PMTRightSurface);
+	//fLogicalSurface.push_back(PMTLeftSurface);
 
 	// Photocathode surface properties
 	G4double photonEnergy[] =
@@ -580,14 +580,14 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 
 	G4cout << "Photocathode G4MaterialPropertiesTable" << G4endl;
 	photocathodeMPT->DumpTable();
-	fMPT.push_back(photocathodeMPT);
+	//fMPT.push_back(photocathodeMPT);
 
 	G4OpticalSurface* opPhotocathodeSurf = new G4OpticalSurface("PhotocathodeSurface", unified, polished, dielectric_metal);
 	opPhotocathodeSurf->SetMaterialPropertiesTable(photocathodeMPT);
-	fOpticalSurface.push_back(opPhotocathodeSurf);
+	//fOpticalSurface.push_back(opPhotocathodeSurf);
 
 	G4LogicalSkinSurface* photocathodeSurface = new G4LogicalSkinSurface("PhotocathodeSurface", logicPhotocathode, opPhotocathodeSurf);
-	fLogicalSurface.push_back(photocathodeSurface);
+	//fLogicalSurface.push_back(photocathodeSurface);
 
 	// 
 	// Visualization attributes
@@ -600,17 +600,17 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	logicModule->SetVisAttributes(visAttributes);
 	logicGdMylarFilm->SetVisAttributes(visAttributes);
 	logicAlMylarFilm->SetVisAttributes(visAttributes);
-	fVisAttributes.push_back(visAttributes);
+	//fVisAttributes.push_back(visAttributes);
 
 	visAttributes = new G4VisAttributes(G4Colour(0., 1.0, 0.));
 	visAttributes->SetVisibility(false);
 	logicGdFilm->SetVisAttributes(visAttributes);
-	fVisAttributes.push_back(visAttributes);
+	//fVisAttributes.push_back(visAttributes);
 
 	visAttributes = new G4VisAttributes(G4Colour(1.0, 0., 0.));
 	visAttributes->SetVisibility(false);
 	logicAlFilm->SetVisAttributes(visAttributes);
-	fVisAttributes.push_back(visAttributes);
+	//fVisAttributes.push_back(visAttributes);
 
 	visAttributes = new G4VisAttributes(G4Colour(3. / 255., 130. / 255., 233. / 255., 1.));
 	visAttributes->SetVisibility(true);
@@ -624,13 +624,13 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	visAttributes->SetVisibility(true);
 	visAttributes->SetForceSolid(true);
 	logicPMT->SetVisAttributes(visAttributes);
-	fVisAttributes.push_back(visAttributes);
+	//fVisAttributes.push_back(visAttributes);
 
 	visAttributes = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0, 1.));
 	visAttributes->SetVisibility(true);
 	visAttributes->SetForceSolid(true);
 	logicChamberPMT->SetVisAttributes(visAttributes);
-	fVisAttributes.push_back(visAttributes);
+	//fVisAttributes.push_back(visAttributes);
 
 	visAttributes = new G4VisAttributes(G4Colour(204. / 255, 205. / 255, 207. / 255));
 	visAttributes->SetVisibility(true);
@@ -638,7 +638,7 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	//visAttributes->SetForceWireframe(true);
 	visAttributes->SetForceAuxEdgeVisible(true);
 	logicHat->SetVisAttributes(visAttributes);
-	fVisAttributes.push_back(visAttributes);
+	//fVisAttributes.push_back(visAttributes);
 
 }
 
@@ -651,19 +651,19 @@ void PANDASimDetectorConstruction::ConstructSDandField()
 	sdManager->AddNewDetector(scinitillatorSD);
 	//SetSensitiveDetector("PlasticScintillatorLV", scinitillatorSD);
 	logicPlasticScintillator->SetSensitiveDetector(scinitillatorSD);
-	fSD.push_back(scinitillatorSD);
+	//fSD.push_back(scinitillatorSD);
 
 	auto gdFilmSD = new PANDASimGdFilmSD("GdFilmSD", "GdFilmHitsCollection", arraySize * arraySize);
 	sdManager->AddNewDetector(gdFilmSD);
 	//SetSensitiveDetector("GdFilmLV", gdFilmSD);
 	logicGdFilm->SetSensitiveDetector(gdFilmSD);
-	fSD.push_back(gdFilmSD);
+	//fSD.push_back(gdFilmSD);
 
 	auto photocathodeSD	= new PANDASimPhotocathodeSD("PhotocathodeSD", "PhotocathodeHitsCollection", arraySize * arraySize * 2);
 	sdManager->AddNewDetector(photocathodeSD);
 	//SetSensitiveDetector("PhotocathodeLV", photocathodeSD);
 	logicPhotocathode->SetSensitiveDetector(photocathodeSD);
-	fSD.push_back(photocathodeSD);
+	//fSD.push_back(photocathodeSD);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -676,122 +676,122 @@ void PANDASimDetectorConstruction::DefineFilmLogicAndPhysVolume(const G4String& 
 	G4BooleanSolid* solidFilm = new G4SubtractionSolid(filmName + "SV", solidFilmBox, solidAnti);
 	logicFilmVolume = new G4LogicalVolume(solidFilm, filmMaterial, filmName + "LV");
 	physFilmVolume = new G4PVPlacement(0, G4ThreeVector(), logicFilmVolume, filmName + "PV", logicMotherVolume, false, 0, checkOverlaps);
-	fSolidVolume.push_back(solidFilmBox);
-	fSolidVolume.push_back(solidAnti);
-	fSolidVolume.push_back(solidFilm);
+	//fSolidVolume.push_back(solidFilmBox);
+	//fSolidVolume.push_back(solidAnti);
+	//fSolidVolume.push_back(solidFilm);
 	//fLogicalVolume.push_back(logicFilmVolume);
 	//fPhysicalVolume.push_back(physFilmVolume);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PANDASimDetectorConstruction::UpdateGeometry()
-{
-	for (auto itr:fSolidVolume)
-	{
-		G4SolidStore::GetInstance()->DeRegister(itr);
-		delete itr;
-	}
-	fSolidVolume.clear();
-	for (auto itr : fLogicalVolume)
-	{
-		G4LogicalVolumeStore::GetInstance()->DeRegister(itr);
-		delete itr;
-	}
-	fLogicalVolume.clear();
-	for (auto itr : fPhysicalVolume)
-	{
-		G4PhysicalVolumeStore::GetInstance()->DeRegister(itr);
-		delete itr;
-	}
-	fPhysicalVolume.clear();
-	for (auto itr : fVisAttributes)
-	{
-		delete itr;
-	}
-	fVisAttributes.clear();
-	for (auto itr : fRotationMatrix)
-	{
-		delete itr;
-	}
-	fRotationMatrix.clear();
-	for (auto itr : fOpticalSurface)
-	{
-		delete itr;
-	}
-	fOpticalSurface.clear();
-	for (auto itr : fLogicalSurface)
-	{
-		delete itr;
-	}
-	fLogicalSurface.clear();
-	for (auto itr : fMPT)
-	{
-		delete itr;
-	}
-	fMPT.clear();
-	for (auto itr : fSD)
-	{
-		delete itr;
-	}
-	fSD.clear();
-
-	// Geometry parameters
-	heightPMT = 4. * cm;
-	mylarFilmThickness = 40. * um;
-	alFilmThickness = 30. * um;
-
-	scintillatorModuleZ = dtctrX + 2. * (gdFilmThickness + alFilmThickness + mylarFilmThickness * 2.);
-	scintillatorModuleY = dtctrY + 2. * (gdFilmThickness + alFilmThickness + mylarFilmThickness * 2.);
-	scintillatorModuleX = dtctrZ;
-	moduleZ = scintillatorModuleZ + distanceBetweenModules;
-	moduleY = scintillatorModuleY + distanceBetweenModules;
-	moduleX = scintillatorModuleX + 2. * heightPMT + 2 * distanceBetweenModules;
-
-	containerZ = arraySize * moduleZ;
-	containerY = arraySize * moduleY;
-	containerX = moduleX;
-
-	worldX = containerX + 10. * m;
-	worldY = containerY + 10. * m;
-	worldZ = 1.1 * containerZ;
-
-	solidWorld->SetXHalfLength(worldX * 0.5);
-	solidWorld->SetYHalfLength(worldY * 0.5);
-	solidWorld->SetZHalfLength(worldZ * 0.5);
-
-	DefineDetector(logicWorld);
-
-	//for (auto itr : fSolidVolume)
-	//{
-	//	G4String name = itr->GetName();
-	//	name = name.substr(0, name.size() - 2) + "LV";
-	//	if (name == logicPlasticScintillator->GetName())
-	//	{
-	//		logicPlasticScintillator->SetSolid(itr);
-	//	}
-	//	if (name == logicGdFilm->GetName())
-	//	{
-	//		logicGdFilm->SetSolid(itr);
-	//	}
-	//	if (name == logicPhotocathode->GetName())
-	//	{
-	//		logicPhotocathode->SetSolid(itr);
-	//	}
-	//}
-
-	ConstructSDandField();
-
-	G4RunManager::GetRunManager()->GeometryHasBeenModified();
-
-	//delete solidWorld;
-	//delete logicWorld;
-	//delete physWorld;
-	//physWorld = Construct();
-	//G4RunManager::GetRunManager()->DefineWorldVolume(physWorld);
-
-	//G4RunManager::GetRunManager()->ReinitializeGeometry();
-}
+//void PANDASimDetectorConstruction::UpdateGeometry()
+//{
+//	for (auto itr:fSolidVolume)
+//	{
+//		G4SolidStore::GetInstance()->DeRegister(itr);
+//		delete itr;
+//	}
+//	fSolidVolume.clear();
+//	for (auto itr : fLogicalVolume)
+//	{
+//		G4LogicalVolumeStore::GetInstance()->DeRegister(itr);
+//		delete itr;
+//	}
+//	fLogicalVolume.clear();
+//	for (auto itr : fPhysicalVolume)
+//	{
+//		G4PhysicalVolumeStore::GetInstance()->DeRegister(itr);
+//		delete itr;
+//	}
+//	fPhysicalVolume.clear();
+//	for (auto itr : fVisAttributes)
+//	{
+//		delete itr;
+//	}
+//	fVisAttributes.clear();
+//	for (auto itr : fRotationMatrix)
+//	{
+//		delete itr;
+//	}
+//	fRotationMatrix.clear();
+//	for (auto itr : fOpticalSurface)
+//	{
+//		delete itr;
+//	}
+//	fOpticalSurface.clear();
+//	for (auto itr : fLogicalSurface)
+//	{
+//		delete itr;
+//	}
+//	fLogicalSurface.clear();
+//	for (auto itr : fMPT)
+//	{
+//		delete itr;
+//	}
+//	fMPT.clear();
+//	for (auto itr : fSD)
+//	{
+//		delete itr;
+//	}
+//	fSD.clear();
+//
+//	// Geometry parameters
+//	heightPMT = 4. * cm;
+//	mylarFilmThickness = 40. * um;
+//	alFilmThickness = 30. * um;
+//
+//	scintillatorModuleZ = dtctrX + 2. * (gdFilmThickness + alFilmThickness + mylarFilmThickness * 2.);
+//	scintillatorModuleY = dtctrY + 2. * (gdFilmThickness + alFilmThickness + mylarFilmThickness * 2.);
+//	scintillatorModuleX = dtctrZ;
+//	moduleZ = scintillatorModuleZ + distanceBetweenModules;
+//	moduleY = scintillatorModuleY + distanceBetweenModules;
+//	moduleX = scintillatorModuleX + 2. * heightPMT + 2 * distanceBetweenModules;
+//
+//	containerZ = arraySize * moduleZ;
+//	containerY = arraySize * moduleY;
+//	containerX = moduleX;
+//
+//	worldX = containerX + 10. * m;
+//	worldY = containerY + 10. * m;
+//	worldZ = 1.1 * containerZ;
+//
+//	solidWorld->SetXHalfLength(worldX * 0.5);
+//	solidWorld->SetYHalfLength(worldY * 0.5);
+//	solidWorld->SetZHalfLength(worldZ * 0.5);
+//
+//	DefineDetector(logicWorld);
+//
+//	//for (auto itr : fSolidVolume)
+//	//{
+//	//	G4String name = itr->GetName();
+//	//	name = name.substr(0, name.size() - 2) + "LV";
+//	//	if (name == logicPlasticScintillator->GetName())
+//	//	{
+//	//		logicPlasticScintillator->SetSolid(itr);
+//	//	}
+//	//	if (name == logicGdFilm->GetName())
+//	//	{
+//	//		logicGdFilm->SetSolid(itr);
+//	//	}
+//	//	if (name == logicPhotocathode->GetName())
+//	//	{
+//	//		logicPhotocathode->SetSolid(itr);
+//	//	}
+//	//}
+//
+//	ConstructSDandField();
+//
+//	G4RunManager::GetRunManager()->GeometryHasBeenModified();
+//
+//	//delete solidWorld;
+//	//delete logicWorld;
+//	//delete physWorld;
+//	//physWorld = Construct();
+//	//G4RunManager::GetRunManager()->DefineWorldVolume(physWorld);
+//
+//	//G4RunManager::GetRunManager()->ReinitializeGeometry();
+//}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -831,7 +831,7 @@ void PANDASimDetectorConstruction::DefineCommands()
 	gdFilmCMD.SetDefaultValue("30.");
 	gdFilmCMD.SetRange("gdFilmThickness >= 0");
 
-	auto& updateCMD = fMessenger->DeclareMethod("update", &PANDASimDetectorConstruction::UpdateGeometry, "Update geometry.");
+	//auto& updateCMD = fMessenger->DeclareMethod("update", &PANDASimDetectorConstruction::UpdateGeometry, "Update geometry.");
 
 	//auto& armAngleCmd = fMessenger->DeclareMethodWithUnit("armAngle", "deg",
 	//		&DetectorConstruction::SetArmAngle,

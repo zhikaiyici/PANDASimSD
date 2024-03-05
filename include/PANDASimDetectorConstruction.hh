@@ -155,7 +155,7 @@ private:
 									  G4LogicalVolume*& logicFilmVolume,
 		                              G4PVPlacement*& physFilmVolume);
 	void DefineCommands();
-	void UpdateGeometry();
+	//void UpdateGeometry();
 
 };
 
