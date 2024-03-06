@@ -261,6 +261,16 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		WriteDataToFile(neutronKEFileName, neutronKE);
 		neutronKE.clear();
 
+		std::list<G4double> capTimeH = myAccu->GetCapTimeH();
+		G4String capTimeHFileName = outDir + "/capTimeH" + runCondition + ".data";
+		WriteDataToFile(capTimeHFileName, capTimeH);
+		capTimeH.clear();
+
+		std::list<G4double> capTimeGd = myAccu->GetCapTimeGd();
+		G4String capTimeGdFileName = outDir + "/capTimeGd" + runCondition + ".data";
+		WriteDataToFile(capTimeGdFileName, capTimeGd);
+		capTimeGd.clear();
+
 		std::list<std::vector<std::vector<G4double>>> neutronGenicTime = myAccu->GetNeutronGenicTime();
 		G4String neutronGenicTimeFileName = outDir + "/neutronGenicTime" + runCondition + ".data";
 		WriteDataToFile(neutronGenicTimeFileName, neutronGenicTime);
@@ -585,6 +595,16 @@ void PANDASimRunAction::PushNeutronKE(const std::vector<std::vector<G4double>>& 
 void PANDASimRunAction::PushNeutronKE(const G4double& ke)
 {
 	myAccu->PushNeutronKE(ke);
+}
+
+void PANDASimRunAction::PushCapTimeH(const G4double& ct)
+{
+	myAccu->PushCapTimeH(ct);
+}
+
+void PANDASimRunAction::PushCapTimeGd(const G4double& ct)
+{
+	myAccu->PushCapTimeGd(ct);
 }
 
 void PANDASimRunAction::AddNLi9(std::vector<std::vector<G4int>> nLi9)

@@ -70,6 +70,14 @@ G4bool PANDASimGdFilmSD::ProcessHits(G4Step* step, G4TouchableHistory* history)
 		fEventAction = static_cast<PANDASimEventAction*>(G4EventManager::GetEventManager()->GetUserEventAction());
 	}
 
+	if (!fRunAction)
+	{
+		if (!fTrackingAction)
+			fTrackingAction = static_cast<PANDASimTrackingAction*>(G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
+
+		fRunAction = fTrackingAction->GetPANDASimRunAction();
+	}
+
 	// 判断是否为中子
 	if (strPrtclName == "neutron")
 	{
@@ -92,6 +100,7 @@ G4bool PANDASimGdFilmSD::ProcessHits(G4Step* step, G4TouchableHistory* history)
 			const G4double capTimeGd = postStepPoint->GetLocalTime() / us;
 			hit->TimeGd(capTimeGd);
 			fEventAction->SetDelayFlagGd(true);
+			fRunAction->PushCapTimeGd(capTimeGd);
 			//G4cout << "global capTimeGd1: " << capTimeGd1 << G4endl;
 			//G4cout << "local capTimeGd: " << capTimeGd << G4endl;
 		}

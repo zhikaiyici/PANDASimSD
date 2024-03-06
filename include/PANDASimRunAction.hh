@@ -71,6 +71,9 @@ public:
 	void PushNeutronKE(const std::vector<std::vector<G4double>>& ke);
 	void PushNeutronKE(const G4double& ke);
 
+	void PushCapTimeH(const G4double& ct);
+	void PushCapTimeGd(const G4double& ct);
+
 	void AddNLi9(std::vector<std::vector<G4int> > nLi9);
 	void AddNHe8(std::vector<std::vector<G4int> > nHe8);
 	void AddNNeutron(std::vector<std::vector<G4int> > nNeutron);

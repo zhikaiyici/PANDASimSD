@@ -167,6 +167,7 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
             const G4double capTimeH = postStepPoint->GetLocalTime() / us;
             hit->SetTimeH(capTimeH);
             fEventAction->SetDelayFlagH(true);
+            fRunAction->PushCapTimeH(capTimeH);
             //G4int nWaiting = fStackManager->GetNWaitingTrack();
             //G4int nUrgent = fStackManager->GetNUrgentTrack();
             //G4cout << "global capTimeH1: " << capTimeH1 << G4endl;
