@@ -6,6 +6,7 @@ PANDASimAccumulable::PANDASimAccumulable(G4int as)
 	: G4VAccumulable(), 
 	energyDeposit(0), betaKEHe8(0), betaKELi9(0), decayTimeHe8(0), decayTimeLi9(0),
 	neutronGenicTime(0), neutronKineticEnergy(0), neutronGT(0), neutronKE(0),
+	edepDecay(0), moduleCalPhDecay(0),
 	capTimeH(0), capTimeGd(0),
 	runCondition(""), neutrinoPosition({16, 5})
 {
@@ -56,6 +57,12 @@ void PANDASimAccumulable::Merge(const G4VAccumulable& other)
 	std::list<std::vector<std::vector<G4double>>> nKineticE = otherPANDASimAccumulable.neutronKineticEnergy;
 	neutronKineticEnergy.merge(nKineticE);
 
+	std::list<std::vector<std::vector<G4double>>> eDecay = otherPANDASimAccumulable.edepDecay;
+	edepDecay.merge(eDecay);
+
+	std::list<std::vector<std::vector<std::vector<G4double>>>> nCalPhDecay = otherPANDASimAccumulable.moduleCalPhDecay;
+	moduleCalPhDecay.merge(nCalPhDecay);
+
 	for (int i = 0; i < numLi9[0].size(); ++i) 
 	{
 		for (int j = 0; j < numLi9.size(); ++j) 
@@ -83,6 +90,9 @@ void PANDASimAccumulable::Reset()
 
 	neutronGT.clear();
 	neutronKE.clear();
+
+	edepDecay.clear();
+	moduleCalPhDecay.clear();
 
 	capTimeH.clear();
 	capTimeGd.clear();
@@ -133,6 +143,16 @@ void PANDASimAccumulable::PushNeutronKE(const std::vector<std::vector<G4double>>
 void PANDASimAccumulable::PushNeutronKE(const G4double& ke)
 {
 	neutronKE.push_back(ke);
+}
+
+void PANDASimAccumulable::PushEdepDecay(const std::vector<std::vector<G4double>>& de)
+{
+	edepDecay.push_back(de);
+}
+
+void PANDASimAccumulable::PushModuleCalPhDecay(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec)
+{
+	moduleCalPhDecay.push_back(nCalPhVec);
 }
 
 void PANDASimAccumulable::PushCapTimeH(const G4double& ct)

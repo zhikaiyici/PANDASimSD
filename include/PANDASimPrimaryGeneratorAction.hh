@@ -59,7 +59,6 @@ class G4Event;
 class G4Box;
 class G4LogicalVolumeStore;
 
-
 /// The primary generator action class with particle gun.
 ///
 /// The default kinematic is a 6 MeV gamma, randomly distribued 

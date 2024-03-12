@@ -1,21 +1,32 @@
 
 #include "PANDASimTrackingAction.hh"
-#include "PANDASimRunAction.hh"
 
 #include "G4Track.hh"
 #include "G4VProcess.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4OpticalPhoton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PANDASimTrackingAction::PANDASimTrackingAction(PANDASimRunAction* runAction)
-	: G4UserTrackingAction(), flagHe8(false), flagLi9(false), flagNeutron(false),
+	: G4UserTrackingAction(), 
+	flagHe8(false), flagLi9(false), flagNeutron(false),
+	parentTime(0.),
+	secondariesNumber(0),
 	fRunAction(runAction)
 {
+	secondariesTime = new std::vector<G4double>;
+}
+
+PANDASimTrackingAction::~PANDASimTrackingAction()
+{
+	secondariesTime->clear();
+	delete secondariesTime;
 }
 
 void PANDASimTrackingAction::PreUserTrackingAction(const G4Track* track)
 {
+	if (track->GetParticleDefinition() == G4OpticalPhoton::OpticalPhoton()) return;
 	flagHe8 = false;
 	flagLi9 = false;
 	flagNeutron= false;
@@ -28,10 +39,25 @@ void PANDASimTrackingAction::PreUserTrackingAction(const G4Track* track)
 	//	G4double betaKE = track->GetKineticEnergy() / keV;
 	//	G4cout << "betaKE:" << betaKE << G4endl;
 	//}
+
+	secondariesNumber = 0;
+	secondariesTime->clear();
+	if (track->GetCurrentStepNumber() == 0)
+	{
+		parentTime = track->GetGlobalTime();
+	}
 }
 
 void PANDASimTrackingAction::PostUserTrackingAction(const G4Track* track)
 {
+	if (track->GetParticleDefinition() == G4OpticalPhoton::OpticalPhoton()) return;
+	auto secondariesTrack = track->GetStep()->GetSecondary();
+	secondariesNumber = secondariesTrack->size();
+	for (auto aTrack : *secondariesTrack)
+	{
+		G4double secondaryTime = aTrack->GetGlobalTime();
+		secondariesTime->push_back(secondaryTime - parentTime);
+	}
 	auto processDefinedStep = track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep();
 	G4String processName = "";
 	if (processDefinedStep)

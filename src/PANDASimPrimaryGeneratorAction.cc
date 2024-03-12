@@ -203,6 +203,7 @@ PANDASimPrimaryGeneratorAction::~PANDASimPrimaryGeneratorAction()
 
 #ifdef __linux__
 	delete gunMessenger;
+	vect->clear();
 	delete vect;
 	if (gen != nullptr)
 		//gen = nullptr;
@@ -222,9 +223,9 @@ void PANDASimPrimaryGeneratorAction::InputCRY()
 //----------------------------------------------------------------------------//
 void PANDASimPrimaryGeneratorAction::UpdateCRY(std::string* MessInput)
 {
-	CRYSetup setup0 = CRYSetup(*MessInput, CRYDataPath);
-	CRYSetup* setup = &setup0;
-	// CRYSetup *setup = new CRYSetup(*MessInput, CRYDataPath);
+	// CRYSetup setup0 = CRYSetup(*MessInput, CRYDataPath);
+	// CRYSetup* setup = &setup0;
+	CRYSetup *setup = new CRYSetup(*MessInput, CRYDataPath);
 	// CRYSetup *setup = new CRYSetup(*MessInput, "/home/lab/programs/cry/cry_v1.7/data");
 
 	gen = new CRYGenerator(setup);
@@ -233,6 +234,7 @@ void PANDASimPrimaryGeneratorAction::UpdateCRY(std::string* MessInput)
 	RNGWrapper<CLHEP::HepRandomEngine>::set(CLHEP::HepRandom::getTheEngine(), &CLHEP::HepRandomEngine::flat);
 	setup->setRandomFunction(RNGWrapper<CLHEP::HepRandomEngine>::rng);
 	InputState = 0;
+	delete setup;
 }
 
 //----------------------------------------------------------------------------//
@@ -416,12 +418,11 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 		for (unsigned j = 0; j < vect->size(); j++)
 		{
-			particleName = CRYUtils::partName((*vect)[j]->id());
-
+			//particleName = CRYUtils::partName((*vect)[j]->id());
 			////....debug output
 			//G4cout << "  " << particleName << " "
 			//	   << "charge=" << (*vect)[j]->charge() << " "
-			//	   << setprecision(4)
+			//	   << std::setprecision(4)
 			//	   << "energy (MeV)=" << (*vect)[j]->ke() * MeV << " "
 			//	   << "pos (m)"
 			//	   << G4ThreeVector((*vect)[j]->x(), (*vect)[j]->y(), (*vect)[j]->z())

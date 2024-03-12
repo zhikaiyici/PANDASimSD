@@ -71,7 +71,10 @@ set(PANDASim_SCRIPTS
   vis.mac
   run.mac
   run_phoeva.mac
+  run_calibration.mac
   cry.mac
+  cry_file.mac
+  cry_setup.cry
   calibration.mac
   neutrino.mac
   He8Li9.mac

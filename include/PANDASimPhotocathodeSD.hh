@@ -5,6 +5,7 @@
 
 #include "PANDASimPhotocathodeHit.hh"
 #include "PANDASimEventAction.hh"
+#include "PANDASimRunAction.hh"
 
 class G4Step;
 class G4HCofThisEvent;
@@ -24,6 +25,7 @@ public:
 
 private:
     PANDASimPhotocathodeHitsCollection* fHitsCollection;
+    PANDASimRunAction* fRunAction;
     PANDASimEventAction* fEventAction;
     G4int  fHitsNum;
 };

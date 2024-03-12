@@ -69,9 +69,10 @@ void PANDASimActionInitialization::Build() const
 	PANDASimEventAction* eventAction = new PANDASimEventAction(/*runAction*/);
 	SetUserAction(eventAction);
 
-	SetUserAction(new PANDASimStackingAction(eventAction));
+	PANDASimTrackingAction* trackingAction = new PANDASimTrackingAction(runAction);
+	SetUserAction(trackingAction);
 
-	SetUserAction(new PANDASimTrackingAction(runAction));
+	SetUserAction(new PANDASimStackingAction(eventAction, trackingAction));
 
 	//SetUserAction(new PANDASimSteppingAction(eventAction, runAction));
 }

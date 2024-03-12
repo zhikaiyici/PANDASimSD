@@ -11,7 +11,8 @@
 
 PANDASimGdFilmSD::PANDASimGdFilmSD(const G4String& name, const G4String& hitsCollectionName, G4int nofHits)
 	: G4VSensitiveDetector(name),
-	fHitsCollection(nullptr), fEventAction(nullptr),
+	fHitsCollection(nullptr), 
+	fRunAction(nullptr), fEventAction(nullptr),
 	fHitsNum(nofHits)
 {
 	collectionName.insert(hitsCollectionName);
@@ -72,10 +73,10 @@ G4bool PANDASimGdFilmSD::ProcessHits(G4Step* step, G4TouchableHistory* history)
 
 	if (!fRunAction)
 	{
-		if (!fTrackingAction)
-			fTrackingAction = static_cast<PANDASimTrackingAction*>(G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
-
-		fRunAction = fTrackingAction->GetPANDASimRunAction();
+		//if (!fTrackingAction)
+		//	fTrackingAction = static_cast<PANDASimTrackingAction*>(G4EventManager::GetEventManager()->GetTrackingManager()->GetUserTrackingAction());
+		//fRunAction = fTrackingAction->GetPANDASimRunAction();
+		fRunAction = const_cast<PANDASimRunAction*>(static_cast<const PANDASimRunAction*>(G4RunManager::GetRunManager()->GetUserRunAction()));
 	}
 
 	// 判断是否为中子

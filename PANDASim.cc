@@ -99,7 +99,7 @@ int main(int argc, char** argv)
 //#else
 //	G4RunManager* runManager = new G4RunManager;
 //#endif
-	auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MT);
+	G4RunManager* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MT);
 
 	// Set mandatory initialization classes
 	//
@@ -145,7 +145,7 @@ int main(int argc, char** argv)
 	runManager->SetUserInitialization(new PANDASimActionInitialization());
 
 	//The default value of the time threshold for radioactive decays of ions has been changed, from 10^27 ns to 1 year, sine 11.2
-	G4HadronicParameters::Instance()->SetTimeThresholdForRadioactiveDecay(1.0e+60 * CLHEP::year);
+	//G4HadronicParameters::Instance()->SetTimeThresholdForRadioactiveDecay(1.0e+60 * CLHEP::year);
 
 	// Replaced HP environmental variables with C++ calls
 	G4ParticleHPManager::GetInstance()->SetSkipMissingIsotopes(true);

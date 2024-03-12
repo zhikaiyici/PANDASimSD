@@ -1,0 +1,5 @@
+/source/type CRY
+
+/CRY/file cry_setup.cry
+
+/run/beamOn 1000000

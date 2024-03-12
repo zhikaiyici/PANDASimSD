@@ -29,18 +29,21 @@ public:
     void AddH(G4double calPhe);
     void AddGd(G4double calPhe);
     void AddMu(G4double calPhe);
+    inline void AddDecay(G4double calPhe) { fCalPheNumDecay += calPhe; }
 
     // get methods
     G4double GetPheNum() const;
     G4double GetPheNumH() const;
     G4double GetPheNumGd() const;
     G4double GetPheNumMu() const;
+    inline G4double GetPheNumDecay() const { return fCalPheNumDecay; }
 
 private:
     G4double fCalPheNum;
     G4double fCalPheNumH;
     G4double fCalPheNumGd;
     G4double fCalPheNumMu;
+    G4double fCalPheNumDecay;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

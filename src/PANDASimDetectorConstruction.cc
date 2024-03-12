@@ -488,11 +488,13 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	//fPhysicalVolume.push_back(physHatLeft);
 
 	////G4_Be orb for Am-Be neutron source
-	//if (UserDataInput::GetSoureType() == "Am-Be")
+	//G4String sourceType =
+	//	(static_cast<const PANDASimPrimaryGeneratorAction*>(G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction()))->GetSourceType();
+	//if (/*UserDataInput::GetSoureType()*/ sourceType == "Am-Be")
 	//{
 	//	G4Orb* solidBeOrb = new G4Orb("BeOrbSV", 0.5 * mm);
 	//	G4LogicalVolume* logicBeOrb = new G4LogicalVolume(solidBeOrb, berylliumForAmBe, "BeOrbLV");
-	//	auto sourcePosition = UserDataInput::GetSourePosition();
+	//	auto sourcePosition = (static_cast<const PANDASimPrimaryGeneratorAction*>(G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction()))->GetSourcePosition();
 	//	G4ThreeVector positionVector;
 	//	if (sourcePosition == "EDGE")
 	//	{
@@ -503,9 +505,9 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	//		positionVector = G4ThreeVector(0., 0., 0.5 * mm + containerZ / 2.);
 	//	}
 	//	G4VPhysicalVolume* physBeOrb = new G4PVPlacement(0, positionVector, logicBeOrb, "BeOrbPV", world, false, 0, checkOverlaps);
-	//	fSolidVolume.push_back(solidBeOrb);
-	//	fLogicalVolume.push_back(logicBeOrb);
-	//	fPhysicalVolume.push_back(physBeOrb);
+	//	//fSolidVolume.push_back(solidBeOrb);
+	//	//fLogicalVolume.push_back(logicBeOrb);
+	//	//fPhysicalVolume.push_back(physBeOrb);
 	//}
 
 	//
@@ -808,17 +810,17 @@ void PANDASimDetectorConstruction::DefineCommands()
 	auto& detectorXCMD = fMessenger->DeclarePropertyWithUnit("detectorX", "cm", dtctrX, "Set detector X dimensions.");
 	detectorXCMD.SetParameterName("detectorX", true);
 	detectorXCMD.SetDefaultValue("10.");
-	detectorXCMD.SetRange("detectorX >= 0");
+	detectorXCMD.SetRange("detectorX > 0");
 
 	auto& detectorYCMD = fMessenger->DeclarePropertyWithUnit("detectorY", "cm", dtctrY, "Set detector Y dimensions.");
 	detectorYCMD.SetParameterName("detectorY", true);
 	detectorYCMD.SetDefaultValue("10.");
-	detectorYCMD.SetRange("detectorY >= 0");
+	detectorYCMD.SetRange("detectorY > 0");
 
 	auto& detectorZCMD = fMessenger->DeclarePropertyWithUnit("detectorZ", "cm", dtctrZ, "Set detector Z dimensions.");
 	detectorZCMD.SetParameterName("detectorZ", true);
 	detectorZCMD.SetDefaultValue("100.");
-	detectorZCMD.SetRange("detectorZ >= 0");
+	detectorZCMD.SetRange("detectorZ > 0");
 
 	auto& distanceCMD = fMessenger->DeclarePropertyWithUnit("moduleDistance", "cm", distanceBetweenModules, "Set distance between modules.");
 	distanceCMD.SetParameterName("moduleDistance", true);

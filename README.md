@@ -45,42 +45,43 @@
 
 ### 1. detector 
 
-   > Use this command ***before*** `/run/initialize`
- ```
- /detector/arraySize
- /detector/detectorX
- /detector/detectorY
- /detector/detectorZ
- /detector/moduleDistance
- /detector/gdFilmThickness
- ```
+> Use this command ***before*** `/run/initialize`
+   
+```
+/detector/arraySize
+/detector/detectorX
+/detector/detectorY
+/detector/detectorZ
+/detector/moduleDistance
+/detector/gdFilmThickness
+```
  <!--
  /detector/update
 ```
 -->
 
 - `/detector/arraySize`
-  - Setting detector array size, a positive integer.
+  - Detector array size, a positive integer.
   - Default value: `4`.
 
 - `/detector/detectorX`
-  - Setting detector X dimension, a positive double with unit (`cm` by default).
+  - Detector X dimension, a positive double with unit (`cm` by default).
   - Default value: `10. cm`.
 
 - `/detector/detectorY`
-  - Setting detector Y dimension, a positive double with unit (`cm` by default).
+  - Detector Y dimension, a positive double with unit (`cm` by default).
   - Default value: `10. cm`.
 
 - `/detector/detectorZ`
-  - Setting detector Z dimension, a positive double with unit (`cm` by default).
+  - Detector Z dimension, a positive double with unit (`cm` by default).
   - Default value: `100. cm`.
 
 - `/detector/moduleDistance`
-  - Setting distance between modules, a positive double with unit (`cm` by default).
+  - Distance between modules, a positive double with unit (`cm` by default).
   - Default value: `2. cm`.
 
 - `/detector/gdFilmThickness`
-  - Setting Gd film thickness, a positive double with unit (`um`, μm, by default).
+  - Gd film thickness, a positive double with unit (`um`, μm, by default).
   - Default value: `30. um`.
 
 <!--
@@ -91,7 +92,7 @@
 
 ### 2. source
 
-   > Use this command ***after*** `/run/initialize`
+> Use this command ***after*** `/run/initialize`
 
 ```
 /source/type              
@@ -108,45 +109,58 @@
     Position, momentum, particle etc. must be defined with source `GPS` using UI command `/gps/**`.
   - Default value: `NEUTRINO`.
 
- - `/source/spectra`
-   - Spectra of neutron and positron, two strings at most. See spectra directory.  
-     First one should be spectrum of neutron.  
-     Second one, if there is, should be spectrum of positron.
-   - Command is valid only for `NEUTRINO` and `COSMICNEUTRON`.
-   - Default value: `IBDNeutron.spec IBDPositron.spec`.
+- `/source/spectra`
+  - Spectra of neutron and positron, two strings at most. See spectra directory.  
+    First one should be spectrum of neutron.  
+    Second one, if there is, should be spectrum of positron.
+  - Command is valid only for `NEUTRINO` and `COSMICNEUTRON`.
+  - Default value: `IBDNeutron.spec IBDPositron.spec`.
 
- - `/source/position`
-   - Available values:  
-     `CENTER`/`EDGE`/`INSIDE`/`COMMAND`
-   - Position for `Cs137`/`Co60`/`Na22`/`Cs137g`/`Co60g`/`Am-Be-n`/`GUN`  
-     Direction must be defined for `GUN` with position `CENTER`/`EDGE`.  
-     Direction and position must be defined for `GUN` with position `COMMAND`.  
-     Direction is isotropic for `GUN` with position `INSIDE`.
-   - Default value: `CENTER`.
- 
- - `/source/neutrinoPosition`
-   - Position for `NEUTRINO`, two positive integers [0 - size × size, 0 - 5].  
-     First integer is position in the detector array, size × size means random.  
-     Second integer is position in the detector module, 5 means random.  
-     Second integer is valid only when arrayPosition < size × size.
-   - Default value: `size × size 5`.
+- `/source/position`
+  - Available values:  
+    `CENTER`/`EDGE`/`INSIDE`/`COMMAND`
+  - Position for `Cs137`/`Co60`/`Na22`/`Cs137g`/`Co60g`/`Am-Be-n`/`GUN`  
+    Direction must be defined for `GUN` with position `CENTER`/`EDGE`.  
+    Direction and position must be defined for `GUN` with position `COMMAND`.  
+    Direction is isotropic for `GUN` with position `INSIDE`.
+  - Default value: `CENTER`.
+
+- `/source/neutrinoPosition`
+  - Position for `NEUTRINO`, two positive integers [0 - size × size, 0 - 5].  
+    First integer is position in the detector array, size × size means random.  
+    Second integer is position in the detector module, 5 means random.  
+    Second integer is valid only when arrayPosition < size × size.
+  - Default value: `size × size 5`.
 
 ### 3. physics
 
- > Use this command in the ***second*** input `*.mac` file, the first should be the one with `/run/initialize` and `/run/beamOn`.  
- This `*.mac` file is ***optional***. Without this file optical process and muonic atom decay process will be ***off***. 
+> Use this command in the ***second*** input `*.mac` file, the first should be the one with `/run/initialize` and `/run/beamOn`.  
+  This `*.mac` file is ***optional***. Without this file optical process and muonic atom decay process will be ***off***. 
 
- ```
- /physics/optical
- /physics/muonicDecay
+```
+/physics/optical
+/physics/muonicDecay
 ```
 
--  `/physics/optical`
-   - Available values: `true`/`false`.
-   - Turning on/off optical process.
-   - Default value: `true`.
+- `/physics/optical`
+  - Available values: `true`/`false`.
+  - Turning on/off optical process.
+  - Default value: `true`.
 
--  `/physics/muonicDecay`
-   - Available values: `true`/`false`.
-   - Turning on/off muonic atom decay process.
-   - Default value: `true`.
+- `/physics/muonicDecay`
+  - Available values: `true`/`false`.
+  - Turning on/off muonic atom decay process.
+  - Default value: `true`.
+
+### 4. time
+
+> Use this command ***after*** `/run/initialize`
+
+```
+/time/timeInterval
+```
+
+- `/time/timeInterval`
+  - Time interval between parent particle and secondaries, a positive double with unit (`us`,  μm, by default).
+  - If time interval between parent particle and secondaries is bigger than this value, they will be treated as two signals.
+  - Default value: `8. us`.

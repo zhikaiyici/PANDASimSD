@@ -272,21 +272,32 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		capTimeGd.clear();
 
 		std::list<std::vector<std::vector<G4double>>> neutronGenicTime = myAccu->GetNeutronGenicTime();
-		G4String neutronGenicTimeFileName = outDir + "/neutronGenicTime" + runCondition + ".data";
+		G4String neutronGenicTimeFileName = outDir + "/moduleNeutronGenicTime" + runCondition + ".data";
 		WriteDataToFile(neutronGenicTimeFileName, neutronGenicTime);
 		neutronGenicTime.clear();
 
 		std::list<std::vector<std::vector<G4double>>> neutronKineticEnergy = myAccu->GetNeutronKineticEnergy();
-		G4String neutronKineticEnergyFileName = outDir + "/neutronKineticEnergy" + runCondition + ".data";
+		G4String neutronKineticEnergyFileName = outDir + "/moduleNeutronKineticEnergy" + runCondition + ".data";
 		WriteDataToFile(neutronKineticEnergyFileName, neutronKineticEnergy);
 		neutronKineticEnergy.clear();
 
+		std::list<std::vector<std::vector<G4double>>> edepDecay = myAccu->GetEdepDecay();
+		G4String edepDecayFileName = outDir + "/moduleEdepDecay" + runCondition + ".data";
+		WriteDataToFile(edepDecayFileName, edepDecay);
+		edepDecay.clear();
+
+		std::list<std::vector<std::vector<std::vector<G4double>>>> moduleCalPhDecay = myAccu->GetModuleCalPhDecay();
+		G4String moduleCalPhDecayFileNameRight = outDir + "/moduleCalPhDecayRight" + runCondition + ".data";
+		G4String moduleCalPhDecayFileNameLeft = outDir + "/moduleCalPhDecayLeft" + runCondition + ".data";
+		WriteDataToFile(moduleCalPhDecayFileNameRight, moduleCalPhDecayFileNameLeft, moduleCalPhDecay);
+		moduleCalPhDecay.clear();
+
 		std::vector<std::vector<G4int>> numLi9 = myAccu->GetNLi9();
-		G4String numLi9FileName = outDir + "/numLi9" + runCondition + ".txt";
+		G4String numLi9FileName = outDir + "/moduleNumLi9" + runCondition + ".txt";
 		WriteDataToFile(numLi9FileName, numLi9);
 
 		std::vector<std::vector<G4int>> numHe8 = myAccu->GetNHe8();
-		G4String numHe8FileName = outDir + "/numHe8" + runCondition + ".txt";
+		G4String numHe8FileName = outDir + "/moduleNumHe8" + runCondition + ".txt";
 		WriteDataToFile(numHe8FileName, numHe8);
 
 		std::vector<std::vector<G4int>> numNeutron = myAccu->GetNNeutron();
@@ -620,6 +631,16 @@ void PANDASimRunAction::AddNHe8(std::vector<std::vector<G4int>> nHe8)
 void PANDASimRunAction::AddNNeutron(std::vector<std::vector<G4int>> nNeutron)
 {
 	myAccu->AddNNeurtron(nNeutron);
+}
+
+void PANDASimRunAction::PushEdepDecay(const std::vector<std::vector<G4double>>& de)
+{
+	myAccu->PushEdepDecay(de);
+}
+
+void PANDASimRunAction::PushModuleCalPhDecay(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec)
+{
+	myAccu->PushModuleCalPhDecay(nCalPhVec);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

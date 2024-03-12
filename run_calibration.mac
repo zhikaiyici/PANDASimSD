@@ -1,0 +1,31 @@
+# Macro file
+# 
+# To be run preferably in batch, without graphics:
+# % run.mac
+#
+# Detector setting, before /run/initialize
+/detector/arraySize 1
+/detector/detectorX 10 cm
+/detector/detectorX 10 cm
+/detector/detectorZ 100 cm
+/detector/moduleDistance 2 cm
+/detector/gdFilmThickness 30 um
+#
+/process/had/particle_hp/use_photo_evaporation true
+#
+/run/numberOfThreads 8
+/run/initialize
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
+#
+/control/verbose 2
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 0
+#
+# Source setting, after /run/initialize
+#/control/loop neutrino.mac id 0 10
+#/control/loop cry.mac id 0 10
+/control/foreach calibration.mac sType "Cs137 Co60"
+#/control/foreach nCap.mac Ekin "0.0000253 1. 5."
+#/control/loop nCap.mac Ekin 10. 50. 5
+#/control/foreach He8Li9.mac sType "He8 Li9"

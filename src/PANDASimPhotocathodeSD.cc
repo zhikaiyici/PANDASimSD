@@ -1,5 +1,6 @@
 #include "PANDASimPhotocathodeSD.hh"
 #include "Spline.hh"
+#include "PANDASimDetectorConstruction.hh"
 
 #include "globals.hh"
 #include "G4HCofThisEvent.hh"
@@ -12,7 +13,8 @@
 
 PANDASimPhotocathodeSD::PANDASimPhotocathodeSD(const G4String& name, const G4String& hitsCollectionName, G4int nofHits)
 	: G4VSensitiveDetector(name),
-	fHitsCollection(nullptr), fEventAction(nullptr),
+	fHitsCollection(nullptr),
+	fRunAction(nullptr), fEventAction(nullptr),
 	fHitsNum(nofHits)
 {
 	collectionName.insert(hitsCollectionName);
@@ -89,15 +91,21 @@ G4bool PANDASimPhotocathodeSD::ProcessHits(G4Step* step, G4TouchableHistory* his
 			{
 				fEventAction = static_cast<PANDASimEventAction*>(G4EventManager::GetEventManager()->GetUserEventAction());
 			}
+			G4bool delayedFlag = fEventAction->GetDelayedFlag();
 			G4bool delayFlagH = fEventAction->GetDelayFlagH();
 			G4bool delayFlagGd = fEventAction->GetDelayFlagGd();
 			G4bool decayFlagMu = fEventAction->GetDecayFlagMu();
-			if (delayFlagH)
-				hit->AddH(pheNum);
-			else if (delayFlagGd)
-				hit->AddGd(pheNum);
-			else if (decayFlagMu)
-				hit->AddMu(pheNum);
+			if (delayedFlag)
+			{
+				if (delayFlagH)
+					hit->AddH(pheNum);
+				else if (delayFlagGd)
+					hit->AddGd(pheNum);
+				else if (decayFlagMu)
+					hit->AddMu(pheNum);
+				else
+					hit->AddDecay(pheNum);
+			}
 			else
 				hit->Add(pheNum);
 		}
@@ -113,4 +121,27 @@ G4bool PANDASimPhotocathodeSD::ProcessHits(G4Step* step, G4TouchableHistory* his
 
 void PANDASimPhotocathodeSD::EndOfEvent(G4HCofThisEvent* hitCollection)
 {
+	if (!fRunAction)
+	{
+		fRunAction = const_cast<PANDASimRunAction*>(static_cast<const PANDASimRunAction*>(G4RunManager::GetRunManager()->GetUserRunAction()));
+	}
+	G4int arraySize =
+		(static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();
+
+	std::vector<std::vector<std::vector<G4double>>> moduleCalPh(arraySize, std::vector <std::vector<G4double>>(arraySize, std::vector<G4double>(2, 0)));
+
+	auto nofHits = fHitsCollection->entries();
+	for (G4int i = 0; i < nofHits; i++)
+	{
+		G4int PMTCopyNumber = i / (arraySize * arraySize);
+		G4int moduleRowReplicaNumber = (i - PMTCopyNumber * arraySize * arraySize) % arraySize;
+		G4int moduleRepliaNumber = (i - PMTCopyNumber * arraySize * arraySize) / arraySize;
+		PANDASimPhotocathodeHit* hit = (*fHitsCollection)[i];
+
+		G4double nCalPh = hit->GetPheNumDecay();
+		moduleCalPh[moduleRepliaNumber][moduleRowReplicaNumber][PMTCopyNumber] = nCalPh;
+	}
+	std::vector<std::vector<std::vector<G4double>>> emptyVec(arraySize, std::vector <std::vector<G4double>>(arraySize, std::vector<G4double>(2, 0)));
+	if (moduleCalPh != emptyVec)
+		fRunAction->PushModuleCalPhDecay(moduleCalPh);
 }

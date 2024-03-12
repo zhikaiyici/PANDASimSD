@@ -22,6 +22,9 @@ public:
     void PushDecayTimeHe8(const G4double& dt);
     void PushDecayTimeLi9(const G4double& dt);
 
+    void PushEdepDecay(const std::vector<std::vector<G4double>>& de);
+    void PushModuleCalPhDecay(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec);
+
     void PushNeutronGenicTime(const std::vector<std::vector<G4double>>& t);
     void PushNeutronGenicTime(const G4double& t);
     void PushNeutronKE(const std::vector<std::vector<G4double>>& ke);
@@ -48,6 +51,9 @@ public:
     inline std::list<G4double> GetCapTimeH() const { return capTimeH; }
     inline std::list<G4double> GetCapTimeGd() const { return capTimeGd; }
 
+    inline std::list<std::vector<std::vector<G4double>>> GetEdepDecay() const { return edepDecay; }
+    inline std::list<std::vector<std::vector<std::vector<G4double>>>> GetModuleCalPhDecay() const { return moduleCalPhDecay; }
+
     inline std::list<std::vector<std::vector<G4double>>> GetNeutronGenicTime() const { return neutronGenicTime; }
     inline std::list<std::vector<std::vector<G4double>>> GetNeutronKineticEnergy() const { return neutronKineticEnergy; }
 
@@ -67,6 +73,9 @@ private:
 
     std::list<G4double> capTimeH;
     std::list<G4double> capTimeGd;
+
+    std::list<std::vector<std::vector<G4double>>> edepDecay;
+    std::list<std::vector<std::vector<std::vector<G4double>>>> moduleCalPhDecay;
 
     std::list<std::vector<std::vector<G4double>>> neutronGenicTime;
     std::list<std::vector<std::vector<G4double>>> neutronKineticEnergy;

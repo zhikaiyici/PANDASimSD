@@ -1,0 +1,11 @@
+returnNeutrons 0
+returnProtons 0
+returnGammas 0
+returnPions 0
+returnKaons 0
+returnElectrons 0
+returnMuons 1
+date 7-1-2022
+latitude 40.0
+altitude 0
+subboxLength 10

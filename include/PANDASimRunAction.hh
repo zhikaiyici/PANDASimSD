@@ -66,6 +66,9 @@ public:
 	void PushDecayTimeHe8(const G4double& dt);
 	void PushDecayTimeLi9(const G4double& dt);
 
+	void PushEdepDecay(const std::vector<std::vector<G4double>>& de);
+	void PushModuleCalPhDecay(const std::vector<std::vector<std::vector<G4double>>>& nCalPhVec);
+
 	void PushNeutronGenicTime(const std::vector<std::vector<G4double>>& t);
 	void PushNeutronGenicTime(const G4double& t);
 	void PushNeutronKE(const std::vector<std::vector<G4double>>& ke);

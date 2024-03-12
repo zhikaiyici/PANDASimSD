@@ -4,7 +4,6 @@
 #include "G4VSensitiveDetector.hh"
 
 #include "PANDASimGdFilmHit.hh"
-#include "PANDASimTrackingAction.hh"
 #include "PANDASimEventAction.hh"
 #include "PANDASimRunAction.hh"
 
@@ -33,7 +32,6 @@ private:
     PANDASimGdFilmHitsCollection* fHitsCollection;
     PANDASimRunAction* fRunAction;
     PANDASimEventAction* fEventAction;
-    PANDASimTrackingAction* fTrackingAction;
     G4int  fHitsNum;
 };
 
