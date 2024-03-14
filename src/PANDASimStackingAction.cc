@@ -46,13 +46,20 @@ G4ClassificationOfNewTrack PANDASimStackingAction::ClassifyNewTrack(const G4Trac
 	else
 	{
 		auto secondariesTimes = fTrackingAction->GetSecondariesTime();
-		G4int i = secondariesTimes->size() - fTrackingAction->GetSecondariesNumber();
-		fTrackingAction->SetSecondariesNumber();
-		//G4cout << "secondariesTimes->at(i): " << i << ": " << secondariesTimes->at(i) / us << G4endl;
-		if (secondariesTimes->at(i) > timeInterval && parentID > 1)
+		if (!secondariesTimes->empty())
 		{
-			//G4cout << "waiting" << G4endl;
-			return fWaiting;
+			G4int i = secondariesTimes->size() - fTrackingAction->GetSecondariesNumber();
+			//G4cout << "secondariesTimes->size(): " << secondariesTimes->size() << ": "
+			//	<< fTrackingAction->GetSecondariesNumber() << G4endl;
+			//G4cout << "secondariesTimes->at(i): " << i << ": " << secondariesTimes->at(i) / us << G4endl;
+			fTrackingAction->SetSecondariesNumber();
+			if (secondariesTimes->at(i) > timeInterval && parentID > 1)
+			{
+				//G4cout << "waiting" << G4endl;
+				return fWaiting;
+			}
+			else
+				return fUrgent;
 		}
 		else
 			return fUrgent;

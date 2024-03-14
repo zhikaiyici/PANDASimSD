@@ -51,13 +51,27 @@ void PANDASimTrackingAction::PreUserTrackingAction(const G4Track* track)
 void PANDASimTrackingAction::PostUserTrackingAction(const G4Track* track)
 {
 	if (track->GetParticleDefinition() == G4OpticalPhoton::OpticalPhoton()) return;
+
+	// When optical-photons are generated, current track will be suspended 
+	// with stopping code 4(fSuspend, defined in  G4TrackStatus.hh) and
+	// PostUserTrackingAction() will be invoked. StackingAction::ClassifyNewTrack()
+	// will be invoked to decide which stack this suspended track should be stored into.
+	// 
+	// This if() code block fixs bug of overrange in StackingAction::ClassifyNewTrack()
+	// in a specific situation: current track generates non-optical-photons before optical-photons.
+	if (track->GetTrackStatus() == fSuspend)
+		secondariesTime->push_back(0.);
+
 	auto secondariesTrack = track->GetStep()->GetSecondary();
-	secondariesNumber = secondariesTrack->size();
 	for (auto aTrack : *secondariesTrack)
 	{
-		G4double secondaryTime = aTrack->GetGlobalTime();
-		secondariesTime->push_back(secondaryTime - parentTime);
+		if (aTrack->GetParticleDefinition() != G4OpticalPhoton::OpticalPhoton())
+		{
+			G4double secondaryTime = aTrack->GetGlobalTime();
+			secondariesTime->push_back(secondaryTime - parentTime);
+		}
 	}
+	secondariesNumber = secondariesTime->size();
 	auto processDefinedStep = track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep();
 	G4String processName = "";
 	if (processDefinedStep)

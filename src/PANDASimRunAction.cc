@@ -301,7 +301,7 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		WriteDataToFile(numHe8FileName, numHe8);
 
 		std::vector<std::vector<G4int>> numNeutron = myAccu->GetNNeutron();
-		G4String numNeutronFileName = outDir + "/modulenumNeutron" + runCondition + ".txt";
+		G4String numNeutronFileName = outDir + "/moduleNumNeutron" + runCondition + ".txt";
 		WriteDataToFile(numNeutronFileName, numNeutron);
 
 		const PANDASimRun* fPANDASimRun = static_cast<const PANDASimRun*>(run);
