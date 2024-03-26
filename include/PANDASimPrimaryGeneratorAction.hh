@@ -116,6 +116,7 @@ private:
 	G4double containerXHalfLength;
 	G4double containerYHalfLength;
 	G4double containerZHalfLength;
+	G4double roofZHalfLength;
 
 	G4double distanceBetweenModules;
 	G4int arraySize;

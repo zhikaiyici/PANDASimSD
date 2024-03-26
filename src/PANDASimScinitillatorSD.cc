@@ -165,19 +165,22 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
         G4bool flagNeutron = fTrackingAction->GetFlagNeutron();
         if (parentID != 0 && !flagNeutron)
         {
-            hit->AddNNeutron();
-            const G4double genicTime = step->GetPreStepPoint()->GetGlobalTime() / us;
-            hit->SetNeutronGenicTime(genicTime);
-            fRunAction->PushNeutronGenicTime(genicTime);
+            if (theTrack->GetCurrentStepNumber() == 1 || theTrack->GetCurrentStepNumber() == 0)
+            {
+                hit->AddNNeutron();
+                const G4double genicTime = step->GetPreStepPoint()->GetGlobalTime() / us;
+                hit->SetNeutronGenicTime(genicTime);
+                fRunAction->PushNeutronGenicTime(genicTime);
 
-            auto energy = theTrack->GetKineticEnergy() / keV;
-            hit->SetNeutronKE(energy);
-            fRunAction->PushNeutronKE(energy);
+                auto energy = theTrack->GetKineticEnergy() / keV;
+                hit->SetNeutronKE(energy);
+                fRunAction->PushNeutronKE(energy);
 
-            fTrackingAction->SetFlagNeutron(true);
+                fTrackingAction->SetFlagNeutron(true);
 
-            //G4cout << "Neutron genic time (SD::Hits): " << genicTime << G4endl;
-            //G4cout << "Neutron kinetic energy (SD::Hits): " << energy << G4endl;
+                //G4cout << "Neutron genic time (SD::Hits): " << genicTime << G4endl;
+                //G4cout << "Neutron kinetic energy (SD::Hits): " << energy << G4endl;
+            }
         }
 
         if (processName == "nCapture")

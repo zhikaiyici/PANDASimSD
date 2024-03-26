@@ -87,6 +87,10 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction(const char* input
 
 	logicVolStroe = G4LogicalVolumeStore::GetInstance();
 
+	G4LogicalVolume* logicRoof = logicVolStroe->GetVolume("RoofLV");
+	G4Box* roofBox = dynamic_cast<G4Box*>(logicRoof->GetSolid());
+	roofZHalfLength = roofBox->GetZHalfLength();
+
 	//G4LogicalVolume* logicPlasticScintillator = logicVolStroe->GetVolume("PlasticScintillatorLV");
 	//G4Box* scinitillatorBox = dynamic_cast<G4Box*>(logicPlasticScintillator->GetSolid());
 	//scinitillatorXHalfLength = scinitillatorBox->GetXHalfLength();
@@ -305,6 +309,10 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		containerYHalfLength = containerBox->GetYHalfLength();
 		containerZHalfLength = containerBox->GetZHalfLength();
 
+		G4LogicalVolume* logicRoof = logicVolStroe->GetVolume("RoofLV");
+		G4Box* roofBox = dynamic_cast<G4Box*>(logicRoof->GetSolid());
+		roofZHalfLength = roofBox->GetZHalfLength();
+
 		auto moduleLV = logicVolStroe->GetVolume("ModuleLV");
 		G4Box* moduleBox = dynamic_cast<G4Box*>(moduleLV->GetSolid());
 		G4double moduleYHalfLength = moduleBox->GetYHalfLength();
@@ -419,6 +427,13 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		for (unsigned j = 0; j < vect->size(); j++)
 		{
 			//particleName = CRYUtils::partName((*vect)[j]->id());
+			//if (particleName == "muon")
+			//{
+			//	std::ofstream outFile;
+			//	outFile.open("fileName.txt", std::ios_base::app);
+			//	outFile << (*vect)[j]->ke() << G4endl;
+			//	outFile.close();
+			//}
 			////....debug output
 			//G4cout << "  " << particleName << " "
 			//	   << "charge=" << (*vect)[j]->charge() << " "
@@ -433,7 +448,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle((*vect)[j]->PDGid()));
 			fParticleGun->SetParticleEnergy((*vect)[j]->ke() * MeV);
-			fParticleGun->SetParticlePosition(G4ThreeVector((*vect)[j]->x() * m, (*vect)[j]->y() * m, (*vect)[j]->z() * m + 1.01 * containerZHalfLength));
+			fParticleGun->SetParticlePosition(G4ThreeVector((*vect)[j]->x() * m, (*vect)[j]->y() * m, (*vect)[j]->z() * m + 1.1 * containerZHalfLength + 2.1 * roofZHalfLength));
 			fParticleGun->SetParticleMomentumDirection(G4ThreeVector((*vect)[j]->u(), (*vect)[j]->v(), (*vect)[j]->w()));
 			fParticleGun->SetParticleTime((*vect)[j]->t());
 			fParticleGun->GeneratePrimaryVertex(anEvent);

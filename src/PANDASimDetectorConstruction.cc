@@ -107,12 +107,13 @@ G4VPhysicalVolume* PANDASimDetectorConstruction::Construct()
 	DefineMaterials();
 
 	air = G4Material::GetMaterial("G4_AIR");
+	auto concrete = G4Material::GetMaterial("G4_CONCRETE");
 
-	if (!air)
+	if (!air || !concrete)
 	{
 		G4ExceptionDescription msg;
 		msg << "Cannot retrieve materials already defined.";
-		G4Exception("PANDASimDetectorConstruction::Construct()", "Air", FatalException, msg);
+		G4Exception("PANDASimDetectorConstruction::Construct()", "GetMaterial()", FatalException, msg);
 	}
 
 	// Geometry parameters
@@ -131,15 +132,22 @@ G4VPhysicalVolume* PANDASimDetectorConstruction::Construct()
 	containerY = arraySize * moduleY;
 	containerX = moduleX;
 
-	worldX = containerX + 10. * m;
-	worldY = containerY + 10. * m;
-	worldZ = 1.1 * containerZ;
+	G4double roofXY = 10. * m;
+	G4double roofZ = 0.5 * m;
+
+	worldX = containerX + roofXY;
+	worldY = containerY + roofXY;
+	worldZ = 1.1 * (containerZ + 2. * roofZ);
 
 	// World
     //
 	solidWorld = new G4Box("WorldSV", 0.5 * worldX, 0.5 * worldY, 0.5 * worldZ);
 	logicWorld = new G4LogicalVolume(solidWorld, air, "WorldLV");
 	physWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld, "WorldPV", 0, false, 0, checkOverlaps);
+
+	auto solidRoof = new G4Box("RoofSV", 0.5 * roofXY, 0.5 * roofXY, 0.5 * roofZ);
+	auto logicRoof = new G4LogicalVolume(solidRoof, concrete, "RoofLV");
+	auto physRoof = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.5 * containerZ + 0.55 * roofZ), logicRoof, "RoofPV", logicWorld, false, 0, checkOverlaps);
 
 	DefineDetector(logicWorld);
 
@@ -159,6 +167,7 @@ void PANDASimDetectorConstruction::DefineMaterials()
 	G4Material* glass = nistManager->FindOrBuildMaterial("G4_Pyrex_Glass");
 	G4Material* stainlessSteel = nistManager->FindOrBuildMaterial("G4_STAINLESS-STEEL");
 	G4Material* berylliumForAmBe = nistManager->FindOrBuildMaterial("G4_Be");
+	G4Material* concrete = nistManager->FindOrBuildMaterial("G4_CONCRETE");
 
 	G4Element* elH = nistManager->FindOrBuildElement(1);
 	G4Element* elB = nistManager->FindOrBuildElement(5);

@@ -45,6 +45,10 @@ void PANDASimTrackingAction::PreUserTrackingAction(const G4Track* track)
 	if (track->GetCurrentStepNumber() == 0)
 	{
 		parentTime = track->GetGlobalTime();
+		if (IsInPlasticScintillator(track))
+		{
+
+		}
 	}
 }
 
@@ -126,5 +130,9 @@ void PANDASimTrackingAction::PostUserTrackingAction(const G4Track* track)
 
 G4bool PANDASimTrackingAction::IsInPlasticScintillator(const G4Track* track)
 {
-	return true;
+	auto& volumeName = track->GetVolume()->GetLogicalVolume()->GetName();
+	if (volumeName == "PlasticScintillatorLV")
+		return true;
+	else
+		return false;
 }
