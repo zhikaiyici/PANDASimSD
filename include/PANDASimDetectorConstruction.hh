@@ -121,6 +121,10 @@ private:
 	G4double worldY;// = containerY + 10. * m;
 	G4double worldZ;// = 1.1 * containerZ;
 
+	G4double roofXY;// = 10. * m;
+	G4double roofZ;// = 0.25 * m;
+	G4double roomHeight;// = 4. * m;
+
 	std::vector<G4VisAttributes*> fVisAttributes;
 	std::vector<G4RotationMatrix*> fRotationMatrix;
 	std::vector<G4VSolid*> fSolidVolume;

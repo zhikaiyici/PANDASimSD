@@ -87,9 +87,11 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction(const char* input
 
 	logicVolStroe = G4LogicalVolumeStore::GetInstance();
 
-	G4LogicalVolume* logicRoof = logicVolStroe->GetVolume("RoofLV");
-	G4Box* roofBox = dynamic_cast<G4Box*>(logicRoof->GetSolid());
-	roofZHalfLength = roofBox->GetZHalfLength();
+	G4LogicalVolume* logicWorld = logicVolStroe->GetVolume("WorldLV");
+	G4Box* worldBox = dynamic_cast<G4Box*>(logicWorld->GetSolid());
+	worldXHalfLength = worldBox->GetXHalfLength();
+	worldYHalfLength = worldBox->GetYHalfLength();
+	worldZHalfLength = worldBox->GetZHalfLength();
 
 	//G4LogicalVolume* logicPlasticScintillator = logicVolStroe->GetVolume("PlasticScintillatorLV");
 	//G4Box* scinitillatorBox = dynamic_cast<G4Box*>(logicPlasticScintillator->GetSolid());
@@ -309,9 +311,11 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		containerYHalfLength = containerBox->GetYHalfLength();
 		containerZHalfLength = containerBox->GetZHalfLength();
 
-		G4LogicalVolume* logicRoof = logicVolStroe->GetVolume("RoofLV");
-		G4Box* roofBox = dynamic_cast<G4Box*>(logicRoof->GetSolid());
-		roofZHalfLength = roofBox->GetZHalfLength();
+		G4LogicalVolume* logicWorld = logicVolStroe->GetVolume("WorldLV");
+		G4Box* worldBox = dynamic_cast<G4Box*>(logicWorld->GetSolid());
+		worldXHalfLength = worldBox->GetXHalfLength();
+		worldYHalfLength = worldBox->GetYHalfLength();
+		worldZHalfLength = worldBox->GetZHalfLength();
 
 		auto moduleLV = logicVolStroe->GetVolume("ModuleLV");
 		G4Box* moduleBox = dynamic_cast<G4Box*>(moduleLV->GetSolid());
@@ -448,7 +452,7 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 			fParticleGun->SetParticleDefinition(particleTable->FindParticle((*vect)[j]->PDGid()));
 			fParticleGun->SetParticleEnergy((*vect)[j]->ke() * MeV);
-			fParticleGun->SetParticlePosition(G4ThreeVector((*vect)[j]->x() * m, (*vect)[j]->y() * m, (*vect)[j]->z() * m + 1.1 * containerZHalfLength + 2.1 * roofZHalfLength));
+			fParticleGun->SetParticlePosition(G4ThreeVector((*vect)[j]->x() * m, (*vect)[j]->y() * m, (*vect)[j]->z() * m + worldZHalfLength / 1.05));
 			fParticleGun->SetParticleMomentumDirection(G4ThreeVector((*vect)[j]->u(), (*vect)[j]->v(), (*vect)[j]->w()));
 			fParticleGun->SetParticleTime((*vect)[j]->t());
 			fParticleGun->GeneratePrimaryVertex(anEvent);
@@ -640,9 +644,12 @@ void PANDASimPrimaryGeneratorAction::SamplingForMuon(G4ThreeVector& positionVect
 	G4double theta = pi * G4UniformRand();
 	G4double phi = twopi * G4UniformRand();
 
-	sourcePositionX = 2. * containerXHalfLength * G4UniformRand() - containerXHalfLength;
-	sourcePositionY = 2. * containerYHalfLength * G4UniformRand() - containerYHalfLength;
-	sourcePositionZ = containerZHalfLength;
+	//sourcePositionX = 2. * containerXHalfLength * G4UniformRand() - containerXHalfLength;
+	//sourcePositionY = 2. * containerYHalfLength * G4UniformRand() - containerYHalfLength;
+	//sourcePositionZ = containerZHalfLength;
+	sourcePositionX = 2. * worldXHalfLength / 1.05 * G4UniformRand() - worldXHalfLength / 1.05;
+	sourcePositionY = 2. * worldYHalfLength / 1.05 * G4UniformRand() - worldYHalfLength / 1.05;
+	sourcePositionZ = worldZHalfLength / 1.05;
 
 	// for mu- / mu+, f(theta) = 4/pi * cos^2(theta) (pi/2, pi),替换抽样，抽样效率1/2
 	G4double random = G4UniformRand();

@@ -42,6 +42,7 @@
 #include "G4RunManagerFactory.hh"
 #include "G4EventManager.hh"
 #include "G4SteppingManager.hh"
+#include "G4SteppingVerbose.hh"
 
 #include "G4UImanager.hh"
 #include "QGSP_BIC_AllHP.hh"
@@ -71,6 +72,10 @@ int main(int argc, char** argv)
 	G4Random::setTheEngine(new CLHEP::RanecuEngine);
 	auto seed = time(NULL);
 	G4Random::setTheSeed(seed);
+
+	//use G4SteppingVerboseWithUnits
+	G4int precision = 4;
+	G4SteppingVerbose::UseBestUnit(precision);
 
 	// 
     // Get the pointer to the User Interface manager

@@ -81,6 +81,10 @@ PANDASimDetectorConstruction::PANDASimDetectorConstruction()
 	gdFilmThickness = 30. * um;// UserDataInput::GetGdFilmThickness();
 	distanceBetweenModules = 2. * cm;// UserDataInput::GetDistanceBetweenModules();
 
+	roofXY = 10. * m;
+	roofZ = 0.25 * m;
+	roomHeight = 4. * m;
+
 	DefineCommands();
 }
 
@@ -132,12 +136,18 @@ G4VPhysicalVolume* PANDASimDetectorConstruction::Construct()
 	containerY = arraySize * moduleY;
 	containerX = moduleX;
 
-	G4double roofXY = 10. * m;
-	G4double roofZ = 0.5 * m;
+	roofXY = 10. * m;
+	roofZ = 0.25 * m;
+	roomHeight = 4. * m;
 
-	worldX = containerX + roofXY;
-	worldY = containerY + roofXY;
-	worldZ = 1.1 * (containerZ + 2. * roofZ);
+	G4double wallThickness = 1. * m;
+	G4double roomZ = 2. * (roomHeight + roofZ);
+	G4double roomXY = roofXY + 2. * wallThickness;
+
+	worldX = 1.1 * (containerX + roomXY + 100. * m);
+	worldY = 1.1 * (containerY + roomXY + 100. * m);
+	worldZ = 1.1 * (4. * (roofZ + roomHeight));
+	//worldZ = 1.1 * (containerZ + 2. * (roofZ + roomHeight));
 
 	// World
     //
@@ -147,7 +157,15 @@ G4VPhysicalVolume* PANDASimDetectorConstruction::Construct()
 
 	auto solidRoof = new G4Box("RoofSV", 0.5 * roofXY, 0.5 * roofXY, 0.5 * roofZ);
 	auto logicRoof = new G4LogicalVolume(solidRoof, concrete, "RoofLV");
-	auto physRoof = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.5 * containerZ + 0.55 * roofZ), logicRoof, "RoofPV", logicWorld, false, 0, checkOverlaps);
+	auto physRoof1 = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.5 * roofZ + roomHeight - containerZ * 0.5), logicRoof, "RoofPV1", logicWorld, false, 0, checkOverlaps);
+	auto physRoof2 = new G4PVPlacement(0, G4ThreeVector(0., 0., 1.5 * roofZ + 2. * roomHeight - containerZ * 0.5), logicRoof, "RoofPV2", logicWorld, false, 0, checkOverlaps);
+
+	auto solidSolidRoom = new G4Box("SolidRoomSV", 0.5 * roomXY, 0.5 * roomXY, 0.5 * roomZ);
+	auto solidAirRoom = new G4Box("AirRoomSV", 0.5 * roofXY, 0.5 * roofXY, roomZ);
+	auto solidRoom = new G4SubtractionSolid("RoomSV", solidSolidRoom, solidAirRoom);
+	auto logicRoom = new G4LogicalVolume(solidRoom, concrete, "RoomLV");
+	auto physRoom = new G4PVPlacement(0, G4ThreeVector(0., 0., roofZ + roomHeight - 0.5 * containerZ), logicRoom, "RoomPV", logicWorld, false, 0, checkOverlaps);
+
 
 	DefineDetector(logicWorld);
 
