@@ -84,6 +84,11 @@
   - Gd film thickness, a positive double with unit (`um`, μm, by default).
   - Default value: `30. um`.
 
+- `/detector/addLabRoom`
+  - Available values: `true`/`false`.
+  - Adding/removing lab room.
+  - Default value: `true`.
+
 <!--
 - `/detector/update`
   - Updating geometry after changing it, no parameter.

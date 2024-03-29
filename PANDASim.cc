@@ -193,6 +193,7 @@ int main(int argc, char** argv)
 		UImanager->ApplyCommand("/run/verbose 2");
 		UImanager->ApplyCommand("/event/verbose 0");
 		UImanager->ApplyCommand("/tracking/verbose 0");
+		UImanager->ApplyCommand("/detector/addLabRoom true");
 		//UImanager->ApplyCommand("/run/initialize");
 		//UImanager->ApplyCommand("/source/type Cs137g");
 		//UImanager->ApplyCommand("/control/execute vis.mac");

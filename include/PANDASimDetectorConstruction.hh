@@ -91,6 +91,8 @@ private:
 	// Option to switch on/off checking of volumes overlaps
 	//
 	G4bool checkOverlaps;
+
+	G4bool addLabRoom;
 	
 	G4int arraySize;
 

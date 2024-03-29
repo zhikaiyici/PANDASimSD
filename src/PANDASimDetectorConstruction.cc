@@ -72,7 +72,7 @@
 PANDASimDetectorConstruction::PANDASimDetectorConstruction()
 	: G4VUserDetectorConstruction(),
 	fScoringVolume(nullptr), fPhotoelectricScoringVolume(nullptr), fGdFilmScoringVolume(nullptr),
-	checkOverlaps(true)
+	checkOverlaps(true), addLabRoom(false)
 {
 	arraySize = 4;// UserDataInput::GetSizeOfArray();
 	dtctrX = 10. * cm;// UserDataInput::GetDectorDimensionX();
@@ -111,13 +111,12 @@ G4VPhysicalVolume* PANDASimDetectorConstruction::Construct()
 	DefineMaterials();
 
 	air = G4Material::GetMaterial("G4_AIR");
-	auto concrete = G4Material::GetMaterial("G4_CONCRETE");
 
-	if (!air || !concrete)
+	if (!air)
 	{
 		G4ExceptionDescription msg;
 		msg << "Cannot retrieve materials already defined.";
-		G4Exception("PANDASimDetectorConstruction::Construct()", "GetMaterial()", FatalException, msg);
+		G4Exception("PANDASimDetectorConstruction::Construct()", "Air", FatalException, msg);
 	}
 
 	// Geometry parameters
@@ -136,36 +135,58 @@ G4VPhysicalVolume* PANDASimDetectorConstruction::Construct()
 	containerY = arraySize * moduleY;
 	containerX = moduleX;
 
-	roofXY = 10. * m;
-	roofZ = 0.25 * m;
-	roomHeight = 4. * m;
+	if (addLabRoom)
+	{
+		auto concrete = G4Material::GetMaterial("G4_CONCRETE");
 
-	G4double wallThickness = 1. * m;
-	G4double roomZ = 2. * (roomHeight + roofZ);
-	G4double roomXY = roofXY + 2. * wallThickness;
+		if (!concrete)
+		{
+			G4ExceptionDescription msg;
+			msg << "Cannot retrieve materials already defined.";
+			G4Exception("PANDASimDetectorConstruction::Construct()", "Concrete", FatalException, msg);
+		}
 
-	worldX = 1.1 * (containerX + roomXY + 100. * m);
-	worldY = 1.1 * (containerY + roomXY + 100. * m);
-	worldZ = 1.1 * (4. * (roofZ + roomHeight));
-	//worldZ = 1.1 * (containerZ + 2. * (roofZ + roomHeight));
+		roofXY = 10. * m;
+		roofZ = 0.25 * m;
+		roomHeight = 4. * m;
 
-	// World
-    //
-	solidWorld = new G4Box("WorldSV", 0.5 * worldX, 0.5 * worldY, 0.5 * worldZ);
-	logicWorld = new G4LogicalVolume(solidWorld, air, "WorldLV");
-	physWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld, "WorldPV", 0, false, 0, checkOverlaps);
+		G4double wallThickness = 1. * m;
+		G4double roomZ = 2. * (roomHeight + roofZ);
+		G4double roomXY = roofXY + 2. * wallThickness;
 
-	auto solidRoof = new G4Box("RoofSV", 0.5 * roofXY, 0.5 * roofXY, 0.5 * roofZ);
-	auto logicRoof = new G4LogicalVolume(solidRoof, concrete, "RoofLV");
-	auto physRoof1 = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.5 * roofZ + roomHeight - containerZ * 0.5), logicRoof, "RoofPV1", logicWorld, false, 0, checkOverlaps);
-	auto physRoof2 = new G4PVPlacement(0, G4ThreeVector(0., 0., 1.5 * roofZ + 2. * roomHeight - containerZ * 0.5), logicRoof, "RoofPV2", logicWorld, false, 0, checkOverlaps);
+		worldX = 1.1 * (containerX + roomXY + 100. * m);
+		worldY = 1.1 * (containerY + roomXY + 100. * m);
+		worldZ = 1.1 * (4. * (roofZ + roomHeight));
 
-	auto solidSolidRoom = new G4Box("SolidRoomSV", 0.5 * roomXY, 0.5 * roomXY, 0.5 * roomZ);
-	auto solidAirRoom = new G4Box("AirRoomSV", 0.5 * roofXY, 0.5 * roofXY, roomZ);
-	auto solidRoom = new G4SubtractionSolid("RoomSV", solidSolidRoom, solidAirRoom);
-	auto logicRoom = new G4LogicalVolume(solidRoom, concrete, "RoomLV");
-	auto physRoom = new G4PVPlacement(0, G4ThreeVector(0., 0., roofZ + roomHeight - 0.5 * containerZ), logicRoom, "RoomPV", logicWorld, false, 0, checkOverlaps);
+		// World
+		//
+		solidWorld = new G4Box("WorldSV", 0.5 * worldX, 0.5 * worldY, 0.5 * worldZ);
+		logicWorld = new G4LogicalVolume(solidWorld, air, "WorldLV");
+		physWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld, "WorldPV", 0, false, 0, checkOverlaps);
 
+		auto solidRoof = new G4Box("RoofSV", 0.5 * roofXY, 0.5 * roofXY, 0.5 * roofZ);
+		auto logicRoof = new G4LogicalVolume(solidRoof, concrete, "RoofLV");
+		auto physRoof1 = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.5 * roofZ + roomHeight - containerZ * 0.5), logicRoof, "RoofPV1", logicWorld, false, 0, checkOverlaps);
+		auto physRoof2 = new G4PVPlacement(0, G4ThreeVector(0., 0., 1.5 * roofZ + 2. * roomHeight - containerZ * 0.5), logicRoof, "RoofPV2", logicWorld, false, 0, checkOverlaps);
+
+		auto solidSolidRoom = new G4Box("SolidRoomSV", 0.5 * roomXY, 0.5 * roomXY, 0.5 * roomZ);
+		auto solidAirRoom = new G4Box("AirRoomSV", 0.5 * roofXY, 0.5 * roofXY, roomZ);
+		auto solidRoom = new G4SubtractionSolid("RoomSV", solidSolidRoom, solidAirRoom);
+		auto logicRoom = new G4LogicalVolume(solidRoom, concrete, "RoomLV");
+		auto physRoom = new G4PVPlacement(0, G4ThreeVector(0., 0., roofZ + roomHeight - 0.5 * containerZ), logicRoom, "RoomPV", logicWorld, false, 0, checkOverlaps);
+	}
+	else
+	{
+		worldX = 1.1 * (containerX + 10. * m);
+		worldY = 1.1 * (containerY + 10. * m);
+		worldZ = 1.1 * containerZ;
+
+		// World
+		//
+		solidWorld = new G4Box("WorldSV", 0.5 * worldX, 0.5 * worldY, 0.5 * worldZ);
+		logicWorld = new G4LogicalVolume(solidWorld, air, "WorldLV");
+		physWorld = new G4PVPlacement(0, G4ThreeVector(), logicWorld, "WorldPV", 0, false, 0, checkOverlaps);
+	}
 
 	DefineDetector(logicWorld);
 
@@ -185,7 +206,8 @@ void PANDASimDetectorConstruction::DefineMaterials()
 	G4Material* glass = nistManager->FindOrBuildMaterial("G4_Pyrex_Glass");
 	G4Material* stainlessSteel = nistManager->FindOrBuildMaterial("G4_STAINLESS-STEEL");
 	G4Material* berylliumForAmBe = nistManager->FindOrBuildMaterial("G4_Be");
-	G4Material* concrete = nistManager->FindOrBuildMaterial("G4_CONCRETE");
+	if (addLabRoom)
+		G4Material* concrete = nistManager->FindOrBuildMaterial("G4_CONCRETE");
 
 	G4Element* elH = nistManager->FindOrBuildElement(1);
 	G4Element* elB = nistManager->FindOrBuildElement(5);
@@ -859,6 +881,10 @@ void PANDASimDetectorConstruction::DefineCommands()
 	//gdFilmCMD.SetDefaultUnit("um"); //thread-unsafe
 	gdFilmCMD.SetDefaultValue("30.");
 	gdFilmCMD.SetRange("gdFilmThickness >= 0");
+
+	auto& addLabRoomCMD = fMessenger->DeclareProperty("addLabRoom", addLabRoom, "Add lab room.");
+	addLabRoomCMD.SetParameterName("addLabRoom", true);
+	addLabRoomCMD.SetDefaultValue("true");
 
 	//auto& updateCMD = fMessenger->DeclareMethod("update", &PANDASimDetectorConstruction::UpdateGeometry, "Update geometry.");
 
