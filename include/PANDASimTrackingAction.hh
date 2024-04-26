@@ -37,6 +37,8 @@ private:
 
 	G4int secondariesNumber;
 
+	G4int arraySize;
+
 	G4bool flagHe8;
 	G4bool flagLi9;
 	G4bool flagNeutron;
@@ -44,6 +46,7 @@ private:
 	G4double parentTime;
 	std::vector<G4double>* secondariesTime;
 
+	G4bool IsVertexInPlasticScintillator(const G4Track* track);
 	G4bool IsInPlasticScintillator(const G4Track* track);
 
 };

@@ -36,6 +36,8 @@
 #include "globals.hh"
 #include "PANDASimAccumulable.hh"
 #include "PANDASimPrimaryGeneratorAction.hh"
+#include "PANDASimAccumulableList.hh"
+#include "PANDASimAccumulableVector.hh"
 
 #include <vector>
 #include <list>
@@ -77,9 +79,12 @@ public:
 	void PushCapTimeH(const G4double& ct);
 	void PushCapTimeGd(const G4double& ct);
 
-	void AddNLi9(std::vector<std::vector<G4int> > nLi9);
-	void AddNHe8(std::vector<std::vector<G4int> > nHe8);
-	void AddNNeutron(std::vector<std::vector<G4int> > nNeutron);
+	void AddNLi9(const std::vector<std::vector<G4int>>& nLi9);
+	void AddNHe8(const std::vector<std::vector<G4int>>& nHe8);
+	void AddNNeutron(const std::vector<std::vector<G4int>>& nNeutron);
+	inline void AddCorrectedNNeutron(const std::vector<std::vector<G4int>>& nNeutron) { *fCorrectedNNeutron += nNeutron; };
+	inline void AddCorrectedNNeutron() { fNNeutron++; };
+	inline void SubtractNNeutron() { fNNeutron += -1; };
 
 	//inline void PushBackEnergyDepositOfEvent(G4double edep) { energyDeposit.push_back(edep); };
 	//inline void AddNeutronCount() { fAbsorbedOpPhoton += 1; }
@@ -96,7 +101,11 @@ private:
 	//G4Accumulable<G4int> fAbsorbedOpPhoton;
 	//G4Accumulable<G4int> fDetectedOpPhoton;
 
-	PANDASimAccumulable* myAccu = nullptr;
+	G4Accumulable<G4int> fNNeutron = 0;
+
+	PANDASimAccumulableVector<std::vector<G4int>>* fCorrectedNNeutron;
+
+	PANDASimAccumulable* myAccu; // = nullptr;
 
 	//PANDASimPrimaryGeneratorAction* generatorAction = nullptr;
 

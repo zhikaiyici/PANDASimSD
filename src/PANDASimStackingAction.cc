@@ -12,14 +12,14 @@
 PANDASimStackingAction::PANDASimStackingAction(PANDASimEventAction* eventAction, PANDASimTrackingAction* trackingAction)
 	: G4UserStackingAction(), 
 	fEventAction(eventAction), fTrackingAction(trackingAction),
-	timeInterval(8. * us)
+	timeInterval(1. * us)
 {
 	// Define detector command directory using generic messenger class
 	fMessenger = new G4GenericMessenger(this, "/time/", "Time interval.");
 
 	auto& timeIntervalCMD = fMessenger->DeclarePropertyWithUnit("timeInterval", "us", timeInterval, "Set time interval between prompt and delayed signals.");
 	timeIntervalCMD.SetParameterName("timeInterval", true);
-	timeIntervalCMD.SetDefaultValue("8.");
+	timeIntervalCMD.SetDefaultValue("1.");
 	timeIntervalCMD.SetRange("timeInterval > 0");
 }
 

@@ -41,6 +41,12 @@
 
    > betaKEHe8, betaKELi9, decayTimeHe8, decayTimeLi9, neutronGT, neutronKE, capTimeH, capTimeGd
 
+3. 物理量单位
+   > Time: `μs`  
+   > Energy deposition: `MeV`  
+   > Kenitic energy: `keV`  
+   > Track length: `mm`
+
 ## 自定义宏命令
 
 ### 1. detector 
@@ -169,4 +175,4 @@
 - `/time/timeInterval`
   - Time interval between parent particle and secondaries, a positive double with unit (`us`,  μs, by default).
   - If time interval between parent particle and secondaries is bigger than this value, they will be treated as two signals.
-  - Default value: `8. us`.
+  - Default value: `1. us`.

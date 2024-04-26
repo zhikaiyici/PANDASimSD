@@ -73,9 +73,12 @@ PANDASimRunAction::PANDASimRunAction()
 	//arraySize = UserDataInput::GetSizeOfArray();
 	arraySize = (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();
 	myAccu = new PANDASimAccumulable(arraySize);
+	fCorrectedNNeutron = new PANDASimAccumulableVector(arraySize, std::vector<G4int>(arraySize, 0));
 
 	G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
 	accumulableManager->RegisterAccumulable(myAccu);
+	accumulableManager->RegisterAccumulable(fNNeutron);
+	accumulableManager->RegisterAccumulable(fCorrectedNNeutron);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,6 +86,7 @@ PANDASimRunAction::PANDASimRunAction()
 PANDASimRunAction::~PANDASimRunAction()
 {
 	delete myAccu;
+	delete fCorrectedNNeutron;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -303,6 +307,13 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		std::vector<std::vector<G4int>> numNeutron = myAccu->GetNNeutron();
 		G4String numNeutronFileName = outDir + "/moduleNumNeutron" + runCondition + ".txt";
 		WriteDataToFile(numNeutronFileName, numNeutron);
+
+		std::vector<std::vector<G4int>> moduleCorrectedNumNeutron = fCorrectedNNeutron->GetValue();
+		G4String moduleCorrectedNumNeutronFileName = outDir + "/moduleCorrectedNumNeutron" + runCondition + ".txt";
+		WriteDataToFile(moduleCorrectedNumNeutronFileName, moduleCorrectedNumNeutron);
+
+		G4int correctedNNeutron = fNNeutron.GetValue();
+		G4cout << G4endl << "Corrected number of neutrons = " << correctedNNeutron << G4endl;
 
 		const PANDASimRun* fPANDASimRun = static_cast<const PANDASimRun*>(run);
 
@@ -618,17 +629,17 @@ void PANDASimRunAction::PushCapTimeGd(const G4double& ct)
 	myAccu->PushCapTimeGd(ct);
 }
 
-void PANDASimRunAction::AddNLi9(std::vector<std::vector<G4int>> nLi9)
+void PANDASimRunAction::AddNLi9(const std::vector<std::vector<G4int>>& nLi9)
 {
 	myAccu->AddNLi9(nLi9);
 }
 
-void PANDASimRunAction::AddNHe8(std::vector<std::vector<G4int>> nHe8)
+void PANDASimRunAction::AddNHe8(const std::vector<std::vector<G4int>>& nHe8)
 {
 	myAccu->AddNHe8(nHe8);
 }
 
-void PANDASimRunAction::AddNNeutron(std::vector<std::vector<G4int>> nNeutron)
+void PANDASimRunAction::AddNNeutron(const std::vector<std::vector<G4int>>& nNeutron)
 {
 	myAccu->AddNNeurtron(nNeutron);
 }

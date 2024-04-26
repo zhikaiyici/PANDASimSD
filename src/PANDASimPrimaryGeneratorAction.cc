@@ -500,7 +500,8 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		{
 			fParticle = fMuonP;
 		}
-		primaryParticleEnergy = (0. * G4UniformRand() + 100.) * GeV; // 4. * GeV;
+		//primaryParticleEnergy = (0. * G4UniformRand() + 100.) * GeV; // 4. * GeV;
+		primaryParticleEnergy = 4. * GeV;
 		fParticleGun->SetParticleDefinition(fParticle);
 		fParticleGun->SetParticleEnergy(primaryParticleEnergy);
 		SamplingForMuon(positionVector, directionVector);

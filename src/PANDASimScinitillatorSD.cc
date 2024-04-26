@@ -303,14 +303,14 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
     
     G4int arraySize = 
         (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();// UserDataInput::GetSizeOfArray();
-    std::vector<std::vector<G4int> > numHe8(arraySize, std::vector<G4int>(arraySize, 0));
-    std::vector<std::vector<G4int> > numLi9(arraySize, std::vector<G4int>(arraySize, 0));
-    std::vector<std::vector<G4int> > numNeutron(arraySize, std::vector<G4int>(arraySize, 0));
+    std::vector<std::vector<G4int>> numHe8(arraySize, std::vector<G4int>(arraySize, 0));
+    std::vector<std::vector<G4int>> numLi9(arraySize, std::vector<G4int>(arraySize, 0));
+    std::vector<std::vector<G4int>> numNeutron(arraySize, std::vector<G4int>(arraySize, 0));
 
-    std::vector<std::vector<G4double> > nGenicT(arraySize, std::vector<G4double>(arraySize, 0.));
-    std::vector<std::vector<G4double> > nKineticE(arraySize, std::vector<G4double>(arraySize, 0.));
+    std::vector<std::vector<G4double>> nGenicT(arraySize, std::vector<G4double>(arraySize, 0.));
+    std::vector<std::vector<G4double>> nKineticE(arraySize, std::vector<G4double>(arraySize, 0.));
 
-    std::vector<std::vector<G4double> > edepDecay(arraySize, std::vector<G4double>(arraySize, 0.));
+    std::vector<std::vector<G4double>> edepDecay(arraySize, std::vector<G4double>(arraySize, 0.));
 
     auto nofHits = fHitsCollection->entries();
     for (G4int i = 0; i < nofHits; i++)
