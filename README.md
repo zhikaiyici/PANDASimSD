@@ -38,7 +38,7 @@ The spectrum format is showing below:
 
 > 0 1 2 ... 14 15 0 1 2 ... 14 15 0 ...
 
-- Files whos names contain `Right` or `Left` are the photo-electron data. The `*Right*.data` is exactly the same with the one `*Left*.data`, in which both right and left PMT data is stored. 
+- Files whos names contain `Right` or `Left` are the photo-electron data. The `*Right*.data` is exactly the same with the `*Left*.data`, in which both right and left PMT data are stored. 
 
   > 0R 0L 1R 1L ... 14R 14L 15R 15L 0R 0L ...
 
