@@ -37,7 +37,7 @@ PANDASimScinitillatorHit::PANDASimScinitillatorHit()
  : G4VHit(),
 	fEdep(0.),fEdepH(0.),fEdepGd(0.), fEdepMu(0.), fEdepDecay(0.),
 	capTimeH(0.), decayTimeMu(0.),
-	neutronGenicTime(0.), neutronKE(0.),
+	neutronGenicTime(0.), neutronKE(0.), neutronTrack(0.),
 	muTrack(0.), muEdep(0.),
 	numHe8(0), numLi9(0), numNeutron(0)
 {
@@ -63,6 +63,7 @@ PANDASimScinitillatorHit::PANDASimScinitillatorHit(const PANDASimScinitillatorHi
 	decayTimeMu = right.decayTimeMu;
 	neutronGenicTime = right.neutronGenicTime;
 	neutronKE = right.neutronKE;
+	neutronTrack = right.neutronTrack;
 
 	muTrack = right.muTrack;
 	muEdep = right.muEdep;
@@ -86,6 +87,7 @@ const PANDASimScinitillatorHit& PANDASimScinitillatorHit::operator=(const PANDAS
 	decayTimeMu = right.decayTimeMu;
 	neutronGenicTime = right.neutronGenicTime;
 	neutronKE = right.neutronKE;
+	neutronTrack = right.neutronTrack;
 
 	muTrack = right.muTrack;
 	muEdep = right.muEdep;

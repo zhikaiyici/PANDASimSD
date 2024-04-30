@@ -8,12 +8,13 @@
 #include "G4OpticalPhoton.hh"
 #include "G4Neutron.hh"
 #include "G4RunManager.hh"
+#include "G4VUserTrackInformation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PANDASimTrackingAction::PANDASimTrackingAction(PANDASimRunAction* runAction)
 	: G4UserTrackingAction(), 
-	flagHe8(false), flagLi9(false), flagNeutron(false),
+	flagHe8(false), flagLi9(false), flagNeutron(false), flagParent(false),
 	parentTime(0.),
 	secondariesNumber(0),
 	fRunAction(runAction)
@@ -34,6 +35,7 @@ void PANDASimTrackingAction::PreUserTrackingAction(const G4Track* track)
 	flagHe8 = false;
 	flagLi9 = false;
 	flagNeutron= false;
+	flagParent= false;
 
 	//G4int parentID = track->GetParentID();
 	//if (parentID == 0) return;
@@ -50,11 +52,6 @@ void PANDASimTrackingAction::PreUserTrackingAction(const G4Track* track)
 	if (track->GetCurrentStepNumber() == 0)
 	{
 		parentTime = track->GetGlobalTime();
-		//if (IsInPlasticScintillator(track))
-		//{
-		//	if (track->GetParticleDefinition() == G4Neutron::Neutron())
-		//		fRunAction->AddNNeutron();
-		//}
 	}
 }
 

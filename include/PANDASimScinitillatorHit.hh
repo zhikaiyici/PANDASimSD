@@ -64,6 +64,7 @@ public:
     void AddMuTrack(G4double tl);
     void AddMuEdep(G4double de);
 
+    inline void AddNeutronTrack(G4double tl) { neutronTrack += tl; }
     inline void AddEdepDecay(G4double de) { fEdepDecay += de; }
 
     inline void SetNeutronGenicTime(G4double t) { neutronGenicTime = t; }
@@ -83,6 +84,7 @@ public:
     G4double GetMuTrack() const; 
     G4double GetMuEdep() const;
 
+    inline G4double GetNeutronTrack() const { return neutronTrack; }
     inline G4double GetEdepDecay() const { return fEdepDecay; }
     inline G4double GetNeutronGenicTime() const { return neutronGenicTime; }
     inline G4double GetNeutronKE() const { return neutronKE; }
@@ -101,6 +103,7 @@ private:
     G4double decayTimeMu;
     G4double neutronGenicTime;
     G4double neutronKE;
+    G4double neutronTrack;
 
     G4double muTrack;
     G4double muEdep; // edep of muon itself
