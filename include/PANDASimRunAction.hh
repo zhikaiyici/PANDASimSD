@@ -73,6 +73,9 @@ public:
 
 	void PushNeutronGenicTime(const std::vector<std::vector<G4double>>& t);
 	void PushNeutronGenicTime(const G4double& t);
+	
+	inline void PushNeutronTrack(const std::vector<std::vector<G4double>>& tl) { fNeutronTrack->PushValue(tl); }
+	
 	void PushNeutronKE(const std::vector<std::vector<G4double>>& ke);
 	void PushNeutronKE(const G4double& ke);
 
@@ -82,9 +85,12 @@ public:
 	void AddNLi9(const std::vector<std::vector<G4int>>& nLi9);
 	void AddNHe8(const std::vector<std::vector<G4int>>& nHe8);
 	void AddNNeutron(const std::vector<std::vector<G4int>>& nNeutron);
-	inline void AddCorrectedNNeutron(const std::vector<std::vector<G4int>>& nNeutron) { *fCorrectedNNeutron += nNeutron; };
+
+	inline void AddCorrectedNNeutron(const std::vector<std::vector<G4int>>& nNeutron) { *fCorrectedNNeutron += nNeutron; }
 	inline void AddCorrectedNNeutron() { fNNeutron++; };
 	inline void SubtractNNeutron() { fNNeutron += -1; };
+	inline void PushMuonKEPrimary(const G4double& ke) { fMuonKE->PushValue(ke); }
+	inline void PushNeutronKEPrimary(const G4double& ke) { fNeutronKE->PushValue(ke); }
 
 	//inline void PushBackEnergyDepositOfEvent(G4double edep) { energyDeposit.push_back(edep); };
 	//inline void AddNeutronCount() { fAbsorbedOpPhoton += 1; }
@@ -102,9 +108,10 @@ private:
 	//G4Accumulable<G4int> fDetectedOpPhoton;
 
 	G4Accumulable<G4int> fNNeutron = 0;
-
 	PANDASimAccumulableVector<std::vector<G4int>>* fCorrectedNNeutron;
-
+	PANDASimAccumulableList<std::vector<std::vector<G4double>>>* fNeutronTrack;
+	PANDASimAccumulableList<G4double>* fMuonKE;
+	PANDASimAccumulableList<G4double>* fNeutronKE;
 	PANDASimAccumulable* myAccu; // = nullptr;
 
 	//PANDASimPrimaryGeneratorAction* generatorAction = nullptr;

@@ -36,7 +36,7 @@ e.g. 4 × 4
 
 #以下数据未按照阵列结构存储(顺序存储)
 
-betaKEHe8, betaKELi9, decayTimeHe8, decayTimeLi9, neutronGT, neutronKE, capTimeH, capTimeGd
+betaKEHe8, betaKELi9, decayTimeHe8, decayTimeLi9, neutronGT, neutronKE, capTimeH, capTimeGd, muonKEPrimary, neutronKEPrimary
 
 #物理量单位
 Time: μs; Energy deposition: MeV; Kenitic energy: keV; Track length: mm
