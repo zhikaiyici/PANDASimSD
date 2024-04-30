@@ -4,51 +4,53 @@
 - **GEANT4: `11.2.1`**
 - **CRY: `1.7`**
 
-##  运行方式
-1. 编译后直接执行可执行文件以UI模式运行，此时将自动加载`init_vis.mac`
-2. 编译后执行可执行文件，并输入`*.mac`文件以批处理模式运行，`*.mac`文件最多为2个，见***自定义宏命令***
+##  Run the Simulation
+1. Execute the biniary file directly after compilement to run in interactive mode. `init_vis.mac` will be loaded automatically in this situation.
+2. Execute the biniary file with input `*.mac` files to run in batch mode. Two `*.mac` files at most, see [**`physics`**](#3-physics) in [***Customized macro commands***](#customized-macro-commands).
 
-### 输入能谱
-`spectra`文件夹用于存放自定义能谱文件，能谱文件格式
+## Spectra
+`spectra` directory is for energy spectra storing. See [**`/source/spectra`**](#2-source) in [***Customized macro commands***](#customized-macro-commands).
+
+- The spectrum format is showing below:
 
 ```
-能量(MeV)  在能谱中的相对强度
+   Energy (MeV) | Relative intensity
 ```
 
-- 示例：能量为0.0253 eV 单能中子
+- e.g. 0.0253 eV monoenergetic particle
 
 ```
    2.53E-08  1
 ```
 
-### 输出结果保存
-`output`文件夹用于存放输出文件
-  - 保存格式：
+## Data Saving
+`output` directory is for data storing.  
+  - Saving format:
 
     e.g. 4 × 4
     
     ![alt text](array.png)
 
-- 二进制(.data)文件保存格式：
+- Binary (.data) files format (double of 8 bytes):
 
   > 0 1 2 ... 14 15 0 1 2 ... 14 15 0 ...
 
-1. 光电子二进制文件中Right和Left文件内容相同，均保存了左右两端的数据：
+1. Files whos names contain `Right` or `Left` are the photo-electron data. The `*Right*.data` is exactly the same with the one `*Left*.data`, in which both right and left PMT data is stored. 
 
    > 0R 0L 1R 1L ... 14R 14L 15R 15L 0R 0L ...
 
-2. 以下数据未按照阵列结构存储(顺序存储)
+2. The data shown below are not stored in form of the detector array.
 
    > betaKEHe8, betaKELi9, decayTimeHe8, decayTimeLi9, neutronGT, neutronKE, capTimeH, capTimeGd, muonKEPrimary, neutronKEPrimary
 
-3. 物理量单位
+- Unit
    > Time: `μs`  
    > Energy deposition: `MeV`  
    > Kenitic energy: `keV`  
    > Primary kenitic energy: `GeV`
    > Track length: `mm`
 
-## 自定义宏命令
+## Customized macro commands
 
 ### 1. detector 
 
