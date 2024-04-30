@@ -65,9 +65,6 @@ public:
     void AddMuEdep(G4double de);
 
     inline void AddNeutronTrack(G4double tl) { neutronTrack += tl; }
-
-    inline void AddNeutronTrack(G4double tl) { neutronTrack += tl; }
-
     inline void AddEdepDecay(G4double de) { fEdepDecay += de; }
 
     inline void SetNeutronGenicTime(G4double t) { neutronGenicTime = t; }
