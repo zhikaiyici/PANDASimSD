@@ -76,6 +76,9 @@ public:
 	
 	inline void PushNeutronTrack(const std::vector<std::vector<G4double>>& tl) { fNeutronTrack->PushValue(tl); }
 	
+	
+	inilne void PushNeutronTrack(const std::vector<std::vector<G4double>>& tl) { fNeutronTrack->PushValue(tl); }
+	
 	void PushNeutronKE(const std::vector<std::vector<G4double>>& ke);
 	void PushNeutronKE(const G4double& ke);
 

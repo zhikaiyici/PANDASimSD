@@ -66,6 +66,8 @@ public:
 
     inline void AddNeutronTrack(G4double tl) { neutronTrack += tl; }
 
+    inline void AddNeutronTrack(G4double tl) { neutronTrack += tl; }
+
     inline void AddEdepDecay(G4double de) { fEdepDecay += de; }
 
     inline void SetNeutronGenicTime(G4double t) { neutronGenicTime = t; }
@@ -85,7 +87,6 @@ public:
     G4double GetMuTrack() const; 
     G4double GetMuEdep() const;
 
-    inline G4double GetNeutronTrack() const { return neutronTrack; }
     inline G4double GetEdepDecay() const { return fEdepDecay; }
     inline G4double GetNeutronGenicTime() const { return neutronGenicTime; }
     inline G4double GetNeutronKE() const { return neutronKE; }
