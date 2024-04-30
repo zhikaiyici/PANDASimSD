@@ -74,11 +74,17 @@ PANDASimRunAction::PANDASimRunAction()
 	arraySize = (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();
 	myAccu = new PANDASimAccumulable(arraySize);
 	fCorrectedNNeutron = new PANDASimAccumulableVector(arraySize, std::vector<G4int>(arraySize, 0));
+	fMuonKE = new PANDASimAccumulableList<G4double>;
+	fNeutronKE = new PANDASimAccumulableList<G4double>;
+	fNeutronTrack = new PANDASimAccumulableList<std::vector<std::vector<G4double>>>;
 
 	G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
 	accumulableManager->RegisterAccumulable(myAccu);
 	accumulableManager->RegisterAccumulable(fNNeutron);
 	accumulableManager->RegisterAccumulable(fCorrectedNNeutron);
+	accumulableManager->RegisterAccumulable(fMuonKE);
+	accumulableManager->RegisterAccumulable(fNeutronKE);
+	accumulableManager->RegisterAccumulable(fNeutronTrack);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,6 +93,9 @@ PANDASimRunAction::~PANDASimRunAction()
 {
 	delete myAccu;
 	delete fCorrectedNNeutron;
+	delete fMuonKE;
+	delete fNeutronKE;
+	delete fNeutronTrack;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -204,7 +213,6 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 		}
 		myAccu->SetRunCondition(runCondition);
 	}
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -234,6 +242,16 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 			mkdir(outDir, S_IRWXU);
 #endif
 		}
+
+		auto muonKEPrimary = fMuonKE->GetValue();
+		G4String muonKEPrimaryFileName = outDir + "/muonKEPrimary" + runCondition + ".data";
+		WriteDataToFile(muonKEPrimaryFileName, muonKEPrimary);
+		muonKEPrimary.clear();
+
+		auto neutronKEPrimary = fNeutronKE->GetValue();
+		G4String neutronKEPrimaryFileName = outDir + "/neutronKEPrimary" + runCondition + ".data";
+		WriteDataToFile(neutronKEPrimaryFileName, neutronKEPrimary);
+		neutronKEPrimary.clear();
 
 		std::list<G4double> betaKEHe8 = myAccu->GetBetaKEHe8();
 		G4String betaKEHe8FileName = outDir + "/betaKEHe8" + runCondition + ".data";
@@ -285,6 +303,11 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		WriteDataToFile(neutronKineticEnergyFileName, neutronKineticEnergy);
 		neutronKineticEnergy.clear();
 
+		std::list<std::vector<std::vector<G4double>>> neutronTrack = fNeutronTrack->GetValue();
+		G4String neutronTrackFileName = outDir + "/moduleNeutronTrack" + runCondition + ".data";
+		WriteDataToFile(neutronTrackFileName, neutronTrack);
+		neutronTrack.clear();
+
 		std::list<std::vector<std::vector<G4double>>> edepDecay = myAccu->GetEdepDecay();
 		G4String edepDecayFileName = outDir + "/moduleEdepDecay" + runCondition + ".data";
 		WriteDataToFile(edepDecayFileName, edepDecay);
@@ -308,9 +331,9 @@ void PANDASimRunAction::EndOfRunAction(const G4Run* run)
 		G4String numNeutronFileName = outDir + "/moduleNumNeutron" + runCondition + ".txt";
 		WriteDataToFile(numNeutronFileName, numNeutron);
 
-		std::vector<std::vector<G4int>> moduleCorrectedNumNeutron = fCorrectedNNeutron->GetValue();
-		G4String moduleCorrectedNumNeutronFileName = outDir + "/moduleCorrectedNumNeutron" + runCondition + ".txt";
-		WriteDataToFile(moduleCorrectedNumNeutronFileName, moduleCorrectedNumNeutron);
+		std::vector<std::vector<G4int>> moduleNumNeutronCorrected = fCorrectedNNeutron->GetValue();
+		G4String moduleNumNeutronCorrectedFileName = outDir + "/moduleNumNeutronCorrected" + runCondition + ".txt";
+		WriteDataToFile(moduleNumNeutronCorrectedFileName, moduleNumNeutronCorrected);
 
 		G4int correctedNNeutron = fNNeutron.GetValue();
 		G4cout << G4endl << "Corrected number of neutrons = " << correctedNNeutron << G4endl;

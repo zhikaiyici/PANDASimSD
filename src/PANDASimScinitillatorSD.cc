@@ -182,7 +182,18 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
                 //G4cout << "Neutron kinetic energy (SD::Hits): " << energy << G4endl;
             }
         }
-
+        if (parentID == 0)
+        {
+            G4double trackLength = step->GetStepLength() / mm;
+            //G4cout << "trackLength:" << trackLength / mm << G4endl;
+            hit->AddNeutronTrack(trackLength);
+            if (!fTrackingAction->GetFlagParent())
+            {
+                G4double neutronKE = theTrack->GetKineticEnergy() / GeV;
+                fRunAction->PushNeutronKEPrimary(neutronKE);
+                fTrackingAction->SetFlagParent(true);
+            }
+        }
         if (processName == "nCapture")
         {
             //const G4double capTimeH1 = stepPoint->GetGlobalTime() / us;
@@ -205,11 +216,20 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
             hit->SetTimeMu(muDecayTime);
             fEventAction->SetDecayFlagMu(true);
         }
-        G4double trackLength = step->GetStepLength() / mm;
-        //G4cout << "trackLength:" << trackLength / mm << G4endl;
-        hit->AddMuTrack(trackLength);
-        G4double muEdep = step->GetTotalEnergyDeposit();
-        hit->AddMuEdep(muEdep);
+        if (parentID == 0)
+        {
+            G4double trackLength = step->GetStepLength() / mm;
+            //G4cout << "trackLength:" << trackLength / mm << G4endl;
+            hit->AddMuTrack(trackLength);
+            G4double muEdep = step->GetTotalEnergyDeposit();
+            hit->AddMuEdep(muEdep);
+            if (!fTrackingAction->GetFlagParent())
+            {
+                G4double muonKE = theTrack->GetKineticEnergy() / GeV;
+                fRunAction->PushMuonKEPrimary(muonKE);
+                fTrackingAction->SetFlagParent(true);
+            }
+        }
     }
 
     G4bool fLi9 = fTrackingAction->GetFlagLi9();
@@ -232,6 +252,26 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
             fTrackingAction->SetFlagLi9(true);
             //G4cout << "muon Li9" << G4endl;
             //getchar();
+            //G4cout
+            //    << " ParentID: " << parentID << " TrackID: " << theTrack->GetTrackID()
+            //    << " Step: " << theTrack->GetCurrentStepNumber() << " Particle: " << theTrack->GetParticleDefinition()->GetParticleName()
+            //    << " Volume: " << theTrack->GetVolume()->GetName() << " Process: " << theTrack->GetCreatorProcess()->GetProcessName()
+            //    << G4endl;
+            //auto currentEvent = G4EventManager::GetEventManager()->GetConstCurrentEvent();
+            //G4TrajectoryContainer* trajectoryContainer = currentEvent->GetTrajectoryContainer();
+            //if (trajectoryContainer)
+            //{
+            //    // 遍历轨迹容器，查找与特定母粒子track ID 相关的轨迹
+            //    for (size_t i = 0; i < trajectoryContainer->size(); i++) {
+            //        G4VTrajectory* trajectory = (*trajectoryContainer)[i];
+            //        if (trajectory->GetTrackID() == parentID)
+            //        {
+            //            //auto parentTime = trajectory->GetPoint(0)->get
+            //            G4String particleNameP = trajectory->GetParticleName();
+            //            G4cout << " Mother particle with ID " << parentID << " is a " << particleNameP << G4endl;
+            //        }
+            //    }
+            //}
         }
     }
 
@@ -306,6 +346,7 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
     std::vector<std::vector<G4int>> numHe8(arraySize, std::vector<G4int>(arraySize, 0));
     std::vector<std::vector<G4int>> numLi9(arraySize, std::vector<G4int>(arraySize, 0));
     std::vector<std::vector<G4int>> numNeutron(arraySize, std::vector<G4int>(arraySize, 0));
+    std::vector<std::vector<G4double>> neutronTrack(arraySize, std::vector<G4double>(arraySize, 0));
 
     std::vector<std::vector<G4double>> nGenicT(arraySize, std::vector<G4double>(arraySize, 0.));
     std::vector<std::vector<G4double>> nKineticE(arraySize, std::vector<G4double>(arraySize, 0.));
@@ -327,6 +368,9 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
 
         G4int nNeutron = hit->GetNNeutron();
         numNeutron[moduleRepliaNumber][moduleRowReplicaNumber] = nNeutron;
+
+        G4double neutronTrajectory = hit->GetNeutronTrack();
+        neutronTrack[moduleRepliaNumber][moduleRowReplicaNumber] = neutronTrajectory;
 
         G4double nGT = hit->GetNeutronGenicTime();
         nGenicT[moduleRepliaNumber][moduleRowReplicaNumber] = nGT;
@@ -353,6 +397,8 @@ void PANDASimScinitillatorSD::EndOfEvent(G4HCofThisEvent*)
         fRunAction->PushNeutronKE(nKineticE);
     if (edepDecay != empty2DVecDoub)
         fRunAction->PushEdepDecay(edepDecay);
+    if (neutronTrack != empty2DVecDoub)
+        fRunAction->PushNeutronTrack(neutronTrack);
 
     //G4cout << "-----------------------EndOfEventFromScintillatorSD------------------------------" << G4endl << G4endl;
 }
