@@ -79,7 +79,7 @@ G4bool PANDASimGdFilmSD::ProcessHits(G4Step* step, G4TouchableHistory* history)
 		fRunAction = const_cast<PANDASimRunAction*>(static_cast<const PANDASimRunAction*>(G4RunManager::GetRunManager()->GetUserRunAction()));
 	}
 
-	// ÅĞ¶ÏÊÇ·ñÎªÖĞ×Ó
+	// åˆ¤æ–­æ˜¯å¦ä¸ºä¸­å­
 	if (strPrtclName == "neutron")
 	{
 		auto generatorAction = static_cast<const PANDASimPrimaryGeneratorAction*>(G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
