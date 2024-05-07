@@ -139,15 +139,14 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction(const char* input
 
 	//neutrinoPercentage = UserDataInput::GetNeutrinoPercentage();
 
-	std::vector<G4double> nEnergy = { 0.0253 * eV };// UserDataInput::GetNeutronEnergy();
-	std::vector<G4double> nCDFSpectrum = { 1 };// UserDataInput::GetNeutronCDFSpectrum();
-	std::vector<G4double> pEnergy = { 5. * MeV };// UserDataInput::GetPositronEnergy();
-	std::vector<G4double> pCDFSpectrum = { 1 };// UserDataInput::GetPositronCDFSpectrum();
-
-	neutronEnergy = &nEnergy; // UserDataInput::GetNeutronEnergy();
-	neutronCDFSpectrum = &nCDFSpectrum; // UserDataInput::GetNeutronCDFSpectrum();
-	positronEnergy = &pEnergy; // UserDataInput::GetPositronEnergy();
-	positronCDFSpectrum = &pCDFSpectrum; // UserDataInput::GetPositronCDFSpectrum();
+	neutronEnergy = new std::vector<G4double>; // UserDataInput::GetNeutronEnergy();
+	neutronEnergy->push_back(0.0253 * eV);
+	neutronCDFSpectrum = new std::vector<G4double>; // UserDataInput::GetNeutronCDFSpectrum();
+	neutronCDFSpectrum->push_back(1);
+	positronEnergy = new std::vector<G4double>; // UserDataInput::GetPositronEnergy();
+	positronEnergy->push_back(5. * MeV);
+	positronCDFSpectrum = new std::vector<G4double>; // UserDataInput::GetPositronCDFSpectrum();
+	positronCDFSpectrum->push_back(1);
 
 	splineForNeutron = nullptr; // new SplineSpace::Spline(&neutronCDFSpectrum[0], &neutronEnergy[0], neutronEnergy.size());
 	splineForPositron = nullptr; // new SplineSpace::Spline(&positronCDFSpectrum[0], &positronEnergy[0], positronEnergy.size());
@@ -216,6 +215,16 @@ PANDASimPrimaryGeneratorAction::~PANDASimPrimaryGeneratorAction()
 	delete fGPS;
 	// delete fParticleGunP;
 
+	delete neutronEnergy;
+	delete neutronCDFSpectrum;
+	delete positronEnergy;
+	delete positronCDFSpectrum;
+
+	if (splineForNeutron)
+		delete splineForNeutron;
+	if (splineForPositron)
+		delete splineForPositron;
+
 #ifdef __linux__
 	delete gunMessenger;
 	vect->clear();
@@ -225,10 +234,6 @@ PANDASimPrimaryGeneratorAction::~PANDASimPrimaryGeneratorAction()
 		delete gen;
 #endif
 	delete sourceMessenger;
-	if (splineForNeutron)
-		delete splineForNeutron;
-	if (splineForPositron)
-		delete splineForPositron;
 }
 
 #ifdef __linux__
