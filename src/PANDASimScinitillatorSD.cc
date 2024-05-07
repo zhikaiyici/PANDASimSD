@@ -184,14 +184,22 @@ G4bool PANDASimScinitillatorSD::ProcessHits(G4Step* step, G4TouchableHistory* hi
         }
         if (parentID == 0)
         {
-            G4double trackLength = step->GetStepLength() / mm;
-            //G4cout << "trackLength:" << trackLength / mm << G4endl;
-            hit->AddNeutronTrack(trackLength);
-            if (!fTrackingAction->GetFlagParent())
+            auto generatorAction = static_cast<const PANDASimPrimaryGeneratorAction*>(G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
+            if (theTrack->GetKineticEnergy() / MeV < 2.5 * MeV && generatorAction->GetSourceType() == "CRY")
             {
-                G4double neutronKE = theTrack->GetKineticEnergy() / GeV;
-                fRunAction->PushNeutronKEPrimary(neutronKE);
-                fTrackingAction->SetFlagParent(true);
+                theTrack->SetTrackStatus(fStopAndKill);
+            }
+            else
+            {
+                G4double trackLength = step->GetStepLength() / mm;
+                //G4cout << "trackLength:" << trackLength / mm << G4endl;
+                hit->AddNeutronTrack(trackLength);
+                if (!fTrackingAction->GetFlagParent())
+                {
+                    G4double neutronKE = theTrack->GetKineticEnergy() / GeV;
+                    fRunAction->PushNeutronKEPrimary(neutronKE);
+                    fTrackingAction->SetFlagParent(true);
+                }
             }
         }
         if (processName == "nCapture")

@@ -130,7 +130,7 @@ The spectrum format is showing below:
    - Spectra of neutron and positron, two strings at most. See spectra directory.  
      First one should be spectrum of neutron.  
      Second one, if there is, should be spectrum of positron.
-   - Command is valid only for `NEUTRINO` and `COSMICNEUTRON`.
+   - Command is valid only for `NEUTRINO`, `Am-Be-n` and `COSMICNEUTRON`.
    - Default value: `IBDNeutron.spec IBDPositron.spec`.
 
 3. `/source/position`

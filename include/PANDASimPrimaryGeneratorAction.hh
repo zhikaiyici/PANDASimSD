@@ -34,6 +34,8 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "PANDASimPrimaryGeneratorMessenger.hh"
 
+#include "Spline.hh"
+
 #include "G4ParticleGun.hh"
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
@@ -85,10 +87,13 @@ public:
 	inline void SetNeutrinoPosition(std::array<G4int, 2> np) { neutrinoPosition = np; }
 	inline const std::array<G4int, 2> GetNeutrinoPosition() const { return neutrinoPosition; }
 
-	inline void SetNeutronEnergy(std::vector<G4double> energy) { neutronEnergy = energy; }
-	inline void SetNeutronCDF(std::vector<G4double> cdf) { neutronCDFSpectrum = cdf; }
-	inline void SetPositronEnergy(std::vector<G4double> energy) { positronEnergy = energy; }
-	inline void SetPositronCDF(std::vector<G4double> cdf) { positronCDFSpectrum = cdf; }
+	inline void SetNeutronEnergy(std::vector<G4double>* energy) { neutronEnergy = energy; }
+	inline void SetNeutronCDF(std::vector<G4double>* cdf) { neutronCDFSpectrum = cdf; }
+	inline void SetPositronEnergy(std::vector<G4double>* energy) { positronEnergy = energy; }
+	inline void SetPositronCDF(std::vector<G4double>* cdf) { positronCDFSpectrum = cdf; }
+
+	inline void SetSplineForNeutron(SplineSpace::SplineInterface* sp) { splineForNeutron = sp; }
+	inline void SetSplineForPositron(SplineSpace::SplineInterface* sp) { splineForPositron = sp; }
 
 	void InputCRY();
     void UpdateCRY(std::string* MessInput);
@@ -121,18 +126,23 @@ private:
 	G4double worldZHalfLength;
 
 	G4double distanceBetweenModules;
+
+	//G4double neutrinoPercentage;// = UserDataInput::GetNeutrinoPercentage();
+
 	G4int arraySize;
 
 	G4String sourceType;
 	G4String sourcePosition;
+
 	std::array<G4int, 2> neutrinoPosition;
 
-	//G4double neutrinoPercentage;// = UserDataInput::GetNeutrinoPercentage();
+	SplineSpace::SplineInterface* splineForNeutron;
+	SplineSpace::SplineInterface* splineForPositron;
 
-	std::vector<G4double> neutronEnergy;// = userData.GetNeutronEnergy();
-	std::vector<G4double> neutronCDFSpectrum;// = userData.GetNeutronCDFSpectrum();
-	std::vector<G4double> positronEnergy;// = userData.GetPositronEnergy();
-	std::vector<G4double> positronCDFSpectrum;// = userData.GetPositronCDFSpectrum();
+	std::vector<G4double>* neutronEnergy;// = userData.GetNeutronEnergy();
+	std::vector<G4double>* neutronCDFSpectrum;// = userData.GetNeutronCDFSpectrum();
+	std::vector<G4double>* positronEnergy;// = userData.GetPositronEnergy();
+	std::vector<G4double>* positronCDFSpectrum;// = userData.GetPositronCDFSpectrum();
 
 	std::vector<std::array<G4double, 2> > referencePoints;
 
@@ -143,7 +153,9 @@ private:
 	void SamplingForMuon(G4ThreeVector& positionVector, G4ThreeVector& directionVector); //位置和方向抽样函数
 	void SamplingForIBD(G4ThreeVector& positionVector, G4ThreeVector& directionVector); //位置和方向抽样函数
 	void PositionSampling(G4ThreeVector& positionVector); //位置抽样函数
-	G4double EnergySampling(std::vector<G4double> energy, std::vector<G4double> cdfSpectrum); //能量抽样函数
+	G4double EnergySampling(std::vector<G4double>* energy, std::vector<G4double>* cdfSpectrum); //能量抽样函数
+
+	//SplineSpace::SplineInterface* CreatSpectrumSpline(std::vector<G4double> cdfSpectrum, std::vector<G4double> energy);
 
 #ifdef __linux__
 	G4String CRYDataPath;

@@ -79,6 +79,7 @@ set(PANDASim_SCRIPTS
   neutrino.mac
   He8Li9.mac
   nCap.mac
+  cosmicNeutron2.5MeV.mac
   detector.mac
   physics.mac
   README.md

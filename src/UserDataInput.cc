@@ -25,14 +25,10 @@ G4double UserDataInput::neutrinoPercentage = 1.;
 G4String UserDataInput::sourceType = "NEUTRINO";
 G4String UserDataInput::sourcePosition = "CENTER";
 
-//std::vector<G4double> UserDataInput::positronEnergy = *(new std::vector<G4double>); //粒子能量MeV
-//std::vector<G4double> UserDataInput::positronCDFSpectrum = *(new std::vector<G4double>); //归一化能谱
-//std::vector<G4double> UserDataInput::neutronEnergy = *(new std::vector<G4double>); //粒子能量MeV
-//std::vector<G4double> UserDataInput::neutronCDFSpectrum = *(new std::vector<G4double>); //归一化能谱
-std::vector<G4double> UserDataInput::positronEnergy(0);// = std::vector<G4double>(0); //粒子能量MeV
-std::vector<G4double> UserDataInput::positronCDFSpectrum(0);// = std::vector<G4double>(0); //归一化能谱
-std::vector<G4double> UserDataInput::neutronEnergy(0);// = std::vector<G4double>(0); //粒子能量MeV
-std::vector<G4double> UserDataInput::neutronCDFSpectrum(0);// = std::vector<G4double>(0); //归一化能谱
+std::vector<G4double>* UserDataInput::positronEnergy = new std::vector<G4double>; //粒子能量MeV
+std::vector<G4double>* UserDataInput::positronCDFSpectrum = new std::vector<G4double>; //归一化能谱
+std::vector<G4double>* UserDataInput::neutronEnergy = new std::vector<G4double>; //粒子能量MeV
+std::vector<G4double>* UserDataInput::neutronCDFSpectrum = new std::vector<G4double>; //归一化能谱
 
 std::array<G4int, 2> UserDataInput::neutrinoPosition = { arraySize * arraySize, 5 };
 
@@ -161,7 +157,7 @@ void UserDataInput::ReadInputData()
 	}
 }
 
-void UserDataInput::ReadSpectra(G4String spectrumName, std::vector<G4double>& energy, std::vector<G4double>& cdfSpectrum)
+void UserDataInput::ReadSpectra(G4String spectrumName, std::vector<G4double>* energy, std::vector<G4double>* cdfSpectrum)
 {
 	std::ifstream spcFile;
 	spectrumName = "spectra/" + spectrumName;
@@ -182,8 +178,8 @@ void UserDataInput::ReadSpectra(G4String spectrumName, std::vector<G4double>& en
 		while (spcFile >> temp)
 		{
 			if (i == 0)
-				energy.push_back(temp * 0.9999);
-			energy.push_back(temp);
+				energy->push_back(temp * 0.9999999999);
+			energy->push_back(temp);
 			spcFile >> temp;
 			spectrum.push_back(temp);
 			i++;
@@ -191,13 +187,13 @@ void UserDataInput::ReadSpectra(G4String spectrumName, std::vector<G4double>& en
 		spcFile.close();
 
 		//归一化能谱
-		for (i = 0; i < energy.size(); ++i)
+		for (i = 0; i < energy->size(); ++i)
 			sum += spectrum[i]; //求能谱总和
 		std::vector<G4double> normSpectrum;
-		for (i = 0; i < energy.size(); ++i)
+		for (i = 0; i < energy->size(); ++i)
 			normSpectrum.push_back(spectrum[i] / sum);  //归一化谱数据 
-		cdfSpectrum.push_back(normSpectrum[0]);
-		for (i = 1; i < energy.size(); ++i)
-			cdfSpectrum.push_back(normSpectrum[i] + cdfSpectrum[i - 1]);
+		cdfSpectrum->push_back(normSpectrum[0]);
+		for (i = 1; i < energy->size(); ++i)
+			cdfSpectrum->push_back(normSpectrum[i] + cdfSpectrum->at(i-1));
 	}
 }

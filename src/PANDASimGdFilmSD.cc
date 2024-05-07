@@ -82,28 +82,36 @@ G4bool PANDASimGdFilmSD::ProcessHits(G4Step* step, G4TouchableHistory* history)
 	// 判断是否为中子
 	if (strPrtclName == "neutron")
 	{
-		//G4cout << "particle name : " << strPrtclName << G4endl;
-		//G4cout << "particle created process : " << theTrack->GetCreatorProcess()->GetProcessName() << G4endl;
-		//G4cout << "track id: " << theTrack->GetTrackID() << G4endl;
-		//G4cout << "parent id: " << theTrack->GetParentID() << G4endl;
-		//G4cout << "gd here" << G4endl;
-		//getchar();
-		const G4StepPoint* postStepPoint = step->GetPostStepPoint();
-		auto processDefinedStep = postStepPoint->GetProcessDefinedStep();
-		G4String processName = "";
-		if (processDefinedStep)
-			processName = processDefinedStep->GetProcessName();
-		//const G4String processName_ = preStepPoint->GetProcessDefinedStep()->GetProcessName();
-		//G4cout << "processName: " << processName << G4endl;
-		if (processName == "nCapture")
+		auto generatorAction = static_cast<const PANDASimPrimaryGeneratorAction*>(G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
+		if (generatorAction->GetSourceType() == "CRY" && theTrack->GetParentID() == 0 && theTrack->GetKineticEnergy() / MeV < 2.5 * MeV)
 		{
-			//const G4double capTimeGd1 = postStepPoint->GetGlobalTime() / us;
-			const G4double capTimeGd = postStepPoint->GetLocalTime() / us;
-			hit->TimeGd(capTimeGd);
-			fEventAction->SetDelayFlagGd(true);
-			fRunAction->PushCapTimeGd(capTimeGd);
-			//G4cout << "global capTimeGd1: " << capTimeGd1 << G4endl;
-			//G4cout << "local capTimeGd: " << capTimeGd << G4endl;
+			theTrack->SetTrackStatus(fStopAndKill);
+		}
+		else
+		{
+			//G4cout << "particle name : " << strPrtclName << G4endl;
+			//G4cout << "particle created process : " << theTrack->GetCreatorProcess()->GetProcessName() << G4endl;
+			//G4cout << "track id: " << theTrack->GetTrackID() << G4endl;
+			//G4cout << "parent id: " << theTrack->GetParentID() << G4endl;
+			//G4cout << "gd here" << G4endl;
+			//getchar();
+			const G4StepPoint* postStepPoint = step->GetPostStepPoint();
+			auto processDefinedStep = postStepPoint->GetProcessDefinedStep();
+			G4String processName = "";
+			if (processDefinedStep)
+				processName = processDefinedStep->GetProcessName();
+			//const G4String processName_ = preStepPoint->GetProcessDefinedStep()->GetProcessName();
+			//G4cout << "processName: " << processName << G4endl;
+			if (processName == "nCapture")
+			{
+				//const G4double capTimeGd1 = postStepPoint->GetGlobalTime() / us;
+				const G4double capTimeGd = postStepPoint->GetLocalTime() / us;
+				hit->TimeGd(capTimeGd);
+				fEventAction->SetDelayFlagGd(true);
+				fRunAction->PushCapTimeGd(capTimeGd);
+				//G4cout << "global capTimeGd1: " << capTimeGd1 << G4endl;
+				//G4cout << "local capTimeGd: " << capTimeGd << G4endl;
+			}
 		}
 	}
 	return true;

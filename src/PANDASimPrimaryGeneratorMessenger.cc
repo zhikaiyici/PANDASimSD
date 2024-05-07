@@ -136,22 +136,26 @@ void PANDASimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4Stri
 	{
 		std::istringstream is(newValue);
 		G4String name = "";
-		std::vector<std::vector<G4double>> energys(0);
-		std::vector<std::vector<G4double>> cdfSpectrums(0);
+		std::vector<std::vector<G4double>*> energys(0);
+		std::vector<std::vector<G4double>*> cdfSpectrums(0);
 		while (is >> name)
 		{
-			std::vector<G4double> energy(0);
-			std::vector<G4double> cdfSpectrum(0);
+			std::vector<G4double>* energy = new std::vector<G4double>;
+			std::vector<G4double>* cdfSpectrum = new std::vector<G4double>;
 			UserDataInput::ReadSpectra(name, energy, cdfSpectrum);
 			energys.push_back(energy);
 			cdfSpectrums.push_back(cdfSpectrum);
 		}
 		generaAction->SetNeutronEnergy(energys[0]);
 		generaAction->SetNeutronCDF(cdfSpectrums[0]);
+		if (energys[0]->size() > 2)
+			generaAction->SetSplineForNeutron(new SplineSpace::Spline(cdfSpectrums[0]->data(), energys[0]->data(), energys[0]->size()));
 		if (energys.size() > 1)
 		{
 			generaAction->SetPositronEnergy(energys[1]);
 			generaAction->SetPositronCDF(cdfSpectrums[1]);
+			if (energys[1]->size() > 2)
+				generaAction->SetSplineForPositron(new SplineSpace::Spline(cdfSpectrums[1]->data(), energys[1]->data(), energys[1]->size()));
 		}
 	}
 }

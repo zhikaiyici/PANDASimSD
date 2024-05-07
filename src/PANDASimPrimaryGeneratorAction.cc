@@ -138,10 +138,19 @@ PANDASimPrimaryGeneratorAction::PANDASimPrimaryGeneratorAction(const char* input
 	//distanceBetweenModules = UserDataInput::GetDistanceBetweenModules();
 
 	//neutrinoPercentage = UserDataInput::GetNeutrinoPercentage();
-	neutronEnergy = { 0.0253 * eV };// UserDataInput::GetNeutronEnergy();
-	neutronCDFSpectrum = { 1 };// UserDataInput::GetNeutronCDFSpectrum();
-	positronEnergy = { 5. * MeV };// UserDataInput::GetPositronEnergy();
-	positronCDFSpectrum = { 1 };// UserDataInput::GetPositronCDFSpectrum();
+
+	std::vector<G4double> nEnergy = { 0.0253 * eV };// UserDataInput::GetNeutronEnergy();
+	std::vector<G4double> nCDFSpectrum = { 1 };// UserDataInput::GetNeutronCDFSpectrum();
+	std::vector<G4double> pEnergy = { 5. * MeV };// UserDataInput::GetPositronEnergy();
+	std::vector<G4double> pCDFSpectrum = { 1 };// UserDataInput::GetPositronCDFSpectrum();
+
+	neutronEnergy = &nEnergy; // UserDataInput::GetNeutronEnergy();
+	neutronCDFSpectrum = &nCDFSpectrum; // UserDataInput::GetNeutronCDFSpectrum();
+	positronEnergy = &pEnergy; // UserDataInput::GetPositronEnergy();
+	positronCDFSpectrum = &pCDFSpectrum; // UserDataInput::GetPositronCDFSpectrum();
+
+	splineForNeutron = nullptr; // new SplineSpace::Spline(&neutronCDFSpectrum[0], &neutronEnergy[0], neutronEnergy.size());
+	splineForPositron = nullptr; // new SplineSpace::Spline(&positronCDFSpectrum[0], &positronEnergy[0], positronEnergy.size());
 
 #ifdef __linux__
 	// char* CRYHome = getenv("CRYHOME");
@@ -215,8 +224,11 @@ PANDASimPrimaryGeneratorAction::~PANDASimPrimaryGeneratorAction()
 		//gen = nullptr;
 		delete gen;
 #endif
-
 	delete sourceMessenger;
+	if (splineForNeutron)
+		delete splineForNeutron;
+	if (splineForPositron)
+		delete splineForPositron;
 }
 
 #ifdef __linux__
@@ -556,41 +568,53 @@ void PANDASimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	runID = thisID;
 }
 
-G4double PANDASimPrimaryGeneratorAction::EnergySampling(std::vector<G4double> energy, std::vector<G4double> cdfSpectrum)
+G4double PANDASimPrimaryGeneratorAction::EnergySampling(std::vector<G4double>* energy, std::vector<G4double>* cdfSpectrum)
 {
 	G4double random = G4UniformRand();
 	G4int i = 0;
-	while (random > cdfSpectrum[i])
+
+	if (energy->size() < 3)
 	{
-		++i;
-	}
-	return energy[i] * MeV;
-	/*while (random < cdfSpectrum[0] || random > *(cdfSpectrum.end() - 1))
-	{
-		random = G4UniformRand();
-		i++;
-		if (i > 1e6)
+		while (random > cdfSpectrum->at(i))
 		{
-			G4ExceptionDescription msg;
-			msg << "Cannot sample primaryParticleEnergy. 1e6 times samplings have been tried." << G4endl;
-			msg << "Break the while loop now.";
-			G4Exception("PANDASimPrimaryGeneratorAction::EnergySampling()",
-				"while (random < cdfSpectrum[0] || random > *(cdfSpectrum.end() - 1))", JustWarning, msg);
-			break;
+			++i;
 		}
+		return energy->at(i) * MeV;
 	}
-	try
+	else
 	{
-		SplineSpace::SplineInterface* sp = new SplineSpace::Spline(&cdfSpectrum[0], &energy[0], energy.size());
-		sp->SinglePointInterp(random, primaryParticleEnergy);
-		//G4cout << "random =: " << primaryParticleEnergy << G4endl;
+		G4double primaryParticleEnergy = energy->at(0);
+		while (random < cdfSpectrum->at(0) || random > *(cdfSpectrum->end() - 1))
+		{
+			random = G4UniformRand();
+			i++;
+			if (i > 1e6)
+			{
+				G4ExceptionDescription msg;
+				msg << "Cannot sample primaryParticleEnergy. 1e6 times samplings have been tried." << G4endl;
+				msg << "Break the while loop now and return energy[0].";
+				G4Exception("PANDASimPrimaryGeneratorAction::EnergySampling()",
+					"while (random < cdfSpectrum[0] || random > *(cdfSpectrum.end() - 1))", JustWarning, msg);
+				return primaryParticleEnergy * MeV;
+			}
+		}
+		try
+		{
+			SplineSpace::SplineInterface* sp;
+			if (energy == neutronEnergy)
+				sp = splineForNeutron;
+			else //if (energy == positronEnergy)
+				sp = splineForPositron;
+			sp->SinglePointInterp(random, primaryParticleEnergy);
+			//G4cout << "random: " << random << " energy: " << primaryParticleEnergy << G4endl;
+		}
+		catch (SplineSpace::SplineFailure sf)
+		{
+			G4cout << sf.GetMessage() << G4endl;
+			//primaryParticleEnergy = 15.75 * keV;
+		}
+		return primaryParticleEnergy * MeV;
 	}
-	catch (SplineSpace::SplineFailure sf)
-	{
-		G4cout << sf.GetMessage() << G4endl;
-		//primaryParticleEnergy = 15.75 * keV;
-	}
-	return primaryParticleEnergy;*/
 }
 
 void PANDASimPrimaryGeneratorAction::SamplingForIBD(G4ThreeVector& positionVector, G4ThreeVector& directionVector)
