@@ -1,2 +1,1 @@
-*.cc linguist-language=c++
-*.hh linguist-language=c++
+*.spec text
