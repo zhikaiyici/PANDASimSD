@@ -1,0 +1,27 @@
+# Macro file
+#
+# % detector.mac
+#
+#/detector/arraySize
+#       --/detectorX
+#       --/detectorY
+#       --/detectorZ
+#       --/moduleDistance
+#       --/gdFilmThickness
+#       --/update          ### DONOT USE!! BUG WITH SENSITIVE DETECTOR ###
+### Use this command before /run/initialize ###
+#
+/detector/arraySize 1
+/detector/detectorX 10 cm
+/detector/detectorX 10 cm
+/detector/detectorZ 100 cm
+/detector/moduleDistance 2 cm
+/detector/gdFilmThickness 30 um
+
+/detector/sigmaAlpha 0
+/detector/rReflectivity 1
+
+/detector/scintResol 0
+/detector/PMTReflectivity 1
+
+/detector/birksConstant 0

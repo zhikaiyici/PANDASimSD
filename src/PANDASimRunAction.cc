@@ -192,11 +192,26 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 				G4double particleEnergy = generatorAction->GetParticleGun()->GetParticleEnergy();
 				std::ostringstream ossEnergy;
 				ossEnergy << G4BestUnit(particleEnergy, "Energy");
+				//if (sourcePosition == "COMMAND")
+				//{
+				//	//No method for getting position in GetParticleGun;
+				//	G4ThreeVector particlePosition = generatorAction->GetParticleGun()->GetParticlePosition();
+				//	std::ostringstream position;
+				//	position << particlePosition;
+				//	sourcePosition = position.str();
+				//}
 				runCondition += particleName + "_" + ossEnergy.str() + "_" + sourcePosition;
 			}
 			else if (sourceType == "GPS")
 			{
-				runCondition += sourceType;
+				G4String particleName = generatorAction->GetGPS()->GetParticleDefinition()->GetParticleName();
+				G4double particleEnergy = generatorAction->GetGPS()->GetParticleEnergy();
+				std::ostringstream ossEnergy;
+				ossEnergy << G4BestUnit(particleEnergy, "Energy");
+				G4ThreeVector particlePosition = generatorAction->GetGPS()->GetParticlePosition();
+				std::ostringstream position;
+				position << particlePosition;
+				runCondition += particleName + "_" + ossEnergy.str() + "_" + position.str();
 			}
 			else
 			{

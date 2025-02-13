@@ -77,6 +77,7 @@ public:
 
 	// method to access particle gun
 	const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+	const G4GeneralParticleSource* GetGPS() const { return fGPS; }
 
 	inline void SetSourceType(G4String s) { sourceType = s; }
 	inline const G4String GetSourceType() const { return sourceType; }

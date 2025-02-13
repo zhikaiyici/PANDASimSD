@@ -74,7 +74,7 @@ PANDASimDetectorConstruction::PANDASimDetectorConstruction()
 	fScoringVolume(nullptr), fPhotoelectricScoringVolume(nullptr), fGdFilmScoringVolume(nullptr),
 	checkOverlaps(true), addLabRoom(false)
 {
-	arraySize = 4;// UserDataInput::GetSizeOfArray();
+	arraySize = 1;// UserDataInput::GetSizeOfArray();
 	dtctrX = 10. * cm;// UserDataInput::GetDectorDimensionX();
 	dtctrY = 10. * cm;// UserDataInput::GetDectorDimensionY();
 	dtctrZ = 100. * cm;// UserDataInput::GetDectorDimensionZ();
@@ -84,6 +84,12 @@ PANDASimDetectorConstruction::PANDASimDetectorConstruction()
 	roofXY = 10. * m;
 	roofZ = 0.25 * m;
 	roomHeight = 4. * m;
+
+	scintResol = 0.;
+	birksConstant = 0.;
+	sigmaAlpha = 0.;
+	rReflectivity = 1.;
+	PMTReflectivity = 1.;
 
 	DefineCommands();
 }
@@ -302,7 +308,7 @@ void PANDASimDetectorConstruction::DefineMaterials()
 
 
 	scintillatorMPT->AddConstProperty("SCINTILLATIONYIELD", 10000. / MeV);
-	scintillatorMPT->AddConstProperty("RESOLUTIONSCALE", 0./*1.0*/);
+	scintillatorMPT->AddConstProperty("RESOLUTIONSCALE", scintResol/*1.0*/);
 	//scintillatorMPT->AddConstProperty("FASTSCINTILLATIONRISETIME", 0.9 * ns);
 	scintillatorMPT->AddConstProperty("SCINTILLATIONRISETIME1", 0.9 * ns);
 	scintillatorMPT->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 2.1 * ns);
@@ -314,6 +320,7 @@ void PANDASimDetectorConstruction::DefineMaterials()
 	scintillatorMPT->DumpTable();
 
 	plasticScintillator->SetMaterialPropertiesTable(scintillatorMPT);
+	plasticScintillator->GetIonisation()->SetBirksConstant(birksConstant * mm / MeV);
 
 	// Air
 	//
@@ -565,9 +572,23 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	// sci-reflector
 	G4OpticalSurface* opScinRelfleSurface = new G4OpticalSurface("ScinMetalOpticalSurface");
 	opScinRelfleSurface->SetType(dielectric_metal);
-	opScinRelfleSurface->SetFinish(polished);
-	opScinRelfleSurface->SetModel(glisur);
+	opScinRelfleSurface->SetModel(unified);
+	opScinRelfleSurface->SetFinish(ground);
+	opScinRelfleSurface->SetSigmaAlpha(sigmaAlpha);
+	//opScinRelfleSurface->SetModel(glisur);
 	//fOpticalSurface.push_back(opScinRelfleSurface);
+
+	G4double photonEnergy[] = { 2. * eV, 3.5 * eV };
+	const G4int num = sizeof(photonEnergy) / sizeof(G4double);
+	//G4double reflectivityReflector[num] = { 0., 0. };
+	G4double reflectivityReflector[num] = { rReflectivity, rReflectivity };
+	assert(sizeof(photonEnergy) == sizeof(reflectivityReflector));
+
+	G4MaterialPropertiesTable* scinRelfleSurfaceMPT = new G4MaterialPropertiesTable();
+	scinRelfleSurfaceMPT->AddProperty("REFLECTIVITY", photonEnergy, reflectivityReflector, num);
+	G4cout << "Reflector Surface G4MaterialPropertiesTable" << G4endl;
+	scinRelfleSurfaceMPT->DumpTable();
+	opScinRelfleSurface->SetMaterialPropertiesTable(scinRelfleSurfaceMPT);
 
 	G4LogicalBorderSurface* scinRefleSurface = new G4LogicalBorderSurface("ScinRefleSurface", physPlasticScinitillator, physAlFilm, opScinRelfleSurface);
 	G4LogicalBorderSurface* scinHatRightSurface = new G4LogicalBorderSurface("ScinHatRightSurface", physPlasticScinitillator, physHatRight, opScinRelfleSurface);
@@ -579,23 +600,23 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	// sci-PMT glss
 	G4OpticalSurface* opScinPMTSurface = new G4OpticalSurface("ScinPMTOpticalSurface");
 	opScinPMTSurface->SetType(dielectric_dielectric);
-	opScinPMTSurface->SetFinish(polished);
 	opScinPMTSurface->SetModel(unified);
+	opScinPMTSurface->SetFinish(ground);
+	opScinPMTSurface->SetSigmaAlpha(sigmaAlpha);
 	//fOpticalSurface.push_back(opScinPMTSurface);
 
-	//G4double photonEnergy[] = { 2 * eV, 3.5 * eV };
-	//const G4int num = sizeof(photonEnergy) / sizeof(G4double);
-	//G4double reflectivity[num] = { 1.0, 1.0 };
-	//assert(sizeof(photonEnergy) == sizeof(reflectivity));
-	//G4double transimission[num] = { 0.0, 0.0 };
-	//assert(sizeof(photonEnergy) == sizeof(transimission));
-	//G4double efficiency[num] = { 0.8, 1.0 };
-	//G4MaterialPropertiesTable* opPMTSurfaceMPT = new G4MaterialPropertiesTable();
-	//opPMTSurfaceMPT->AddProperty("REFLECTIVITY", photonEnergy, reflectivity, num);
-	//opPMTSurfaceMPT->AddProperty("TRANSMISSION", photonEnergy, transimission, num);
-	//G4cout << "PMT Surface G4MaterialPropertiesTable" << G4endl;
-	//opPMTSurfaceMPT->DumpTable();
-	//opPMTSurface->SetMaterialPropertiesTable(opPMTSurfaceMPT);
+	//G4double reflectivityPMT[num] = { 0., 0. };
+	G4double reflectivityPMT[num] = { PMTReflectivity, PMTReflectivity };
+	assert(sizeof(photonEnergy) == sizeof(reflectivityPMT));
+	//G4double transimissionPMT[num] = { 0.0, 0.0 };
+	//assert(sizeof(photonEnergy) == sizeof(transimissionPMT));
+
+	G4MaterialPropertiesTable* opScinPMTSurfaceMPT = new G4MaterialPropertiesTable();
+	opScinPMTSurfaceMPT->AddProperty("REFLECTIVITY", photonEnergy, reflectivityPMT, num);
+	//opScinPMTSurfaceMPT->AddProperty("TRANSMISSION", photonEnergy, transimissionPMT, num);
+	G4cout << "PMT Surface G4MaterialPropertiesTable" << G4endl;
+	opScinPMTSurfaceMPT->DumpTable();
+	opScinPMTSurface->SetMaterialPropertiesTable(opScinPMTSurfaceMPT);
 
 	G4LogicalBorderSurface* PMTRightSurface = new G4LogicalBorderSurface("ScinPMTRightSurface", physPlasticScinitillator, physPMTRight, opScinPMTSurface);
 	G4LogicalBorderSurface* PMTLeftSurface = new G4LogicalBorderSurface("ScinPMTLeftSurface", physPlasticScinitillator, physPMTLeft, opScinPMTSurface);
@@ -603,12 +624,12 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	//fLogicalSurface.push_back(PMTLeftSurface);
 
 	// Photocathode surface properties
-	G4double photonEnergy[] =
+	G4double photonEnergyPhotocathode[] =
 	{ 1.8338 * eV, 1.8419 * eV, 1.8527 * eV, 1.8721 * eV, 1.8890 * eV, 1.9172 * eV, 1.9530 * eV, 1.9800 * eV,
 	  2.0022 * eV, 2.0413 * eV, 2.0845 * eV, 2.1479 * eV, 2.2163 * eV, 2.2922 * eV, 2.4194 * eV, 2.5563 * eV,
 	  2.7037 * eV, 2.8891 * eV, 3.0268 * eV, 3.1703 * eV, 3.3728 * eV, 3.6556 * eV, 3.9353 * eV, 4.0806 * eV,
 	  4.2007 * eV, 4.2506 * eV };
-	const G4int nEntries = sizeof(photonEnergy) / sizeof(G4double);
+	const G4int nEntries = sizeof(photonEnergyPhotocathode) / sizeof(G4double);
 
 	G4double realRefraIndex[nEntries] = {};
 	std::fill(realRefraIndex, realRefraIndex + nEntries, 2.9);
@@ -622,12 +643,12 @@ void PANDASimDetectorConstruction::DefineDetector(G4LogicalVolume* world)
 	{ 0.0005, 0.0006, 0.0009, 0.0013, 0.0021, 0.0034, 0.0068, 0.0093, 0.0129, 0.0184, 0.0289, 0.0436,
 	  0.0624, 0.0903, 0.1354, 0.1785, 0.2165, 0.2461, 0.2530, 0.2460, 0.2268, 0.1802, 0.1222, 0.0847,
 	  0.0510, 0.0387 };
-	assert(sizeof(quatumnEfficiency) == sizeof(photonEnergy));
+	assert(sizeof(quatumnEfficiency) == sizeof(photonEnergyPhotocathode));
 
 	G4MaterialPropertiesTable* photocathodeMPT = new G4MaterialPropertiesTable();
-	photocathodeMPT->AddProperty("EFFICIENCY", photonEnergy, quatumnEfficiency, nEntries, false, true);// ->SetSpline(true);
-	photocathodeMPT->AddProperty("REALRINDEX", photonEnergy, realRefraIndex, nEntries, false, true);// ->SetSpline(true);
-	photocathodeMPT->AddProperty("IMAGINARYRINDEX", photonEnergy, imgRefraIndex, nEntries, false, true);// ->SetSpline(true);
+	photocathodeMPT->AddProperty("EFFICIENCY", photonEnergyPhotocathode, quatumnEfficiency, nEntries, false, true);// ->SetSpline(true);
+	photocathodeMPT->AddProperty("REALRINDEX", photonEnergyPhotocathode, realRefraIndex, nEntries, false, true);// ->SetSpline(true);
+	photocathodeMPT->AddProperty("IMAGINARYRINDEX", photonEnergyPhotocathode, imgRefraIndex, nEntries, false, true);// ->SetSpline(true);
 
 	G4cout << "Photocathode G4MaterialPropertiesTable" << G4endl;
 	photocathodeMPT->DumpTable();
@@ -885,6 +906,32 @@ void PANDASimDetectorConstruction::DefineCommands()
 	auto& addLabRoomCMD = fMessenger->DeclareProperty("addLabRoom", addLabRoom, "Add lab room.");
 	addLabRoomCMD.SetParameterName("addLabRoom", true);
 	addLabRoomCMD.SetDefaultValue("true");
+
+	auto& scintResolCMD = fMessenger->DeclareProperty("scintResol", scintResol, "Set scintillation yield resolution scale.");
+	scintResolCMD.SetParameterName("scintResol", true);
+	scintResolCMD.SetDefaultValue("0");
+	scintResolCMD.SetRange("scintResol >= 0");
+
+	//auto& birksConstantCMD = fMessenger->DeclarePropertyWithUnit("birksConstant", "mm/MeV", birksConstant, "Set birk's constant");
+	auto& birksConstantCMD = fMessenger->DeclareProperty("birksConstant", birksConstant, "Set birk's constant (mm/MeV by default).");
+	birksConstantCMD.SetParameterName("birksConstant", true);
+	birksConstantCMD.SetDefaultValue("0");
+	birksConstantCMD.SetRange("birksConstant >= 0");
+
+	auto& sigmaAlphaCMD = fMessenger->DeclareProperty("sigmaAlpha", sigmaAlpha, "Set sigma_alpha of scintillator-reflector boundary.");
+	sigmaAlphaCMD.SetParameterName("sigmaAlpha", true);
+	sigmaAlphaCMD.SetDefaultValue("0");
+	sigmaAlphaCMD.SetRange("sigmaAlpha >= 0");
+
+	auto& rReflectivityCMD = fMessenger->DeclareProperty("rReflectivity", rReflectivity, "Set reflection probability of scintillator-reflector boundary.");
+	rReflectivityCMD.SetParameterName("rReflectivity", true);
+	rReflectivityCMD.SetDefaultValue("1");
+	rReflectivityCMD.SetRange("rReflectivity >= 0 && rReflectivity <= 1");
+
+	auto& PMTReflectivityCMD = fMessenger->DeclareProperty("PMTReflectivity", PMTReflectivity, "Set reflection probability of scintillator-PMT boundary.");
+	PMTReflectivityCMD.SetParameterName("PMTReflectivity", true);
+	PMTReflectivityCMD.SetDefaultValue("1");
+	PMTReflectivityCMD.SetRange("PMTReflectivity >= 0 && PMTReflectivity <= 1");
 
 	//auto& updateCMD = fMessenger->DeclareMethod("update", &PANDASimDetectorConstruction::UpdateGeometry, "Update geometry.");
 

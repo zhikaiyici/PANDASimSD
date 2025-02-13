@@ -72,6 +72,7 @@ set(PANDASim_SCRIPTS
   run.mac
   run_phoeva.mac
   run_calibration.mac
+  run_optical.mac
   cry.mac
   cry_file.mac
   cry_setup.cry
@@ -80,9 +81,12 @@ set(PANDASim_SCRIPTS
   He8Li9.mac
   nCap.mac
   cosmicNeutron2.5MeV.mac
+  optical.mac
   detector.mac
+  detector_optical.mac
   physics.mac
   README.md
+  array.png
   )
 
 foreach(_script ${PANDASim_SCRIPTS})

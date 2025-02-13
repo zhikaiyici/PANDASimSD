@@ -127,6 +127,12 @@ private:
 	G4double roofZ;// = 0.25 * m;
 	G4double roomHeight;// = 4. * m;
 
+	G4double scintResol; // = 0.;
+	G4double birksConstant; // = 0. * mm / MeV;
+	G4double sigmaAlpha; // = 0.;
+	G4double rReflectivity; // = 1.;
+	G4double PMTReflectivity; // = 1.;
+
 	std::vector<G4VisAttributes*> fVisAttributes;
 	std::vector<G4RotationMatrix*> fRotationMatrix;
 	std::vector<G4VSolid*> fSolidVolume;

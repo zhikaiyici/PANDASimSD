@@ -174,7 +174,6 @@ int main(int argc, char** argv)
 	//	UImanager->ApplyCommand("/source/type Cs137g");
 	//	G4String command = "/control/execute ";
 	//	UImanager->ApplyCommand(command + "run.mac");
-
 	//}
 	else
 	{

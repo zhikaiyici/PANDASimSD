@@ -1,0 +1,11 @@
+# Macro file
+#
+# % optical.mac
+#
+/source/type GUN
+/source/position COMMAND
+/gun/particle ion
+/gun/ion 55 137
+/gun/position {px} 0 5.5 cm
+/gun/energy 0 keV
+/run/beamOn 1000000
