@@ -74,7 +74,7 @@ PANDASimDetectorConstruction::PANDASimDetectorConstruction()
 	fScoringVolume(nullptr), fPhotoelectricScoringVolume(nullptr), fGdFilmScoringVolume(nullptr),
 	checkOverlaps(true), addLabRoom(false)
 {
-	arraySize = 1;// UserDataInput::GetSizeOfArray();
+	arraySize = 4;// UserDataInput::GetSizeOfArray();
 	dtctrX = 10. * cm;// UserDataInput::GetDectorDimensionX();
 	dtctrY = 10. * cm;// UserDataInput::GetDectorDimensionY();
 	dtctrZ = 100. * cm;// UserDataInput::GetDectorDimensionZ();
@@ -918,7 +918,7 @@ void PANDASimDetectorConstruction::DefineCommands()
 	birksConstantCMD.SetDefaultValue("0");
 	birksConstantCMD.SetRange("birksConstant >= 0");
 
-	auto& sigmaAlphaCMD = fMessenger->DeclareProperty("sigmaAlpha", sigmaAlpha, "Set sigma_alpha of scintillator-reflector boundary.");
+	auto& sigmaAlphaCMD = fMessenger->DeclareProperty("sigmaAlpha", sigmaAlpha, "Set sigma_alpha of scintillator-reflector/PMT boundary.");
 	sigmaAlphaCMD.SetParameterName("sigmaAlpha", true);
 	sigmaAlphaCMD.SetDefaultValue("0");
 	sigmaAlphaCMD.SetRange("sigmaAlpha >= 0");

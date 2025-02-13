@@ -67,6 +67,11 @@ The spectrum format is showing below:
 /detector/moduleDistance
 /detector/gdFilmThickness
 /detector/addLabRoom
+/detector/sigmaAlpha
+/detector/rReflectivity
+/detector/scintResol
+/detector/PMTReflectivity
+/detector/birksConstant
 ```
  <!--
  /detector/update
@@ -101,6 +106,27 @@ The spectrum format is showing below:
    - Available values: `true`/`false`.
    - Adding/removing lab room.
    - Default value: `true`.
+
+8. `/detector/sigmaAlpha`
+   - `sigma_alpha` of scintillator-reflector/PMT boundary, a non-negative double.
+   - Default value: `0`.
+
+9. `/detector/rReflectivity`
+   - Reflection probability of scintillator-reflector boundary, range: [0, 1].
+   - Default value: `1`.
+
+10. `/detector/scintResol`
+    - Scintillation yield resolution scale of the scintillator, a non-negative double.
+    - Default value: `0`.
+
+11. `/detector/PMTReflectivity`
+    - Reflection probability of scintillator-PMT boundary, range: [0, 1].
+    - Default value: `1`.
+
+12. `/detector/birksConstant`
+    - Available values: `true`/`false`.
+    - Birk's constant, a non-negative double in mm/MeV.
+    - Default value: `0`.
 
 <!--
 8. `/detector/update`
