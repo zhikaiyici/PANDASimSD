@@ -10,7 +10,7 @@ std::vector<T> operator+=(std::vector<T>& a, const std::vector<T>& b)
 {
     if (a.size() != b.size())
     {
-        G4cout << "a.size() != b.size(), a will be returnd." << G4endl;
+        G4cout << "a.size() != b.size(), a will be returned." << G4endl;
         return a;
     }
     for (G4int i = 0; i < a.size(); ++i)
