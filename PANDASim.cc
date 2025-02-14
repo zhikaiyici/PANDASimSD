@@ -77,19 +77,6 @@ int main(int argc, char** argv)
 	G4int precision = 4;
 	G4SteppingVerbose::UseBestUnit(precision);
 
-	// 
-    // Get the pointer to the User Interface manager
-	G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-	PANDASimPhysicsListMessenger* physMessenger = new PANDASimPhysicsListMessenger(); 
-	//UImanager->ApplyCommand("/physics/optical true");
-	if (argc > 2)
-	{
-		// set optical process status
-		G4String command = "/control/execute ";
-		G4String fileName = argv[2];
-		UImanager->ApplyCommand(command + fileName);
-	}
 
 	// Construct the default run manager
 	//
@@ -106,10 +93,27 @@ int main(int argc, char** argv)
 //#endif
 	G4RunManager* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MT);
 
+	// 
+    // Get the pointer to the User Interface manager
+	G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+	PANDASimPhysicsListMessenger* physMessenger = new PANDASimPhysicsListMessenger();
+	//UImanager->ApplyCommand("/physics/optical true");
+
 	// Set mandatory initialization classes
 	//
 	// Detector construction
 	runManager->SetUserInitialization(new PANDASimDetectorConstruction());
+
+	if (argc > 2)
+	{
+		for (G4int i = 2; i < argc; ++i) {
+			// set detector setup and physics process status
+			G4String command = "/control/execute ";
+			G4String fileName = argv[i];
+			UImanager->ApplyCommand(command + fileName);
+		}
+	}
 
 	//// Physics list
 	//runManager->SetUserInitialization(new PANDASimPhysicsList());
@@ -163,6 +167,11 @@ int main(int argc, char** argv)
 
 	if (argc > 1)
 	{
+		if (argc < 3)
+		{
+			G4cout << "<<< No detector description *.mac file detected, using default detector setup." << G4endl
+				<< " <<< Refer to README.md for details of default detector setup.";
+		}
 		// batch mode
 		G4String command = "/control/execute ";
 		G4String fileName = argv[1];

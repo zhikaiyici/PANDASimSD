@@ -3,9 +3,6 @@
 # To be run preferably in batch, without graphics:
 # % run_optical.mac
 #
-# Detector setting, before /run/initialize
-/control/execute detector_optical.mac
-#
 /run/numberOfThreads 8
 /run/initialize
 #

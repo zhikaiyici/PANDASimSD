@@ -121,7 +121,7 @@ private:
 	void WriteDataToFile(const G4String& fileName, const std::list<G4double>& data);
 	void WriteDataToFile(const G4String& fileName, const std::vector<std::vector<G4int>>& data);
 	void WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4int>>>& data);
-	void WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4double>>> data);
+	void WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4double>>>& data);
 	void WriteDataToFile(const G4String& fileNameRight, const G4String& fileNameLeft, const std::list<std::vector<std::vector<std::vector<G4int>>>>& data);
 	void WriteDataToFile(const G4String& fileNameRight, const G4String& fileNameLeft, const std::list<std::vector<std::vector<std::vector<G4double>>>>& data);
 };

@@ -2,13 +2,27 @@
 #
 # % detector.mac
 #
+# This *.mac file is optional. 
+# Without this file default detector setup wil be used. 
+# Refer to README.md for details of default detector setup.
+#
+# Use this command as second or third input *.mac file, 
+# the first should be the one with run/initialize and /beamOn
+#
 #/detector/arraySize
 #       --/detectorX
 #       --/detectorY
 #       --/detectorZ
 #       --/moduleDistance
 #       --/gdFilmThickness
+#       --/addLabRoom
+#       --/sigmaAlpha
+#       --/rReflectivity
+#       --/scintResol
+#       --/PMTReflectivity
+#       --/birksConstant
 #       --/update          ### DONOT USE!! BUG WITH SENSITIVE DETECTOR ###
+#
 ### Use this command before /run/initialize ###
 #
 /detector/arraySize 1

@@ -3,9 +3,6 @@
 # To be run preferably in batch, without graphics:
 # % run.mac
 #
-# Detector setting, before /run/initialize
-/control/execute detector.mac
-#
 /process/had/particle_hp/use_photo_evaporation true
 #
 /run/numberOfThreads 8

@@ -70,6 +70,13 @@
 PANDASimRunAction::PANDASimRunAction()
 	: G4UserRunAction()
 {
+	// RunAction for master thread is initialized before DetectorConstruction::Construct() when 
+	// detector UICommand hasn't taken effect. Thus, variable arraySize is the initial value of 
+	// DetectorConstruction constructor. 
+	// This causes bug while trying to merge local thread data to master thread at the end of the 
+	// run, because arraySize (taken from DetectorConstruction constructor) of master thread is 
+	// different from the locals' (taken from UICommand).
+	// HOW TO FIX: Use /detector/ UICommand before ActionInitialization.
 	//arraySize = UserDataInput::GetSizeOfArray();
 	arraySize = (static_cast<const PANDASimDetectorConstruction*>(G4RunManager::GetRunManager()->GetUserDetectorConstruction()))->GetArrySize();
 	myAccu = new PANDASimAccumulable(arraySize);
@@ -528,7 +535,7 @@ void PANDASimRunAction::WriteDataToFile(const G4String& fileName, std::list<std:
 	outFile.close();
 }
 
-void PANDASimRunAction::WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4double>>> data)
+void PANDASimRunAction::WriteDataToFile(const G4String& fileName, std::list<std::vector<std::vector<G4double>>>& data)
 {
 	if (data.empty()) return;
 	std::vector <std::vector<G4double> > empty2DVec(arraySize, std::vector<G4double>(arraySize, 0));

@@ -3,9 +3,6 @@
 # To be run preferably in batch, without graphics:
 # % run.mac
 #
-# Detector setting, before /run/initialize
-/control/execute detector.mac
-#
 /run/numberOfThreads 8
 /run/initialize
 #

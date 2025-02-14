@@ -7,7 +7,7 @@
 ##  Run the Simulation
 1. Execute the biniary file directly after compilement to run in interactive mode. `init_vis.mac` will be loaded automatically in this situation.
 
-2. Execute the biniary file with input `*.mac` files to run in batch mode. Two `*.mac` files at most, see [**`physics`**](#iii-physics) in [***Customized macro commands***](#customized-macro-commands).
+2. Execute the biniary file with input `*.mac` files to run in batch mode. Three `*.mac` files at most, see [**`detector`**](#i-detector) and [**`physics`**](#iii-physics) in [***Customized macro commands***](#customized-macro-commands).
 
 ## Spectra
 `spectra` directory is for energy spectra storing. See [**`/source/spectra`**](#ii-source) in [***Customized macro commands***](#customized-macro-commands).
@@ -57,7 +57,9 @@ The spectrum format is showing below:
 
 ### I. detector 
 
-> Use this command ***before*** `/run/initialize`
+> Use this command ***before*** `/run/initialize`.  
+  Use this command in the ***second or third*** input `*.mac` file, the first should be the one with `/run/initialize` and `/run/beamOn`.  
+  This `*.mac` file is ***optional***. Without this file default detector setup wil be used. 
    
 ```
 /detector/arraySize
@@ -176,7 +178,7 @@ The spectrum format is showing below:
 
 ### III. physics
 
-> Use this command in the ***second*** input `*.mac` file, the first should be the one with `/run/initialize` and `/run/beamOn`.  
+> Use this command in the ***second or third*** input `*.mac` file, the first should be the one with `/run/initialize` and `/run/beamOn`.  
   This `*.mac` file is ***optional***. Without this file optical process and muonic atom decay process will be ***off***. 
 
 ```

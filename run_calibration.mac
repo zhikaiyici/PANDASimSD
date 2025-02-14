@@ -1,15 +1,7 @@
 # Macro file
 # 
 # To be run preferably in batch, without graphics:
-# % run.mac
-#
-# Detector setting, before /run/initialize
-/detector/arraySize 1
-/detector/detectorX 10 cm
-/detector/detectorX 10 cm
-/detector/detectorZ 100 cm
-/detector/moduleDistance 2 cm
-/detector/gdFilmThickness 30 um
+# % run_calibration.mac
 #
 /process/had/particle_hp/use_photo_evaporation true
 #
