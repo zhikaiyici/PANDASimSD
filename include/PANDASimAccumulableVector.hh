@@ -8,7 +8,12 @@
 template<typename T>
 std::vector<T> operator+=(std::vector<T>& a, const std::vector<T>& b)
 {
-    for (G4int i = 0; i < (a.size() < b.size() ? a.size() : b.size()); ++i)
+    if (a.size() != b.size())
+    {
+        G4cout << "a.size() != b.size(), a will be returnd." << G4endl;
+        return a;
+    }
+    for (G4int i = 0; i < a.size(); ++i)
     {
         a[i] += b[i];
     }
