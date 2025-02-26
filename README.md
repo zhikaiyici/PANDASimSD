@@ -28,6 +28,8 @@ The spectrum format is showing below:
 
 `output` directory is for data storing.
 
+5 numbers in file names denote 5 parameters: `absorptionLength`, `sigmaAlpha`, `rReflectivity`, `scintResol`, `PMTReflectivity` and `birksConstant`. Refer to [**`detector`**](#i-detector) in [***Customized macro commands***](#customized-macro-commands).
+
 ### I. Detector module numbering: 
 
 > e.g. 4 × 4 array
@@ -74,6 +76,7 @@ The spectrum format is showing below:
 /detector/scintResol
 /detector/PMTReflectivity
 /detector/birksConstant
+/detector/absorptionLength
 ```
  <!--
  /detector/update
@@ -126,9 +129,12 @@ The spectrum format is showing below:
     - Default value: `1`.
 
 12. `/detector/birksConstant`
-    - Available values: `true`/`false`.
     - Birk's constant, a non-negative double in mm/MeV.
     - Default value: `0`.
+
+13. `/detector/absorptionLength`
+    - Absorption length of plastic scintillator, a positive double with unit (`cm` by default).
+    - Default value: `380`.
 
 <!--
 8. `/detector/update`
