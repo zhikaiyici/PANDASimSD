@@ -90,6 +90,7 @@ PANDASimDetectorConstruction::PANDASimDetectorConstruction()
 	sigmaAlpha = 0.;
 	rReflectivity = 1.;
 	PMTReflectivity = 1.;
+	absorptionLength = 380. * cm;
 
 	DefineCommands();
 }
@@ -280,7 +281,7 @@ void PANDASimDetectorConstruction::DefineMaterials()
 	G4double scintillatorRefractiveIndex[nEntries] = {};
 	std::fill(scintillatorRefractiveIndex, scintillatorRefractiveIndex + nEntries, 1.58);
 	G4double scintillatorAbsorption[nEntries] = {};
-	std::fill(scintillatorAbsorption, scintillatorAbsorption + nEntries, 380. * cm);
+	std::fill(scintillatorAbsorption, scintillatorAbsorption + nEntries, absorptionLength);
 
 	G4double scintilFast[] =
 	{ 0.0595, 0.0615, 0.0724, 0.0844, 0.1053, 0.1218, 0.1382, 0.1547, 0.1821, 0.2095, 0.2369,
@@ -932,6 +933,11 @@ void PANDASimDetectorConstruction::DefineCommands()
 	PMTReflectivityCMD.SetParameterName("PMTReflectivity", true);
 	PMTReflectivityCMD.SetDefaultValue("1");
 	PMTReflectivityCMD.SetRange("PMTReflectivity >= 0 && PMTReflectivity <= 1");
+
+	auto& absorptionLengthCMD = fMessenger->DeclarePropertyWithUnit("absorptionLength", "cm", absorptionLength, "Set absorption length of plastic scintillator.");
+	absorptionLengthCMD.SetParameterName("absorptionLength", true);
+	absorptionLengthCMD.SetDefaultValue("380.");
+	absorptionLengthCMD.SetRange("absorptionLength > 0");
 
 	//auto& updateCMD = fMessenger->DeclareMethod("update", &PANDASimDetectorConstruction::UpdateGeometry, "Update geometry.");
 

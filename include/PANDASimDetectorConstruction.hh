@@ -83,6 +83,13 @@ public:
 	inline void SetArrySize(G4int as) { arraySize = as; }
 	inline G4int GetArrySize() const { return arraySize; }
 
+	inline G4double GetScintResol() const { return scintResol; }
+	inline G4double GetBirksConstant() const { return birksConstant; }
+	inline G4double GetSigmaAlpha() const { return sigmaAlpha; }
+	inline G4double GetRReflectivity() const { return rReflectivity; }
+	inline G4double GetPMTReflectivity() const { return PMTReflectivity; }
+	inline G4double GetAbsorptionLength() const { return absorptionLength; }
+
 private:
 	G4LogicalVolume* fScoringVolume;
 	G4LogicalVolume* fPhotoelectricScoringVolume;
@@ -132,6 +139,7 @@ private:
 	G4double sigmaAlpha; // = 0.;
 	G4double rReflectivity; // = 1.;
 	G4double PMTReflectivity; // = 1.;
+	G4double absorptionLength; // = 380. * cm;
 
 	std::vector<G4VisAttributes*> fVisAttributes;
 	std::vector<G4RotationMatrix*> fRotationMatrix;

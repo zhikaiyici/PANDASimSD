@@ -167,7 +167,32 @@ void PANDASimRunAction::BeginOfRunAction(const G4Run* run)
 	//G4String sourceType = UserDataInput::GetSoureType();
 	//G4String sourcePosition = UserDataInput::GetSourePosition();
 
-	G4String runCondition = "_" + strArraySize + "x" + strArraySize + "_" + strEventNumber + "_";
+	std::ostringstream scintResol;
+	std::ostringstream birksConstant;
+	std::ostringstream sigmaAlpha;
+	std::ostringstream rReflectivity;
+	std::ostringstream PMTReflectivity;
+	std::ostringstream absorptionLength;
+
+	scintResol << detectorConstruction->GetScintResol();
+	birksConstant << detectorConstruction->GetBirksConstant();
+	sigmaAlpha << detectorConstruction->GetSigmaAlpha();
+	rReflectivity << detectorConstruction->GetRReflectivity();
+	PMTReflectivity << detectorConstruction->GetPMTReflectivity();
+	absorptionLength << detectorConstruction->GetAbsorptionLength() / cm;
+
+	G4String opticalParemeters = absorptionLength.str() + "_" + sigmaAlpha.str() + "_"
+		+ rReflectivity.str() + "_" + scintResol.str() + "_"
+		+ PMTReflectivity.str() + "_" + birksConstant.str();
+
+	//G4String opticalParemeters = std::to_string(detectorConstruction->GetAbsorptionLength() / cm).substr(0, 3) + "_"
+	//	+ std::to_string(detectorConstruction->GetSigmaAlpha()).substr(0, 4) + "_"
+	//	+ std::to_string(detectorConstruction->GetRReflectivity()).substr(0, 4) + "_"
+	//	+ std::to_string(detectorConstruction->GetScintResol()).substr(0, 3) + "_"
+	//	+ std::to_string(detectorConstruction->GetPMTReflectivity()).substr(0, 4) + "_"
+	//	+ std::to_string(detectorConstruction->GetBirksConstant()).substr(0, 5);
+
+	G4String runCondition = "_" + strArraySize + "x" + strArraySize + "_" + strEventNumber + "_" + opticalParemeters + "_";
 
 	auto generatorAction = static_cast<const PANDASimPrimaryGeneratorAction*>(G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
 

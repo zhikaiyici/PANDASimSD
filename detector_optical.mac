@@ -39,3 +39,5 @@
 /detector/PMTReflectivity 1
 
 /detector/birksConstant 0
+
+/detector/absorptionLength 380 cm
