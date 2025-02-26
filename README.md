@@ -7,10 +7,10 @@
 ##  Run the Simulation
 1. Execute the biniary file directly after compilement to run in interactive mode. `init_vis.mac` will be loaded automatically in this situation.
 
-2. Execute the biniary file with input `*.mac` files to run in batch mode. Three `*.mac` files at most, see [**`detector`**](#i-detector) and [**`physics`**](#iii-physics) in [***Customized macro commands***](#customized-macro-commands).
+2. Execute the biniary file with input `*.mac` files to run in batch mode. Three `*.mac` files at most, refer to [**`detector`**](#i-detector) and [**`physics`**](#iii-physics) in [***Customized macro commands***](#customized-macro-commands).
 
 ## Spectra
-`spectra` directory is for energy spectra storing. See [**`/source/spectra`**](#ii-source) in [***Customized macro commands***](#customized-macro-commands).
+`spectra` directory is for energy spectra storing. Refer to [**`/source/spectra`**](#ii-source) in [***Customized macro commands***](#customized-macro-commands).
 
 The spectrum format is showing below:
 
@@ -28,7 +28,7 @@ The spectrum format is showing below:
 
 `output` directory is for data storing.
 
-5 numbers in file names denote 5 parameters: `absorptionLength`, `sigmaAlpha`, `rReflectivity`, `scintResol`, `PMTReflectivity` and `birksConstant`. Refer to [**`detector`**](#i-detector) in [***Customized macro commands***](#customized-macro-commands).
+6 numbers in file names denote 6 optical-related parameters: `absorptionLength`, `sigmaAlpha`, `rReflectivity`, `scintResol`, `PMTReflectivity` and `birksConstant`. Refer to [**`detector`**](#i-detector) in [***Customized macro commands***](#customized-macro-commands).
 
 ### I. Detector module numbering: 
 
